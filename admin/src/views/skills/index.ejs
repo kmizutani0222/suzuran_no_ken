@@ -11,10 +11,11 @@
             <tr>
               <th>アイコン</th>
               <th>名前</th>
-              <th>CT</th>
               <th>コスト</th>
-              <th>カテゴリー</th>
-              <th>タイプ</th>
+              <th>CT</th>
+              <th>スキルタイプ</th>
+              <th>対象</th>
+              <th>説明</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -24,38 +25,29 @@
                 <td colspan="7" class="text-center">データがありません</td>
               </tr>
             <% } %>
-            <% skills.forEach(s => { %>
+            <% skills.forEach(function(s) { %>
               <tr>
                 <td>
-                  <div class="character-images">
-                    <% if (s.icon) { %>
-                      <div class="image-preview">
-                        <img src="<%= s.icon %>" alt="アイコン" title="アイコン" />
-                      </div>
-                    <% } else { %>
-                      <div class="no-image">
-                        <span class="grey-text">画像なし</span>
-                      </div>
-                    <% } %>
-                  </div>
+                  <% if (s.icon) { %>
+                    <img src="/uploads/<%= s.icon %>" alt="<%= s.name %>" style="width: 50px; height: 50px; object-fit: cover;">
+                  <% } else { %>
+                    <span>なし</span>
+                  <% } %>
                 </td>
                 <td><%= s.name %></td>
-                <td><%= s.ct %></td>
                 <td><%= s.cost %></td>
-                <td><%= s.skillCategory %></td>
+                <td><%= s.ct %></td>
                 <td><%= s.skillType %></td>
+                <td><%= s.targets ? s.targets.join(', ') : 'なし' %></td>
+                <td><%= s.description %></td>
                 <td>
-                  <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light orange">
-                    <i class="material-icons">edit</i>
-                  </a>
-                  <form action="/skills/<%= s.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
-                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('削除しますか？')">
-                      <i class="material-icons">delete</i>
-                    </button>
+                  <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light blue">編集</a>
+                  <form action="/skills/<%= s.id %>?_method=DELETE" method="POST" style="display: inline;">
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">削除</button>
                   </form>
                 </td>
               </tr>
-            <% }) %>
+            <% }); %>
           </tbody>
         </table>
       </div>

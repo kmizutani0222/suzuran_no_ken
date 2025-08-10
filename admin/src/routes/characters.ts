@@ -1,19 +1,11 @@
 import { Router } from "express";
 import path from "path";
-import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository } from "../../../shared/src/repository";
+import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository, PersonalitySkillRepository } from "../../../shared/src/repository";
 import { CharacterCreateInput, CharacterUpdateInput } from "../../../shared/src/models";
 import { WeaponType } from "../../../shared/src/models";
 import { upload, toPublicPath } from "../middleware/upload";
 
 export const router = Router();
-
-function categorizeSkills() {
-  const all = SkillRepository.list();
-  const personality = all.filter((s) => s.skillCategory === "個性");
-  const normal = all.filter((s) => s.skillCategory === "通常");
-  const ex = all.filter((s) => s.skillCategory === "EX");
-  return { personality, normal, ex };
-}
 
 router.get("/", (_req, res) => {
   const characters = CharacterRepository.list();
@@ -59,12 +51,31 @@ router.get("/", (_req, res) => {
   res.render(path.join("characters", "index"), { characters: charactersWithDetails });
 });
 
-router.get("/new", (_req, res) => {
-  const rarities = RarityRepository.list();
-  const roles = RoleRepository.list();
-  const factions = FactionRepository.list();
-  const { personality, normal, ex } = categorizeSkills();
-  res.render(path.join("characters", "new"), { rarities, roles, factions, personalitySkills: personality, normalSkills: normal, exSkills: ex });
+router.get("/new", async (req, res) => {
+  try {
+    const rarities = await RarityRepository.list();
+    const roles = await RoleRepository.list();
+    const factions = await FactionRepository.list();
+    const allSkills = await SkillRepository.list();
+    const personalitySkills = await PersonalitySkillRepository.list();
+    
+    // スキルを個性、通常、EXに分類（skillCategoryが削除されたため、PersonalitySkillを使用）
+    const normal = allSkills.filter((s) => !personalitySkills.find(ps => ps.id === s.id));
+    // EXスキルは個性スキルと通常スキル以外のものとして扱う
+    const ex = allSkills.filter((s) => s.skillType === "アクティブ" || s.skillType === "即時");
+
+    res.render("characters/new", {
+      rarities,
+      roles,
+      factions,
+      personalitySkills,
+      normalSkills: normal,
+      exSkills: ex,
+    });
+  } catch (error) {
+    console.error("キャラクター新規作成画面表示エラー:", error);
+    res.status(500).send("画面表示に失敗しました");
+  }
 });
 
 router.post("/", upload.fields([
@@ -112,14 +123,36 @@ router.post("/", upload.fields([
   res.redirect("/characters");
 });
 
-router.get("/:id/edit", (req, res) => {
-  const character = CharacterRepository.findById(req.params.id);
-  if (!character) return res.status(404).send("Not Found");
-  const rarities = RarityRepository.list();
-  const roles = RoleRepository.list();
-  const factions = FactionRepository.list();
-  const { personality, normal, ex } = categorizeSkills();
-  res.render(path.join("characters", "edit"), { character, rarities, roles, factions, personalitySkills: personality, normalSkills: normal, exSkills: ex });
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const character = await CharacterRepository.findById(req.params.id!);
+    if (!character) {
+      return res.status(404).send("キャラクターが見つかりません");
+    }
+
+    const rarities = await RarityRepository.list();
+    const roles = await RoleRepository.list();
+    const factions = await FactionRepository.list();
+    const allSkills = await SkillRepository.list();
+    const personalitySkills = await PersonalitySkillRepository.list();
+    
+    // スキルを個性、通常、EXに分類
+    const normal = allSkills.filter((s) => !personalitySkills.find(ps => ps.id === s.id));
+    const ex = allSkills.filter((s) => s.skillType === "アクティブ" || s.skillType === "即時");
+
+    res.render("characters/edit", {
+      character,
+      rarities,
+      roles,
+      factions,
+      personalitySkills,
+      normalSkills: normal,
+      exSkills: ex,
+    });
+  } catch (error) {
+    console.error("キャラクター編集画面表示エラー:", error);
+    res.status(500).send("画面表示に失敗しました");
+  }
 });
 
 router.post("/:id", upload.fields([

@@ -10,9 +10,8 @@ export interface SkillRange {
   image?: string; // アップロード画像のパス
 }
 
-export type SkillTarget = "対ユニット" | "対地面" | "近接" | "範囲攻撃";
+export type SkillTarget = "単体" | "全体" | "自身";
 export type SkillType = "パッシブ" | "アクティブ" | "即時" | "オーラ" | "通常攻撃" | "リアクション";
-export type SkillCategory = "個性" | "EX" | "通常";
 
 export type SkillEffectCategory = "バフ" | "デバフ" | "状態" | "地形・行動" | "スキル" | "ダメージ" | "その他";
 
@@ -40,7 +39,6 @@ export interface Skill {
   description: string; // 複数行
   targets: SkillTarget[]; // 複数選択（旧types）
   skillType: SkillType; // 追加
-  skillCategory: SkillCategory; // 追加
   range?: SkillRange; // 任意
   effectIds?: string[]; // SkillEffect 複数選択
 }
@@ -53,7 +51,6 @@ export interface SkillCreateInput {
   description: string;
   targets: SkillTarget[];
   skillType: SkillType;
-  skillCategory: SkillCategory;
   range?: SkillRange;
   effectIds?: string[];
 }
@@ -163,7 +160,7 @@ export interface Character {
   roleId: string;   // Role
   factionIds: string[]; // 複数選択
   weaponType: WeaponType; // 武器種
-  personalitySkillId?: string; // Skill(skillCategory: 個性)から単一
+  personalitySkillId?: string; // PersonalitySkillから単一
   skillTree?: CharacterSkillTree; // 各ランク左右に通常スキル
   exSkillIds?: string[]; // EXスキル複数
   normalAppearance?: string; // 通常外見画像

@@ -9,17 +9,15 @@
         <form action="/personality-skills/<%= item.id %>?_method=PUT" method="post" enctype="multipart/form-data">
           <input type="hidden" name="currentIcon" value="<%= item.icon || '' %>" />
 
-          <!-- 名前 -->
+          <!-- 1行目: 左側に名前、右側にアイコン -->
           <div class="row">
-            <div class="input-field col s12">
-              <input type="text" id="name" name="name" value="<%= item.name %>" required />
-              <label for="name">名前</label>
+            <div class="col s6">
+              <div class="input-field">
+                <input type="text" id="name" name="name" value="<%= item.name %>" required />
+                <label for="name">名前</label>
+              </div>
             </div>
-          </div>
-
-          <!-- アイコン -->
-          <div class="row">
-            <div class="col s12">
+            <div class="col s6">
               <div class="image-upload-section">
                 <div class="image-preview-container">
                   <div id="icon-preview" class="image-preview-large">

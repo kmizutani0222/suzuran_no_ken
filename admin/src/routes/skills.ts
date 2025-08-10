@@ -1,7 +1,7 @@
 import { Router } from "express";
 import path from "path";
 import { SkillEffectRepository, SkillRepository } from "../../../shared/src/repository";
-import { SkillCreateInput, SkillUpdateInput, SkillTarget, SkillType, SkillCategory } from "../../../shared/src/models";
+import { SkillCreateInput, SkillUpdateInput, SkillTarget, SkillType } from "../../../shared/src/models";
 import { upload, toPublicPath } from "../middleware/upload";
 
 export const router = Router();
@@ -16,24 +16,30 @@ router.get("/new", (_req, res) => {
   res.render(path.join("skills", "new"), { skillEffects });
 });
 
-router.post("/", upload.single("icon"), (req, res) => {
-  const body = req.body as any;
-  const targets = (Array.isArray(body.targets) ? body.targets : (body.targets ? [body.targets] : [])) as SkillTarget[];
-  const effectIds: string[] = Array.isArray(body.effectIds) ? body.effectIds : (body.effectIds ? [body.effectIds] : []);
+router.post("/", upload.single("icon"), async (req, res) => {
+  try {
+    const body = req.body;
+    const skillData: SkillCreateInput = {
+      name: body.name,
+      cost: parseInt(body.cost) || 0,
+      ct: parseInt(body.ct) || 0,
+      description: body.description || "",
+      targets: body.targets ? (Array.isArray(body.targets) ? body.targets : [body.targets]) : [],
+      skillType: body.skillType as SkillType,
+      effectIds: body.effectIds ? (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) : [],
+    };
 
-  const input: SkillCreateInput = {
-    name: body.name,
-    cost: Number(body.cost),
-    ct: Number(body.ct),
-    description: body.description,
-    targets,
-    skillType: body.skillType as SkillType,
-    skillCategory: body.skillCategory as SkillCategory,
-    ...(effectIds.length > 0 ? { effectIds } : {}),
-    ...(req.file ? { icon: toPublicPath(req.file.path) } : {}),
-  };
-  SkillRepository.create(input);
-  res.redirect("/skills");
+    // iconが存在する場合のみ追加
+    if (req.file?.filename) {
+      (skillData as any).icon = req.file.filename;
+    }
+
+    const skill = await SkillRepository.create(skillData);
+    res.redirect("/skills");
+  } catch (error) {
+    console.error("スキル作成エラー:", error);
+    res.status(500).send("スキル作成に失敗しました");
+  }
 });
 
 router.get("/:id/edit", (req, res) => {
@@ -43,25 +49,21 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("skills", "edit"), { skill, skillEffects });
 });
 
-router.post("/:id", upload.single("icon"), (req, res) => {
+router.post("/:id", upload.single("icon"), async (req, res) => {
   if (!req.params.id) return res.status(400).send("Bad Request");
   
-  const body = req.body as any;
-  const targets = (Array.isArray(body.targets) ? body.targets : (body.targets ? [body.targets] : [])) as SkillTarget[];
-  const effectIds: string[] = Array.isArray(body.effectIds) ? body.effectIds : (body.effectIds ? [body.effectIds] : []);
-
-  const input: SkillUpdateInput = {
-    name: body.name,
-    ...(body.cost ? { cost: Number(body.cost) } : {}),
-    ...(body.ct ? { ct: Number(body.ct) } : {}),
-    description: body.description,
-    targets,
-    ...(body.skillType ? { skillType: body.skillType as SkillType } : {}),
-    ...(body.skillCategory ? { skillCategory: body.skillCategory as SkillCategory } : {}),
-    ...(effectIds.length > 0 ? { effectIds } : {}),
-    ...(req.file ? { icon: toPublicPath(req.file.path) } : {}),
+  const body = req.body;
+  const updateData: SkillUpdateInput = {
+    ...(body.name && { name: body.name }),
+    ...(req.file && { icon: req.file.filename }),
+    ...(body.cost && { cost: parseInt(body.cost) }),
+    ...(body.ct && { ct: parseInt(body.ct) }),
+    ...(body.description && { description: body.description }),
+    ...(body.targets && { targets: Array.isArray(body.targets) ? body.targets : [body.targets] }),
+    ...(body.skillType && { skillType: body.skillType as SkillType }),
+    ...(body.effectIds && { effectIds: Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds] }),
   };
-  SkillRepository.update(req.params.id, input);
+  await SkillRepository.update(req.params.id!, updateData);
   res.redirect("/skills");
 });
 

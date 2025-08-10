@@ -15,7 +15,7 @@
               </div>
             </div>
 
-            <!-- 2行目: 左側にCT・コスト・スキルカテゴリー・スキルタイプ、右側にアイコン -->
+            <!-- 2行目: 左側にCT・コスト・スキルタイプ、右側にアイコン -->
             <div class="row">
               <div class="col s6">
                 <div class="row">
@@ -30,18 +30,9 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
-                    <select name="skillCategory" required>
-                      <option value="個性" selected>個性</option>
-                      <option value="EX">EX</option>
-                      <option value="通常">通常</option>
-                    </select>
-                    <label>スキルカテゴリー</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col s12">
                     <select name="skillType" required>
-                      <option value="パッシブ" selected>パッシブ</option>
+                      <option value="" disabled selected>スキルタイプを選択してください</option>
+                      <option value="パッシブ">パッシブ</option>
                       <option value="アクティブ">アクティブ</option>
                       <option value="即時">即時</option>
                       <option value="オーラ">オーラ</option>
@@ -101,6 +92,19 @@
                     <% }) %>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <!-- 対象 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <select name="targets" multiple>
+                  <option value="" disabled>対象を選択してください（複数選択可）</option>
+                  <option value="単体">単体</option>
+                  <option value="全体">全体</option>
+                  <option value="自身">自身</option>
+                </select>
+                <label>対象</label>
               </div>
             </div>
 
