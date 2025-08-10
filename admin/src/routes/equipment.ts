@@ -94,7 +94,7 @@ router.get('/:id/edit', (req, res) => {
   res.render('equipment/edit', { equipment, rarities });
 });
 
-// 更新処理
+// 更新処理（PUT）
 router.put('/:id', upload.single('icon'), (req, res) => {
   try {
     const id = req.params.id;
@@ -138,6 +138,89 @@ router.put('/:id', upload.single('icon'), (req, res) => {
         const oldIconPath = path.join(process.cwd(), '../../uploads', filename);
         if (fs.existsSync(oldIconPath)) {
           fs.unlinkSync(oldIconPath);
+        }
+      }
+    } else if (req.file) {
+      // 新しいアイコンがアップロードされた場合
+      input.icon = toPublicPath(req.file.filename);
+      
+      // 古いアイコンファイルを削除
+      const oldEquipment = EquipmentRepository.findById(id);
+      if (oldEquipment?.icon) {
+        const filename = oldEquipment.icon.replace('/uploads/', '');
+        const oldIconPath = path.join(process.cwd(), '../../uploads', filename);
+        if (fs.existsSync(oldIconPath)) {
+          fs.unlinkSync(oldIconPath);
+        }
+      }
+    } else {
+      // アイコンがアップロードされていない場合は既存のアイコンを保持
+      const existingEquipment = EquipmentRepository.findById(id);
+      if (existingEquipment?.icon && existingEquipment.icon.trim() !== '') {
+        input.icon = existingEquipment.icon;
+      } else {
+        input.icon = null;
+      }
+    }
+
+    const updated = EquipmentRepository.update(id, input);
+    if (!updated) {
+      return res.status(404).send('装備が見つかりません');
+    }
+    
+    res.redirect('/equipment');
+  } catch (error) {
+    console.error('装備更新エラー:', error);
+    res.status(500).send('装備の更新に失敗しました');
+  }
+});
+
+// 更新処理（POST - HTMLフォーム用）
+router.post('/:id', upload.single('icon'), (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).send('IDが指定されていません');
+    }
+    
+    const { name, rarityId, category, weaponType, equipmentSkill, description, acquisitionMethod, iconClear } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列はnullに変換）
+    if (rarityId !== undefined) input.rarityId = rarityId === '' ? null : rarityId;
+    if (category !== undefined) input.category = category === '' ? null : category;
+    if (weaponType !== undefined) input.weaponType = weaponType === '' ? null : weaponType;
+    if (equipmentSkill !== undefined) input.equipmentSkill = equipmentSkill === '' ? null : equipmentSkill;
+    if (description !== undefined) input.description = description === '' ? null : description;
+    
+    // 入手方法の複数選択を配列として処理
+    if (acquisitionMethod !== undefined) {
+      if (Array.isArray(acquisitionMethod)) {
+        input.acquisitionMethod = acquisitionMethod.length > 0 ? acquisitionMethod.join(', ') : null;
+      } else if (acquisitionMethod === '') {
+        input.acquisitionMethod = null;
+      } else {
+        input.acquisitionMethod = acquisitionMethod;
+      }
+    }
+
+    // アイコンの処理
+    if (iconClear === 'true') {
+      // アイコンリセットが要求された場合
+      input.icon = null;
+      
+      // 古いアイコンファイルを削除
+      const oldEquipment = EquipmentRepository.findById(id);
+      if (oldEquipment?.icon) {
+        if (oldEquipment.icon) {
+          const filename = oldEquipment.icon.replace('/uploads/', '');
+          const oldIconPath = path.join(process.cwd(), '../../uploads', filename);
+          if (fs.existsSync(oldIconPath)) {
+            fs.unlinkSync(oldIconPath);
+          }
         }
       }
     } else if (req.file) {

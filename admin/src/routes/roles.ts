@@ -1,13 +1,10 @@
 import { Router } from "express";
 import path from "path";
-import multer from "multer";
+import { upload, toPublicPath } from "../middleware/upload";
 import { RoleRepository } from "../../../shared/src/repository";
 import { RoleCreateInput, RoleUpdateInput } from "../../../shared/src/models";
 
 export const router = Router();
-
-// Multer設定
-const upload = multer({ dest: path.join(process.cwd(), "..", "..", "uploads") });
 
 router.get("/", (_req, res) => {
   const items = RoleRepository.list();
@@ -19,9 +16,9 @@ router.get("/new", (_req, res) => {
 });
 
 // 新規作成処理
-router.post('/', (req, res) => {
+router.post('/', upload.single('icon'), (req, res) => {
   try {
-    const { name, movementPower, jumpHigh, jumpLow, terrainSuitability, icon } = req.body;
+    const { name, movementPower, jumpHigh, jumpLow, terrainSuitability, iconReset } = req.body;
     
     const input: any = {
       name
@@ -32,7 +29,15 @@ router.post('/', (req, res) => {
     if (jumpHigh !== undefined) input.jumpHigh = jumpHigh || null;
     if (jumpLow !== undefined) input.jumpLow = jumpLow || null;
     if (terrainSuitability !== undefined) input.terrainSuitability = terrainSuitability || null;
-    if (icon !== undefined) input.icon = icon || null;
+
+    // アイコンの処理
+    if (iconReset === 'true') {
+      input.icon = null;
+    } else if (req.file) {
+      input.icon = toPublicPath(req.file.filename);
+    } else {
+      input.icon = null;
+    }
 
     RoleRepository.create(input);
     res.redirect('/roles');
@@ -48,7 +53,7 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("roles", "edit"), { item });
 });
 
-// 更新処理
+// 更新処理（PUT）
 router.put('/:id', (req, res) => {
   try {
     const id = req.params.id!;
@@ -64,6 +69,45 @@ router.put('/:id', (req, res) => {
     if (jumpLow !== undefined) input.jumpLow = jumpLow || null;
     if (terrainSuitability !== undefined) input.terrainSuitability = terrainSuitability || null;
     if (icon !== undefined) input.icon = icon || null;
+
+    const updated = RoleRepository.update(id, input);
+    if (!updated) {
+      return res.status(404).send('ロールが見つかりません');
+    }
+    
+    res.redirect('/roles');
+  } catch (error) {
+    console.error('ロール更新エラー:', error);
+    res.status(500).send('ロールの更新に失敗しました');
+  }
+});
+
+// 更新処理（POST - HTMLフォーム用）
+router.post('/:id', upload.single('icon'), (req, res) => {
+  try {
+    const id = req.params.id!;
+    const { name, movementPower, jumpHigh, jumpLow, terrainSuitability, currentIcon, iconReset } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (movementPower !== undefined) input.movementPower = movementPower || null;
+    if (jumpHigh !== undefined) input.jumpHigh = jumpHigh || null;
+    if (jumpLow !== undefined) input.jumpLow = jumpLow || null;
+    if (terrainSuitability !== undefined) input.terrainSuitability = terrainSuitability || null;
+
+    // アイコンの処理
+    if (iconReset === 'true') {
+      input.icon = null;
+    } else if (req.file) {
+      input.icon = toPublicPath(req.file.filename);
+    } else if (currentIcon && currentIcon !== "") {
+      input.icon = currentIcon;
+    } else {
+      input.icon = null;
+    }
 
     const updated = RoleRepository.update(id, input);
     if (!updated) {

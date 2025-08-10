@@ -43,7 +43,15 @@
                 <td><%= r.movementPower %></td>
                 <td><%= r.jumpHigh %></td>
                 <td><%= r.jumpLow %></td>
-                <td><%= r.terrainSuitability %></td>
+                <td>
+                  <% if (r.terrainSuitability === 'normal') { %>
+                    通常
+                  <% } else if (r.terrainSuitability) { %>
+                    <%= r.terrainSuitability %>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
                 <td>
                   <a href="/roles/<%= r.id %>/edit" class="btn-small waves-effect waves-light blue">
                     <i class="material-icons">edit</i>

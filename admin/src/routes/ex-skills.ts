@@ -69,8 +69,43 @@ router.get("/:id/edit", async (req, res) => {
   }
 });
 
-// 更新処理
+// 更新処理（PUT）
 router.put("/:id", upload.single("icon"), async (req, res) => {
+  try {
+    const body = req.body;
+    const updateData: ExSkillUpdateInput = {
+      name: body.name,
+      effectIds: body.effectIds ? (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) : (body.noEffectIds ? [] : []),
+      lv1Description: body.lv1Description || "",
+      lv2Description: body.lv2Description || "",
+      lv3Description: body.lv3Description || "",
+    };
+
+    // アイコンの処理
+    if (req.file?.filename) {
+      // 新しいファイルがアップロードされた場合
+      (updateData as any).icon = req.file.filename;
+    } else if (body.iconReset === 'true') {
+      // アイコンがリセットされた場合（空文字列を設定）
+      (updateData as any).icon = "";
+    } else if (body.currentIcon && body.currentIcon !== "") {
+      // 既存のアイコンを保持する場合
+      (updateData as any).icon = body.currentIcon;
+    } else {
+      // アイコンが指定されていない場合（空文字列を設定）
+      (updateData as any).icon = "";
+    }
+
+    await ExSkillRepository.update(req.params.id!, updateData);
+    res.redirect("/ex-skills");
+  } catch (error) {
+    console.error("EXスキル更新エラー:", error);
+    res.status(500).send("EXスキル更新に失敗しました");
+  }
+});
+
+// 更新処理（POST - HTMLフォーム用）
+router.post("/:id", upload.single("icon"), async (req, res) => {
   try {
     const body = req.body;
     const updateData: ExSkillUpdateInput = {
