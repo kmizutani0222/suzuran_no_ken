@@ -29,7 +29,7 @@
                     <img src="<%= skill.icon %>" alt="アイコン" style="max-width: 100px; max-height: 100px;" />
                   </div>
                 <% } %>
-                <%- imageResizer.createPreviewHTML('icon') %>
+                <div id="icon-preview" class="image-preview"></div>
               </div>
               <div class="input-field col s6">
                 <input type="number" id="cost" name="cost" min="0" value="<%= skill.cost || '' %>" />
@@ -145,7 +145,7 @@
                       <img src="<%= skill.range.image %>" alt="範囲画像" style="max-width: 100px; max-height: 100px;" />
                     </div>
                   <% } %>
-                  <%- imageResizer.createPreviewHTML('range') %>
+                  <div id="range-preview" class="image-preview"></div>
                 </div>
               </div>
             </div>

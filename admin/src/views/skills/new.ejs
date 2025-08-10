@@ -23,7 +23,7 @@
                     <span>アイコンを選択</span>
                   </label>
                 </div>
-                <%- imageResizer.createPreviewHTML('icon') %>
+                <div id="icon-preview" class="image-preview"></div>
               </div>
               <div class="input-field col s6">
                 <input type="number" id="cost" name="cost" min="0" />
@@ -133,7 +133,7 @@
                       <span>範囲画像を選択</span>
                     </label>
                   </div>
-                  <%- imageResizer.createPreviewHTML('range') %>
+                  <div id="range-preview" class="image-preview"></div>
                 </div>
               </div>
             </div>
