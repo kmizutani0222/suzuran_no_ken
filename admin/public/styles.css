@@ -365,6 +365,21 @@ a:hover {
   background-color: #e3f2fd;
 }
 
+/* テーブルの操作列を右詰めにする */
+table th:last-child,
+table td:last-child {
+  text-align: right;
+}
+
+/* 操作ボタンの間隔を調整 */
+table td:last-child .btn-small {
+  margin-left: 5px;
+}
+
+table td:last-child .btn-small:first-child {
+  margin-left: 0;
+}
+
 /* Responsive adjustments */
 @media only screen and (max-width: 600px) {
   .container {
