@@ -11,18 +11,13 @@
             <tr>
               <th>アイコン</th>
               <th>名前</th>
-              <th>コスト</th>
-              <th>CT</th>
-              <th>スキルタイプ</th>
-              <th>対象</th>
-              <th>説明</th>
               <th>操作</th>
             </tr>
           </thead>
           <tbody>
             <% if (skills.length === 0) { %>
               <tr>
-                <td colspan="7" class="text-center">データがありません</td>
+                <td colspan="3" class="text-center">データがありません</td>
               </tr>
             <% } %>
             <% skills.forEach(function(s) { %>
@@ -35,11 +30,6 @@
                   <% } %>
                 </td>
                 <td><%= s.name %></td>
-                <td><%= s.cost %></td>
-                <td><%= s.ct %></td>
-                <td><%= s.skillType %></td>
-                <td><%= s.targets ? s.targets.join(', ') : 'なし' %></td>
-                <td><%= s.description %></td>
                 <td>
                   <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light blue">
                     <i class="material-icons">edit</i>

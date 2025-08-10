@@ -1,3 +1,13 @@
+/* テーマカラー定義 */
+:root {
+  --theme-primary: #81c784;      /* light-green lighten-2 */
+  --theme-primary-dark: #66bb6a; /* light-green lighten-1 */
+  --theme-primary-darker: #4caf50; /* light-green */
+  --theme-text: #2e7d32;         /* green darken-3 */
+  --theme-text-dark: #1b5e20;    /* green darken-4 */
+  --theme-accent: #c8e6c9;       /* light-green lighten-4 */
+}
+
 /* Custom Material Design Styles */
 
 body {
@@ -28,12 +38,13 @@ nav ul li {
 }
 
 nav ul li a {
-  color: white !important;
+  color: var(--theme-text) !important;
+  font-weight: 500;
 }
 
 nav ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  color: white !important;
+  background-color: rgba(129, 199, 132, 0.2) !important;
+  color: var(--theme-text-dark) !important;
 }
 
 /* ドロップダウンメニューのスタイル */
@@ -50,15 +61,58 @@ nav ul li a:hover {
   color: #1976d2 !important;
 }
 
+/* ドロップダウンメニューのテーマカラー適用 */
+.dropdown-content {
+  background-color: white;
+  border: 1px solid var(--theme-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dropdown-content li > a {
+  color: var(--theme-text) !important;
+  font-weight: 500;
+}
+
+.dropdown-content li > a:hover {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-text-dark) !important;
+}
+
+/* コラプシブルメニューのテーマカラー適用 */
+.collapsible-header {
+  color: var(--theme-text) !important;
+  font-weight: 500;
+}
+
+.collapsible-header:hover {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-text-dark) !important;
+}
+
+.collapsible-body {
+  background-color: white;
+  border-left: 2px solid var(--theme-primary);
+}
+
+.collapsible-body ul li a {
+  color: var(--theme-text) !important;
+  font-weight: 500;
+}
+
+.collapsible-body ul li a:hover {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-text-dark) !important;
+}
+
 .brand-logo {
   font-weight: 300;
   font-size: 1.5rem !important;
   margin-left: 20px;
-  color: white !important;
+  color: var(--theme-text) !important;
 }
 
 .brand-logo:hover {
-  color: white !important;
+  color: var(--theme-text-dark) !important;
 }
 
 /* Cards */
@@ -70,7 +124,7 @@ nav ul li a:hover {
 
 .card .card-title {
   font-weight: 500;
-  color: #1976d2;
+  color: var(--theme-text) !important;
 }
 
 /* Forms */
@@ -211,11 +265,12 @@ table {
   width: 100%;
 }
 
+/* テーブルのヘッダー */
 table th {
-  background-color: #f5f5f5;
+  background-color: var(--theme-accent);
   font-weight: 500;
-  color: #424242;
-  border-bottom: 2px solid #e0e0e0;
+  color: var(--theme-text);
+  border-bottom: 2px solid var(--theme-primary);
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -229,7 +284,12 @@ table td {
 
 /* Links */
 a {
-  color: #1976d2;
+  color: var(--theme-primary-darker);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--theme-text);
   text-decoration: none;
 }
 
@@ -268,106 +328,32 @@ a {
   border: 1px solid #e0e0e0;
 }
 
-a:hover {
-  color: #1565c0;
-  text-decoration: none;
+/* カードのタイトル */
+.card-title {
+  color: var(--theme-text) !important;
 }
 
-/* Page Headers */
-.page-header {
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #e0e0e0;
+.card-title .blue-text {
+  color: var(--theme-primary-darker) !important;
 }
 
+/* カードのアクションリンク */
+.card-action a.blue-text {
+  color: var(--theme-primary-darker) !important;
+}
+
+.card-action a.blue-text:hover {
+  color: var(--theme-text) !important;
+}
+
+/* フォームのラベル */
+label {
+  color: var(--theme-text);
+}
+
+/* ページヘッダー */
 .page-header h1 {
-  color: #424242;
-  font-weight: 400;
-  font-size: 1.8rem;
-  margin: 0;
-}
-
-/* Form sections */
-.form-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.form-section legend {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1976d2;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e3f2fd;
-}
-
-/* 陣営選択（キャラ登録・編集画面用） */
-.faction-selection {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  border: 1px solid #dee2e6;
-}
-
-.faction-checkbox {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  padding: 6px 10px;
-  background-color: white;
-  border: 1px solid #dee2e6;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: fit-content;
-}
-
-.faction-checkbox:hover {
-  background-color: #e9ecef;
-  border-color: #adb5bd;
-}
-
-.faction-checkbox input[type="checkbox"] {
-  margin-right: 4px;
-  margin-left: 0;
-}
-
-.faction-checkbox span {
-  font-size: 14px;
-  color: #495057;
-  white-space: nowrap;
-}
-
-/* Checkboxes and Radio buttons */
-[type="checkbox"]:checked + span:not(.lever):before {
-  border-right: 2px solid #1976d2;
-  border-bottom: 2px solid #1976d2;
-}
-
-[type="checkbox"]:checked + span:not(.lever):after {
-  border: 2px solid #1976d2;
-  background-color: #1976d2;
-}
-
-/* Select dropdowns */
-.select-wrapper input.select-dropdown:focus {
-  border-bottom: 1px solid #1976d2;
-}
-
-.select-wrapper .dropdown-content li > span {
-  color: #424242;
-}
-
-.select-wrapper .dropdown-content li > span:hover {
-  background-color: #e3f2fd;
+  color: var(--theme-text);
 }
 
 /* テーブルの操作列を右詰めにする */
@@ -558,4 +544,146 @@ table td:last-child .btn-small:first-child {
 .no-image span {
   font-size: 14px;
   font-style: italic;
+} 
+
+/* ボタンのテーマカラー適用 */
+.btn-large.blue,
+.btn-small.blue {
+  background-color: var(--theme-primary-darker) !important;
+}
+
+.btn-large.blue:hover,
+.btn-small.blue:hover {
+  background-color: var(--theme-text) !important;
+}
+
+/* 削除ボタンは赤のまま */
+.btn-small.red,
+.btn-large.red {
+  background-color: #f44336 !important;
+}
+
+.btn-small.red:hover,
+.btn-large.red:hover {
+  background-color: #d32f2f !important;
+} 
+
+/* ダッシュボードカードのテーマカラー適用 */
+.dashboard-card {
+  background-color: var(--theme-accent) !important;
+  border: 1px solid var(--theme-primary);
+}
+
+.dashboard-card .card-title {
+  color: var(--theme-text) !important;
+}
+
+.dashboard-card .card-title .blue-text {
+  color: var(--theme-primary-darker) !important;
+}
+
+.dashboard-card .card-action a.btn-small {
+  background-color: var(--theme-primary-darker) !important;
+}
+
+.dashboard-card .card-action a.btn-small:hover {
+  background-color: var(--theme-text) !important;
+} 
+
+/* フォーム要素のテーマカラー適用 */
+.form-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid var(--theme-primary);
+}
+
+.form-section legend {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--theme-text);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--theme-accent);
+}
+
+/* チェックボックスとラジオボタン */
+[type="checkbox"]:checked + span:not(.lever):before {
+  border-right: 2px solid var(--theme-primary-darker);
+  border-bottom: 2px solid var(--theme-primary-darker);
+}
+
+[type="checkbox"]:checked + span:not(.lever):after {
+  border: 2px solid var(--theme-primary-darker);
+  background-color: var(--theme-primary-darker);
+}
+
+/* セレクトドロップダウン */
+.select-wrapper input.select-dropdown:focus {
+  border-bottom: 1px solid var(--theme-primary-darker);
+}
+
+.select-wrapper .dropdown-content li > span {
+  color: var(--theme-text);
+}
+
+.select-wrapper .dropdown-content li > span:hover {
+  background-color: var(--theme-accent);
+}
+
+/* ページヘッダー */
+.page-header {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--theme-primary);
+}
+
+.page-header h1 {
+  color: var(--theme-text);
+  font-weight: 400;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* 陣営選択（キャラ登録・編集画面用） */
+.faction-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 15px;
+  background-color: var(--theme-accent);
+  border-radius: 4px;
+  border: 1px solid var(--theme-primary);
+}
+
+.faction-checkbox {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 6px 10px;
+  background-color: white;
+  border: 1px solid var(--theme-primary);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: fit-content;
+}
+
+.faction-checkbox:hover {
+  background-color: var(--theme-accent);
+  border-color: var(--theme-primary-darker);
+}
+
+.faction-checkbox input[type="checkbox"] {
+  margin-right: 4px;
+  margin-left: 0;
+}
+
+.faction-checkbox span {
+  font-size: 14px;
+  color: var(--theme-text);
+  white-space: nowrap;
 } 
