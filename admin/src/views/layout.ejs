@@ -21,24 +21,32 @@
       <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <li><a href="/characters">キャラクター</a></li>
-        <li><a href="/rarities">レアリティ</a></li>
-        <li><a href="/roles">ロール</a></li>
-        <li><a href="/factions">陣営</a></li>
         <li><a href="/skills">スキル</a></li>
         <li><a href="/skill-effects">スキル効果</a></li>
-        <li><a href="/logout">ログアウト</a></li>
+        <li><a class="dropdown-trigger" href="#!" data-target="settings-dropdown">設定<i class="material-icons right">arrow_drop_down</i></a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Mobile Navigation -->
-  <ul class="sidenav" id="mobile-nav">
-    <li><a href="/characters">キャラクター</a></li>
+  <!-- Settings Dropdown -->
+  <ul id="settings-dropdown" class="dropdown-content">
     <li><a href="/rarities">レアリティ</a></li>
     <li><a href="/roles">ロール</a></li>
     <li><a href="/factions">陣営</a></li>
+    <li class="divider"></li>
+    <li><a href="/logout">ログアウト</a></li>
+  </ul>
+
+  <!-- Mobile Navigation -->
+  <ul class="sidenav" id="mobile-nav">
+    <li><a href="/characters">キャラクター</a></li>
     <li><a href="/skills">スキル</a></li>
     <li><a href="/skill-effects">スキル効果</a></li>
+    <li class="divider"></li>
+    <li><a href="/rarities">レアリティ</a></li>
+    <li><a href="/roles">ロール</a></li>
+    <li><a href="/factions">陣営</a></li>
+    <li class="divider"></li>
     <li><a href="/logout">ログアウト</a></li>
   </ul>
   <% } %>
@@ -54,6 +62,14 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       M.AutoInit();
+      
+      // ドロップダウンメニューの初期化
+      var dropdowns = document.querySelectorAll('.dropdown-trigger');
+      M.Dropdown.init(dropdowns, {
+        constrainWidth: false,
+        coverTrigger: false,
+        closeOnClick: true
+      });
       
       // ImageResizerインスタンスを作成
       window.imageResizer = new ImageResizer();
