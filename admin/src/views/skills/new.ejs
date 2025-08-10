@@ -7,15 +7,52 @@
       <div class="card">
         <div class="card-content">
           <form action="/skills" method="post" enctype="multipart/form-data">
+            <!-- 1行目: 名前(50%)、CT(25%)、コスト(25%) -->
             <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <input type="text" id="name" name="name" required />
                 <label for="name">名前</label>
               </div>
+              <div class="input-field col s3">
+                <input type="number" id="ct" name="ct" min="0" />
+                <label for="ct">CT</label>
+              </div>
+              <div class="input-field col s3">
+                <input type="number" id="cost" name="cost" min="0" />
+                <label for="cost">コスト</label>
+              </div>
             </div>
 
+            <!-- 2行目以降: 左側にスキルカテゴリー・スキルタイプ、右側にアイコン -->
             <div class="row">
-              <div class="input-field col s6">
+              <div class="col s6">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select name="skillCategory" required>
+                      <option value="">選択してください</option>
+                      <option value="個性">個性</option>
+                      <option value="EX">EX</option>
+                      <option value="通常">通常</option>
+                    </select>
+                    <label>スキルカテゴリー</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select name="skillType" required>
+                      <option value="">選択してください</option>
+                      <option value="パッシブ">パッシブ</option>
+                      <option value="アクティブ">アクティブ</option>
+                      <option value="即時">即時</option>
+                      <option value="オーラ">オーラ</option>
+                      <option value="通常攻撃">通常攻撃</option>
+                      <option value="リアクション">リアクション</option>
+                    </select>
+                    <label>スキルタイプ</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col s6">
                 <div class="image-upload-section">
                   <div class="image-preview-container">
                     <div id="icon-preview" class="image-preview-large">
@@ -40,52 +77,9 @@
                   </div>
                 </div>
               </div>
-              <div class="input-field col s6">
-                <input type="number" id="cost" name="cost" min="0" />
-                <label for="cost">コスト</label>
-              </div>
             </div>
 
-            <div class="row">
-              <div class="input-field col s6">
-                <input type="number" id="ct" name="ct" min="0" />
-                <label for="ct">CT</label>
-              </div>
-              <div class="input-field col s6">
-                <select name="skillType" required>
-                  <option value="">選択してください</option>
-                  <option value="パッシブ">パッシブ</option>
-                  <option value="アクティブ">アクティブ</option>
-                  <option value="即時">即時</option>
-                  <option value="オーラ">オーラ</option>
-                  <option value="通常攻撃">通常攻撃</option>
-                  <option value="リアクション">リアクション</option>
-                </select>
-                <label>スキルタイプ</label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s6">
-                <select name="skillCategory" required>
-                  <option value="">選択してください</option>
-                  <option value="個性">個性</option>
-                  <option value="EX">EX</option>
-                  <option value="通常">通常</option>
-                </select>
-                <label>スキルカテゴリー</label>
-              </div>
-              <div class="input-field col s6">
-                <select name="targets" multiple>
-                  <option value="対ユニット">対ユニット</option>
-                  <option value="対地面">対地面</option>
-                  <option value="近接">近接</option>
-                  <option value="範囲攻撃">範囲攻撃</option>
-                </select>
-                <label>スキルターゲット（複数選択）</label>
-              </div>
-            </div>
-
+            <!-- 説明を1行 -->
             <div class="row">
               <div class="input-field col s12">
                 <textarea id="description" name="description" class="materialize-textarea" rows="3"></textarea>
@@ -93,6 +87,7 @@
               </div>
             </div>
 
+            <!-- スキル効果 -->
             <div class="row">
               <div class="col s12">
                 <label>スキル効果（複数選択）:</label>
@@ -107,9 +102,59 @@
               </div>
             </div>
 
+            <!-- 射程・範囲の1行目: スキルターゲット -->
             <div class="row">
               <div class="col s12">
                 <label>射程・範囲（未指定のものはフロントでは非表示）:</label>
+                <div class="mt-20">
+                  <label class="mr-20">
+                    <input type="checkbox" name="targets" value="対ユニット" />
+                    <span>対ユニット</span>
+                  </label>
+                  <label class="mr-20">
+                    <input type="checkbox" name="targets" value="対地面" />
+                    <span>対地面</span>
+                  </label>
+                  <label class="mr-20">
+                    <input type="checkbox" name="targets" value="近接" />
+                    <span>近接</span>
+                  </label>
+                  <label class="mr-20">
+                    <input type="checkbox" name="targets" value="範囲攻撃" />
+                    <span>範囲攻撃</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 射程・範囲の2行目以降: 左側に範囲画像、右側に射程from-to -->
+            <div class="row">
+              <div class="col s6">
+                <div class="image-upload-section">
+                  <div class="image-preview-container">
+                    <div id="range-preview" class="image-preview-large">
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="range" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'range')" />
+                      <label for="range" class="file-input-label">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>範囲画像を選択</span>
+                      </label>
+                    </div>
+                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('range')">
+                      <i class="material-icons">refresh</i>
+                      リセット
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col s6">
                 <div class="row">
                   <div class="input-field col s6">
                     <input type="number" id="rangeFrom" name="rangeFrom" min="0" />
@@ -138,31 +183,6 @@
                   <div class="input-field col s6">
                     <input type="number" id="areaHeightTo" name="areaHeightTo" />
                     <label for="areaHeightTo">範囲高低差 To</label>
-                  </div>
-                </div>
-                <div class="input-field">
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="range-preview" class="image-preview-large">
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="range" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'range')" />
-                        <label for="range" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>範囲画像を選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('range')">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
