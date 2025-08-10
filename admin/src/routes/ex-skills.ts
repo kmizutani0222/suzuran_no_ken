@@ -34,7 +34,7 @@ router.post("/", upload.single("icon"), async (req, res) => {
     const body = req.body;
     const exSkillData: ExSkillCreateInput = {
       name: body.name,
-      effectIds: body.effectIds ? (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) : [],
+      effectIds: body.effectIds ? (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) : (body.noEffectIds ? [] : []),
       lv1Description: body.lv1Description || "",
       lv2Description: body.lv2Description || "",
       lv3Description: body.lv3Description || "",
@@ -74,16 +74,26 @@ router.put("/:id", upload.single("icon"), async (req, res) => {
   try {
     const body = req.body;
     const updateData: ExSkillUpdateInput = {
-      ...(body.name && { name: body.name }),
-      ...(body.effectIds && { effectIds: Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds] }),
-      ...(body.lv1Description && { lv1Description: body.lv1Description }),
-      ...(body.lv2Description && { lv2Description: body.lv2Description }),
-      ...(body.lv3Description && { lv3Description: body.lv3Description }),
+      name: body.name,
+      effectIds: body.effectIds ? (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) : (body.noEffectIds ? [] : []),
+      lv1Description: body.lv1Description || "",
+      lv2Description: body.lv2Description || "",
+      lv3Description: body.lv3Description || "",
     };
 
-    // iconが存在する場合のみ追加
+    // アイコンの処理
     if (req.file?.filename) {
+      // 新しいファイルがアップロードされた場合
       (updateData as any).icon = req.file.filename;
+    } else if (body.iconReset === 'true') {
+      // アイコンがリセットされた場合（空文字列を設定）
+      (updateData as any).icon = "";
+    } else if (body.currentIcon && body.currentIcon !== "") {
+      // 既存のアイコンを保持する場合
+      (updateData as any).icon = body.currentIcon;
+    } else {
+      // アイコンが指定されていない場合（空文字列を設定）
+      (updateData as any).icon = "";
     }
 
     await ExSkillRepository.update(req.params.id!, updateData);

@@ -33,7 +33,7 @@
                       <span>アイコンを選択</span>
                     </label>
                   </div>
-                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
                     <i class="material-icons">refresh</i>
                     リセット
                   </button>
@@ -45,24 +45,24 @@
           <!-- Lv1説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="lv1Description" name="lv1Description" class="materialize-textarea" required></textarea>
-              <label for="lv1Description">Lv1説明</label>
+              <textarea id="lv1Description" name="lv1Description" class="materialize-textarea"></textarea>
+              <label for="lv1Description">Lv1説明（任意）</label>
             </div>
           </div>
 
           <!-- Lv2説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="lv2Description" name="lv2Description" class="materialize-textarea" required></textarea>
-              <label for="lv2Description">Lv2説明</label>
+              <textarea id="lv2Description" name="lv2Description" class="materialize-textarea"></textarea>
+              <label for="lv2Description">Lv2説明（任意）</label>
             </div>
           </div>
 
           <!-- Lv3説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="lv3Description" name="lv3Description" class="materialize-textarea" required></textarea>
-              <label for="lv3Description">Lv3説明</label>
+              <textarea id="lv3Description" name="lv3Description" class="materialize-textarea"></textarea>
+              <label for="lv3Description">Lv3説明（任意）</label>
             </div>
           </div>
 
@@ -79,6 +79,8 @@
                     </label>
                   <% }) %>
                 </div>
+                <!-- チェックボックスが全て外された場合の処理用 -->
+                <input type="hidden" name="noEffectIds" value="true" />
               </div>
             </div>
           </div>
@@ -102,21 +104,20 @@
 </a>
 
 <script>
-document.getElementById('icon').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const preview = document.getElementById('imagePreview');
-      preview.innerHTML = `<img src="${e.target.result}" alt="プレビュー" style="max-width: 100%; max-height: 100%; object-fit: cover;" />`;
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
 // Materialize CSSのselect要素を初期化
 document.addEventListener('DOMContentLoaded', function() {
   var elems = document.querySelectorAll('select');
   var instances = M.FormSelect.init(elems);
+  
+  // テキストエリアのラベルを適切に配置
+  M.textareaAutoResize(document.getElementById('lv1Description'));
+  M.textareaAutoResize(document.getElementById('lv2Description'));
+  M.textareaAutoResize(document.getElementById('lv3Description'));
 });
+
+// アイコンリセット処理
+function resetIcon() {
+  // ImageResizerのリセット処理を実行
+  imageResizer.resetImage('icon');
+}
 </script> 
