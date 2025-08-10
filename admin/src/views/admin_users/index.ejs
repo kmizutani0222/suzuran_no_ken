@@ -14,12 +14,12 @@
             </tr>
           </thead>
           <tbody>
-            <% if (adminUsers.length === 0) { %>
+            <% if (items.length === 0) { %>
               <tr>
                 <td colspan="2" class="text-center">データがありません</td>
               </tr>
             <% } %>
-            <% adminUsers.forEach(au => { %>
+            <% items.forEach(au => { %>
               <tr>
                 <td><%= au.username %></td>
                 <td>
