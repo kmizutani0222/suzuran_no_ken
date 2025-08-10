@@ -31,7 +31,6 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <select name="skillCategory" required>
-                      <option value="">選択してください</option>
                       <option value="個性" <%= skill.skillCategory === '個性' ? 'selected' : '' %>>個性</option>
                       <option value="EX" <%= skill.skillCategory === 'EX' ? 'selected' : '' %>>EX</option>
                       <option value="通常" <%= skill.skillCategory === '通常' ? 'selected' : '' %>>通常</option>
@@ -42,7 +41,6 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <select name="skillType" required>
-                      <option value="">選択してください</option>
                       <option value="パッシブ" <%= skill.skillType === 'パッシブ' ? 'selected' : '' %>>パッシブ</option>
                       <option value="アクティブ" <%= skill.skillType === 'アクティブ' ? 'selected' : '' %>>アクティブ</option>
                       <option value="即時" <%= skill.skillType === '即時' ? 'selected' : '' %>>即時</option>
@@ -229,23 +227,13 @@
 
             <div class="row">
               <div class="col s12 center-align">
-                <button type="submit" class="btn-large waves-effect waves-light">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
                   <i class="material-icons left">save</i>
                   更新
                 </button>
               </div>
             </div>
           </form>
-
-          <div class="row mt-20">
-            <div class="col s12 text-center">
-              <form action="/skills/<%= skill.id %>/delete" method="post" style="display: inline;">
-                <button type="submit" class="btn-large waves-effect waves-light red" onclick="return confirm('削除しますか？')">
-                  <i class="material-icons left">delete</i>削除
-                </button>
-              </form>
-            </div>
-          </div>
         </div>
       </div>
     </div>

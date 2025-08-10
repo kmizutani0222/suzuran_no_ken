@@ -37,10 +37,10 @@ router.post("/", upload.single("icon"), (req, res) => {
 });
 
 router.get("/:id/edit", (req, res) => {
-  const item = SkillRepository.findById(req.params.id);
-  if (!item) return res.status(404).send("Not Found");
+  const skill = SkillRepository.findById(req.params.id);
+  if (!skill) return res.status(404).send("Not Found");
   const skillEffects = SkillEffectRepository.list();
-  res.render(path.join("skills", "edit"), { item, skillEffects });
+  res.render(path.join("skills", "edit"), { skill, skillEffects });
 });
 
 router.post("/:id", upload.single("icon"), (req, res) => {

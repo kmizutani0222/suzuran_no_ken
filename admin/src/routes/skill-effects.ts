@@ -21,9 +21,9 @@ router.post("/", (req, res) => {
 });
 
 router.get("/:id/edit", (req, res) => {
-  const item = SkillEffectRepository.findById(req.params.id);
-  if (!item) return res.status(404).send("Not Found");
-  res.render(path.join("skill_effects", "edit"), { item });
+  const skillEffect = SkillEffectRepository.findById(req.params.id);
+  if (!skillEffect) return res.status(404).send("Not Found");
+  res.render(path.join("skill_effects", "edit"), { skillEffect });
 });
 
 router.post("/:id", (req, res) => {

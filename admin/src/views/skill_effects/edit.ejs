@@ -5,32 +5,54 @@
   <title>管理 - スキル効果編集</title>
 </head>
 <body>
-  <h1>スキル効果編集</h1>
-  <form action="/skill-effects/<%= item.id %>" method="post">
-    <div><label>名前: <input type="text" name="name" value="<%= item.name %>" required /></label></div>
-    <div>
-      <label>カテゴリー: 
-        <select name="category" required>
-          <option value="バフ" <%= item.category === 'バフ' ? 'selected' : '' %>>バフ</option>
-          <option value="デバフ" <%= item.category === 'デバフ' ? 'selected' : '' %>>デバフ</option>
-          <option value="状態" <%= item.category === '状態' ? 'selected' : '' %>>状態</option>
-          <option value="地形・行動" <%= item.category === '地形・行動' ? 'selected' : '' %>>地形・行動</option>
-          <option value="スキル" <%= item.category === 'スキル' ? 'selected' : '' %>>スキル</option>
-          <option value="ダメージ" <%= item.category === 'ダメージ' ? 'selected' : '' %>>ダメージ</option>
-          <option value="その他" <%= item.category === 'その他' ? 'selected' : '' %>>その他</option>
-        </select>
-      </label>
+  <div class="page-header">
+    <h1>スキル効果編集</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/skill-effects/<%= skillEffect.id %>" method="post">
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="text" id="name" name="name" value="<%= skillEffect.name %>" required />
+                <label for="name">名前</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="category" required>
+                  <option value="バフ" <%= skillEffect.category === 'バフ' ? 'selected' : '' %>>バフ</option>
+                  <option value="デバフ" <%= skillEffect.category === 'デバフ' ? 'selected' : '' %>>デバフ</option>
+                  <option value="状態" <%= skillEffect.category === '状態' ? 'selected' : '' %>>状態</option>
+                  <option value="地形・行動" <%= skillEffect.category === '地形・行動' ? 'selected' : '' %>>地形・行動</option>
+                  <option value="スキル" <%= skillEffect.category === 'スキル' ? 'selected' : '' %>>スキル</option>
+                  <option value="ダメージ" <%= skillEffect.category === 'ダメージ' ? 'selected' : '' %>>ダメージ</option>
+                  <option value="その他" <%= skillEffect.category === 'その他' ? 'selected' : '' %>>その他</option>
+                </select>
+                <label>カテゴリー</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="description" name="description" class="materialize-textarea" rows="6" required><%= skillEffect.description %></textarea>
+                <label for="description">効果説明</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">save</i>更新
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div>
-      <label>効果説明:<br />
-        <textarea name="description" rows="6" cols="60" required><%= item.description %></textarea>
-      </label>
-    </div>
-    <button type="submit">更新</button>
-  </form>
-  <form action="/skill-effects/<%= item.id %>/delete" method="post" style="margin-top:1rem;">
-    <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
-  </form>
+  </div>
+
   <p><a href="/skill-effects">一覧に戻る</a></p>
 </body>
 </html> 
