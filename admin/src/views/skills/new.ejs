@@ -44,30 +44,27 @@
                 </div>
               </div>
               <div class="col s6">
-                <div class="form-section">
-                  <legend>アイコン</legend>
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="icon-preview" class="image-preview-large">
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
+                <div class="image-upload-section">
+                  <div class="image-preview-container">
+                    <div id="icon-preview" class="image-preview-large">
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
                       </div>
                     </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                        <label for="icon" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>アイコンを選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                      <label for="icon" class="file-input-label">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>アイコンを選択</span>
+                      </label>
                     </div>
+                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                      <i class="material-icons">refresh</i>
+                      リセット
+                    </button>
                   </div>
                 </div>
               </div>
@@ -128,30 +125,27 @@
             <!-- 射程・範囲の2行目以降: 左側に範囲画像、右側に射程from-to -->
             <div class="row">
               <div class="col s6">
-                <div class="form-section">
-                  <legend>範囲画像</legend>
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="rangeImage-preview" class="image-preview-large">
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
+                <div class="image-upload-section">
+                  <div class="image-preview-container">
+                    <div id="rangeImage-preview" class="image-preview-large">
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
                       </div>
                     </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" />
-                        <label for="rangeImage" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>範囲画像を選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetRangeImage()">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" />
+                      <label for="rangeImage" class="file-input-label">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>範囲画像を選択</span>
+                      </label>
                     </div>
+                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetRangeImage()">
+                      <i class="material-icons">refresh</i>
+                      リセット
+                    </button>
                   </div>
                 </div>
               </div>

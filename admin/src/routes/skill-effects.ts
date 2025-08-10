@@ -42,7 +42,7 @@ router.get("/:id/edit", (req, res) => {
 });
 
 // 更新処理
-router.put('/:id', (req, res) => {
+router.post('/:id', (req, res) => {
   try {
     const id = req.params.id!;
     const { name, category, description } = req.body;
