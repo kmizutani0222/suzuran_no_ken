@@ -16,14 +16,11 @@
         <div class="card-content">
           <form action="/factions/<%= item.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <input type="text" id="name" name="name" value="<%= item.name %>" required />
                 <label for="name">名前</label>
               </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <div class="image-upload-section">
                   <div class="image-preview-container">
                     <div id="icon-preview" class="image-preview-large">
