@@ -34,11 +34,11 @@ export interface Skill {
   id: string;
   name: string;
   icon?: string; // アップロード画像のパス
-  cost: number;
-  ct: number;
-  description: string; // 複数行
+  cost?: number;
+  ct?: number;
+  description?: string; // 複数行（任意）
   targets: SkillTarget[]; // 複数選択（旧types）
-  skillType: SkillType; // 追加
+  skillType?: SkillType; // 追加
   range?: SkillRange; // 任意
   effectIds?: string[]; // SkillEffect 複数選択
 }
@@ -46,11 +46,11 @@ export interface Skill {
 export interface SkillCreateInput {
   name: string;
   icon?: string;
-  cost: number;
-  ct: number;
-  description: string;
+  cost?: number;
+  ct?: number;
+  description?: string;
   targets: SkillTarget[];
-  skillType: SkillType;
+  skillType?: SkillType;
   range?: SkillRange;
   effectIds?: string[];
 }

@@ -30,7 +30,8 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
-                    <select name="skillType" required>
+                    <select name="skillType">
+                      <option value="">未選択</option>
                       <option value="パッシブ" <%= skill.skillType === 'パッシブ' ? 'selected' : '' %>>パッシブ</option>
                       <option value="アクティブ" <%= skill.skillType === 'アクティブ' ? 'selected' : '' %>>アクティブ</option>
                       <option value="即時" <%= skill.skillType === '即時' ? 'selected' : '' %>>即時</option>
@@ -38,120 +39,18 @@
                       <option value="通常攻撃" <%= skill.skillType === '通常攻撃' ? 'selected' : '' %>>通常攻撃</option>
                       <option value="リアクション" <%= skill.skillType === 'リアクション' ? 'selected' : '' %>>リアクション</option>
                     </select>
-                    <label>スキルタイプ</label>
+                    <label>スキルタイプ（任意）</label>
                   </div>
                 </div>
               </div>
               <div class="col s6">
-                <div class="image-upload-section">
-                  <div class="image-preview-container">
-                    <div id="icon-preview" class="image-preview-large">
-                      <% if (skill.icon) { %>
-                        <img src="<%= skill.icon %>" alt="アイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
-                      <% } else { %>
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      <% } %>
-                    </div>
-                  </div>
-                  <div class="image-controls">
-                    <div class="file-input-wrapper">
-                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                      <label for="icon" class="file-input-label">
-                        <i class="material-icons">cloud_upload</i>
-                        <span>アイコンを選択</span>
-                      </label>
-                    </div>
-                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
-                      <i class="material-icons">refresh</i>
-                      リセット
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 説明 -->
-            <div class="row">
-              <div class="input-field col s12">
-                <textarea id="description" name="description" class="materialize-textarea" required><%= skill.description %></textarea>
-                <label for="description">説明</label>
-              </div>
-            </div>
-
-            <!-- スキル効果 -->
-            <div class="form-section">
-              <legend>スキル効果</legend>
-              <div class="faction-selection">
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="攻撃力アップ" <%= skill.skillEffects && skill.skillEffects.includes('攻撃力アップ') ? 'checked' : '' %> />
-                  <span>攻撃力アップ</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="防御力アップ" <%= skill.skillEffects && skill.skillEffects.includes('防御力アップ') ? 'checked' : '' %> />
-                  <span>防御力アップ</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="移動力アップ" <%= skill.skillEffects && skill.skillEffects.includes('移動力アップ') ? 'checked' : '' %> />
-                  <span>移動力アップ</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="ジャンプ力アップ" <%= skill.skillEffects && skill.skillEffects.includes('ジャンプ力アップ') ? 'checked' : '' %> />
-                  <span>ジャンプ力アップ</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="HP回復" <%= skill.skillEffects && skill.skillEffects.includes('HP回復') ? 'checked' : '' %> />
-                  <span>HP回復</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillEffects" value="状態異常回復" <%= skill.skillEffects && skill.skillEffects.includes('状態異常回復') ? 'checked' : '' %> />
-                  <span>状態異常回復</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- 射程・範囲 -->
-            <div class="form-section">
-              <legend>射程・範囲</legend>
-              
-              <!-- スキルターゲット -->
-              <div class="faction-selection">
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="敵単体" <%= skill.skillTargets && skill.skillTargets.includes('敵単体') ? 'checked' : '' %> />
-                  <span>敵単体</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="敵全体" <%= skill.skillTargets && skill.skillTargets.includes('敵全体') ? 'checked' : '' %> />
-                  <span>敵全体</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="味方単体" <%= skill.skillTargets && skill.skillTargets.includes('味方単体') ? 'checked' : '' %> />
-                  <span>味方単体</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="味方全体" <%= skill.skillTargets && skill.skillTargets.includes('味方全体') ? 'checked' : '' %> />
-                  <span>味方全体</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="自分" <%= skill.skillTargets && skill.skillTargets.includes('自分') ? 'checked' : '' %> />
-                  <span>自分</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="skillTargets" value="地形" <%= skill.skillTargets && skill.skillTargets.includes('地形') ? 'checked' : '' %> />
-                  <span>地形</span>
-                </label>
-              </div>
-
-              <!-- 範囲画像と射程・範囲情報 -->
-              <div class="row">
-                <div class="col s6">
+                <div class="form-section">
+                  <legend>アイコン</legend>
                   <div class="image-upload-section">
                     <div class="image-preview-container">
-                      <div id="rangeImage-preview" class="image-preview-large">
-                        <% if (skill.rangeImage) { %>
-                          <img src="<%= skill.rangeImage %>" alt="範囲画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
+                      <div id="icon-preview" class="image-preview-large">
+                        <% if (skill.icon) { %>
+                          <img src="<%= skill.icon %>" alt="アイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
                         <% } else { %>
                           <div class="no-image">
                             <i class="material-icons">image</i>
@@ -162,16 +61,98 @@
                     </div>
                     <div class="image-controls">
                       <div class="file-input-wrapper">
-                        <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" />
-                        <label for="rangeImage" class="file-input-label">
+                        <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                        <label for="icon" class="file-input-label">
                           <i class="material-icons">cloud_upload</i>
-                          <span>範囲画像を選択</span>
+                          <span>アイコンを選択</span>
                         </label>
                       </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('rangeImage')">
+                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
                         <i class="material-icons">refresh</i>
                         リセット
                       </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="description" name="description" class="materialize-textarea"><%= skill.description || '' %></textarea>
+                <label for="description">説明（任意）</label>
+              </div>
+            </div>
+
+            <!-- スキル効果 -->
+            <div class="form-section">
+              <legend>スキル効果</legend>
+              <div class="faction-selection">
+                <% skillEffects.forEach(effect => { %>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="effectIds" value="<%= effect.id %>" <%= skill.effectIds && skill.effectIds.includes(effect.id) ? 'checked' : '' %> />
+                    <span><%= effect.name %></span>
+                  </label>
+                <% }); %>
+              </div>
+            </div>
+
+            <!-- 射程・範囲 -->
+            <div class="form-section">
+              <legend>射程・範囲</legend>
+              
+              <!-- スキルターゲット -->
+              <div class="faction-selection">
+                <label class="faction-checkbox">
+                  <input type="checkbox" name="targets" value="近接" <%= skill.targets && skill.targets.includes('近接') ? 'checked' : '' %> />
+                  <span>近接</span>
+                </label>
+                <label class="faction-checkbox">
+                  <input type="checkbox" name="targets" value="範囲攻撃" <%= skill.targets && skill.targets.includes('範囲攻撃') ? 'checked' : '' %> />
+                  <span>範囲攻撃</span>
+                </label>
+                <label class="faction-checkbox">
+                  <input type="checkbox" name="targets" value="対ユニット" <%= skill.targets && skill.targets.includes('対ユニット') ? 'checked' : '' %> />
+                  <span>対ユニット</span>
+                </label>
+                <label class="faction-checkbox">
+                  <input type="checkbox" name="targets" value="対地面" <%= skill.targets && skill.targets.includes('対地面') ? 'checked' : '' %> />
+                  <span>対地面</span>
+                </label>
+              </div>
+
+              <!-- 範囲画像と射程・範囲情報 -->
+              <div class="row">
+                <div class="col s6">
+                  <div class="form-section">
+                    <legend>範囲画像</legend>
+                    <div class="image-upload-section">
+                      <div class="image-preview-container">
+                        <div id="rangeImage-preview" class="image-preview-large">
+                          <% if (skill.range && skill.range.image) { %>
+                            <img src="<%= skill.range.image %>" alt="範囲画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
+                          <% } else { %>
+                            <div class="no-image">
+                              <i class="material-icons">image</i>
+                              <span>画像が選択されていません</span>
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
+                      <div class="image-controls">
+                        <div class="file-input-wrapper">
+                          <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" />
+                          <label for="rangeImage" class="file-input-label">
+                            <i class="material-icons">cloud_upload</i>
+                            <span>範囲画像を選択</span>
+                          </label>
+                        </div>
+                                              <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetRangeImage()">
+                        <i class="material-icons">refresh</i>
+                        リセット
+                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -179,42 +160,46 @@
                   <!-- 射程 From-To -->
                   <div class="row">
                     <div class="input-field col s6">
-                      <input type="number" id="rangeFrom" name="rangeFrom" min="0" value="<%= skill.rangeFrom || '' %>" />
-                      <label for="rangeFrom">射程 From</label>
+                      <input type="number" id="distanceFrom" name="distanceFrom" min="0" value="<%= skill.range && skill.range.distanceFrom ? skill.range.distanceFrom : '' %>" />
+                      <label for="distanceFrom">射程 From</label>
                     </div>
                     <div class="input-field col s6">
-                      <input type="number" id="rangeTo" name="rangeTo" min="0" value="<%= skill.rangeTo || '' %>" />
-                      <label for="rangeTo">射程 To</label>
+                      <input type="number" id="distanceTo" name="distanceTo" min="0" value="<%= skill.range && skill.range.distanceTo ? skill.range.distanceTo : '' %>" />
+                      <label for="distanceTo">射程 To</label>
                     </div>
                   </div>
                   
                   <!-- 射程高低差 -->
                   <div class="row">
                     <div class="input-field col s6">
-                      <input type="number" id="rangeHeightFrom" name="rangeHeightFrom" value="<%= skill.rangeHeightFrom || '' %>" />
-                      <label for="rangeHeightFrom">射程高低差 From</label>
+                      <input type="number" id="heightDiffFrom" name="heightDiffFrom" value="<%= skill.range && skill.range.heightDiffFrom ? skill.range.heightDiffFrom : '' %>" />
+                      <label for="heightDiffFrom">射程高低差 From</label>
                     </div>
                     <div class="input-field col s6">
-                      <input type="number" id="rangeHeightTo" name="rangeHeightTo" value="<%= skill.rangeHeightTo || '' %>" />
-                      <label for="rangeHeightTo">射程高低差 To</label>
+                      <input type="number" id="heightDiffTo" name="heightDiffTo" value="<%= skill.range && skill.range.heightDiffTo ? skill.range.heightDiffTo : '' %>" />
+                      <label for="heightDiffTo">射程高低差 To</label>
                     </div>
                   </div>
                   
                   <!-- 範囲高低差 -->
                   <div class="row">
                     <div class="input-field col s6">
-                      <input type="number" id="areaHeightFrom" name="areaHeightFrom" value="<%= skill.areaHeightFrom || '' %>" />
-                      <label for="areaHeightFrom">範囲高低差 From</label>
+                      <input type="number" id="areaHeightDiffFrom" name="areaHeightDiffFrom" value="<%= skill.range && skill.range.areaHeightDiffFrom ? skill.range.areaHeightDiffFrom : '' %>" />
+                      <label for="areaHeightDiffFrom">範囲高低差 From</label>
                     </div>
                     <div class="input-field col s6">
-                      <input type="number" id="areaHeightTo" name="areaHeightTo" value="<%= skill.areaHeightTo || '' %>" />
-                      <label for="areaHeightTo">範囲高低差 To</label>
+                      <input type="number" id="areaHeightDiffTo" name="areaHeightDiffTo" value="<%= skill.range && skill.range.areaHeightDiffTo ? skill.range.areaHeightDiffTo : '' %>" />
+                      <label for="areaHeightDiffTo">範囲高低差 To</label>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- 隠しフィールド -->
+            <input type="hidden" name="iconClear" id="iconClear" value="false" />
+            <input type="hidden" name="rangeImageClear" id="rangeImageClear" value="false" />
+            
             <div class="row">
               <div class="col s12 center-align">
                 <button type="submit" class="btn-large waves-effect waves-light blue">
@@ -231,4 +216,49 @@
 <!-- 固定配置の戻るボタン -->
 <a href="/skills" class="btn-floating fab-back waves-effect waves-light grey">
   <i class="material-icons">arrow_back</i>
-</a> 
+</a>
+
+<script>
+// アイコンリセット
+function resetIcon() {
+  document.getElementById('icon-preview').innerHTML = `
+    <div class="no-image">
+      <i class="material-icons">image</i>
+      <span>画像が選択されていません</span>
+    </div>
+  `;
+  document.getElementById('iconClear').value = 'true';
+}
+
+// レンジ画像リセット
+function resetRangeImage() {
+  document.getElementById('rangeImage-preview').innerHTML = `
+    <div class="no-image">
+      <i class="material-icons">image</i>
+      <span>画像が選択されていません</span>
+    </div>
+  `;
+  document.getElementById('rangeImageClear').value = 'true';
+  
+  // ファイル入力もクリア
+  const rangeImageInput = document.querySelector('input[name="rangeImage"]');
+  if (rangeImageInput) {
+    rangeImageInput.value = '';
+  }
+}
+
+// フォーム送信前の処理
+document.querySelector('form').addEventListener('submit', function(e) {
+  // チェックボックスの値を配列として送信するための処理
+  const targetCheckboxes = document.querySelectorAll('input[name="targets"]:checked');
+  const effectCheckboxes = document.querySelectorAll('input[name="effectIds"]:checked');
+  
+  // チェックされていないチェックボックスを無効化して送信しないようにする
+  document.querySelectorAll('input[name="targets"]:not(:checked)').forEach(cb => {
+    cb.disabled = true;
+  });
+  document.querySelectorAll('input[name="effectIds"]:not(:checked)').forEach(cb => {
+    cb.disabled = true;
+  });
+});
+</script> 
