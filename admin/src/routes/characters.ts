@@ -3,6 +3,7 @@ import path from "path";
 import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository } from "../../../shared/src/repository";
 import { CharacterCreateInput, CharacterUpdateInput } from "../../../shared/src/models";
 import { WeaponType } from "../../../shared/src/models";
+import { upload } from "../middleware/upload";
 
 export const router = Router();
 
@@ -27,8 +28,12 @@ router.get("/new", (_req, res) => {
   res.render(path.join("characters", "new"), { rarities, roles, factions, personalitySkills: personality, normalSkills: normal, exSkills: ex });
 });
 
-router.post("/", (req, res) => {
+router.post("/", upload.fields([
+  { name: 'normalAppearance', maxCount: 1 },
+  { name: 'pixelAvatar', maxCount: 1 }
+]), (req, res) => {
   const body = req.body as any;
+  const files = req.files as any;
   const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
   const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
 
@@ -60,6 +65,8 @@ router.post("/", (req, res) => {
     ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
     ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
     ...(exSkillIds.length ? { exSkillIds } : {}),
+    ...(files.normalAppearance?.[0] ? { normalAppearance: files.normalAppearance[0].path.replace(/\\/g, '/') } : {}),
+    ...(files.pixelAvatar?.[0] ? { pixelAvatar: files.pixelAvatar[0].path.replace(/\\/g, '/') } : {}),
   };
 
   CharacterRepository.create(input);
@@ -76,8 +83,12 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("characters", "edit"), { character, rarities, roles, factions, personalitySkills: personality, normalSkills: normal, exSkills: ex });
 });
 
-router.post("/:id", (req, res) => {
+router.post("/:id", upload.fields([
+  { name: 'normalAppearance', maxCount: 1 },
+  { name: 'pixelAvatar', maxCount: 1 }
+]), (req, res) => {
   const body = req.body as any;
+  const files = req.files as any;
   const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
   const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
 
@@ -109,8 +120,13 @@ router.post("/:id", (req, res) => {
     ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
     ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
     ...(exSkillIds.length ? { exSkillIds } : {}),
+    ...(files.normalAppearance?.[0] ? { normalAppearance: files.normalAppearance[0].path.replace(/\\/g, '/') } : {}),
+    ...(files.pixelAvatar?.[0] ? { pixelAvatar: files.pixelAvatar[0].path.replace(/\\/g, '/') } : {}),
   };
 
+  if (!req.params.id) {
+    return res.status(400).send("ID is required");
+  }
   CharacterRepository.update(req.params.id, input);
   res.redirect("/characters");
 });

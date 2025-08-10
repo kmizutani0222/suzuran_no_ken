@@ -26,19 +26,33 @@
                 <tr>
                   <th>名前</th>
                   <th>武器種</th>
+                  <th>ピクセルアバター</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody>
                 <% if (characters.length === 0) { %>
                   <tr>
-                    <td colspan="3" class="text-center">データがありません</td>
+                    <td colspan="4" class="text-center">データがありません</td>
                   </tr>
                 <% } %>
                 <% characters.forEach(c => { %>
                   <tr>
                     <td><%= c.name %></td>
                     <td><%= c.weaponType %></td>
+                    <td>
+                      <div class="character-images">
+                        <% if (c.pixelAvatar) { %>
+                          <div class="image-preview">
+                            <img src="<%= c.pixelAvatar %>" alt="ピクセルアバター" title="ピクセルアバター" />
+                          </div>
+                        <% } else { %>
+                          <div class="no-image">
+                            <span class="grey-text">画像なし</span>
+                          </div>
+                        <% } %>
+                      </div>
+                    </td>
                     <td>
                       <a href="/characters/<%= c.id %>/edit" class="btn-small waves-effect waves-light blue">
                         <i class="material-icons">edit</i>編集

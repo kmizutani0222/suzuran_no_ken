@@ -12,6 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
+// アップロードされた画像を提供
+app.use("/uploads", express.static(path.join(__dirname, "../../admin/uploads")));
+
 app.get("/", (_req, res) => {
   res.redirect("/characters");
 });

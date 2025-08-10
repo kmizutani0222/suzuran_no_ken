@@ -3,34 +3,75 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - ロール登録</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <h1>ロール登録</h1>
-  <form action="/roles" method="post">
-    <div>
-      <label>名前: <input type="text" name="name" required /></label>
+  <div class="page-header">
+    <h1>ロール登録</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/roles" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="name" name="name" required />
+                <label for="name">名前</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <div class="file-field input-field">
+                  <div class="btn blue">
+                    <span>アイコン</span>
+                    <input type="file" name="icon" accept="image/*" />
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="number" id="movementPower" name="movementPower" required min="0" />
+                <label for="movementPower">移動力</label>
+              </div>
+              <div class="input-field col s6">
+                <input type="number" id="jumpHigh" name="jumpHigh" required min="0" />
+                <label for="jumpHigh">ジャンプ高</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="number" id="jumpLow" name="jumpLow" required min="0" />
+                <label for="jumpLow">ジャンプ低</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="terrainSuitability" required>
+                  <option value="normal">通常</option>
+                </select>
+                <label>地形適正</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">save</i>保存
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div>
-      <label>画像URL: <input type="text" name="image" /></label>
-    </div>
-    <div>
-      <label>移動力: <input type="number" name="movementPower" required min="0" /></label>
-    </div>
-    <div>
-      <label>ジャンプ高: <input type="number" name="jumpHigh" required min="0" /></label>
-    </div>
-    <div>
-      <label>ジャンプ低: <input type="number" name="jumpLow" required min="0" /></label>
-    </div>
-    <div>
-      <label>地形適正:
-        <select name="terrainSuitability" required>
-          <option value="normal">通常</option>
-        </select>
-      </label>
-    </div>
-    <button type="submit">保存</button>
-  </form>
+  </div>
   <p><a href="/roles">一覧に戻る</a></p>
 </body>
 </html> 

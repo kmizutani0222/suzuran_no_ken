@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - スキル一覧</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <div class="page-header">
@@ -23,6 +24,7 @@
           <table class="striped responsive-table">
             <thead>
               <tr>
+                <th>アイコン</th>
                 <th>名前</th>
                 <th>タイプ</th>
                 <th>カテゴリー</th>
@@ -34,11 +36,18 @@
             <tbody>
               <% if (skills.length === 0) { %>
                 <tr>
-                  <td colspan="6" class="text-center">データがありません</td>
+                  <td colspan="7" class="text-center">データがありません</td>
                 </tr>
               <% } %>
               <% skills.forEach(s => { %>
                 <tr>
+                  <td>
+                    <% if (s.icon) { %>
+                      <img src="<%= s.icon %>" alt="<%= s.name %>" style="max-width: 40px; max-height: 40px;" />
+                    <% } else { %>
+                      <span class="no-image">画像なし</span>
+                    <% } %>
+                  </td>
                   <td><%= s.name %></td>
                   <td><%= s.skillType %></td>
                   <td><%= s.skillCategory %></td>

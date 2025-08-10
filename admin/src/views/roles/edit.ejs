@@ -3,37 +3,91 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - ロール編集</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <h1>ロール編集</h1>
-  <form action="/roles/<%= item.id %>" method="post">
-    <div>
-      <label>名前: <input type="text" name="name" value="<%= item.name %>" required /></label>
+  <div class="page-header">
+    <h1>ロール編集</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/roles/<%= item.id %>" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="name" name="name" value="<%= item.name %>" required />
+                <label for="name">名前</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <div class="file-field input-field">
+                  <div class="btn blue">
+                    <span>アイコン</span>
+                    <input type="file" name="icon" accept="image/*" />
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                  </div>
+                </div>
+                <% if (item.icon) { %>
+                  <div class="image-preview">
+                    <p>現在のアイコン:</p>
+                    <img src="<%= item.icon %>" alt="現在のアイコン" style="max-width: 100px; max-height: 100px;" />
+                  </div>
+                <% } %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="number" id="movementPower" name="movementPower" value="<%= item.movementPower %>" required min="0" />
+                <label for="movementPower">移動力</label>
+              </div>
+              <div class="input-field col s6">
+                <input type="number" id="jumpHigh" name="jumpHigh" value="<%= item.jumpHigh %>" required min="0" />
+                <label for="jumpHigh">ジャンプ高</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="number" id="jumpLow" name="jumpLow" value="<%= item.jumpLow %>" required min="0" />
+                <label for="jumpLow">ジャンプ低</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="terrainSuitability" required>
+                  <option value="normal" <%= item.terrainSuitability === 'normal' ? 'selected' : '' %>>通常</option>
+                </select>
+                <label>地形適正</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">update</i>更新
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <form action="/roles/<%= item.id %>/delete" method="post" style="margin-top:1rem;">
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light red" onclick="return confirm('削除しますか？')">
+                  <i class="material-icons left">delete</i>削除
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div>
-      <label>画像URL: <input type="text" name="image" value="<%= item.image %>" /></label>
-    </div>
-    <div>
-      <label>移動力: <input type="number" name="movementPower" value="<%= item.movementPower %>" required min="0" /></label>
-    </div>
-    <div>
-      <label>ジャンプ高: <input type="number" name="jumpHigh" value="<%= item.jumpHigh %>" required min="0" /></label>
-    </div>
-    <div>
-      <label>ジャンプ低: <input type="number" name="jumpLow" value="<%= item.jumpLow %>" required min="0" /></label>
-    </div>
-    <div>
-      <label>地形適正:
-        <select name="terrainSuitability" required>
-          <option value="normal" <%= item.terrainSuitability === 'normal' ? 'selected' : '' %>>通常</option>
-        </select>
-      </label>
-    </div>
-    <button type="submit">更新</button>
-  </form>
-  <form action="/roles/<%= item.id %>/delete" method="post" style="margin-top:1rem;">
-    <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
-  </form>
+  </div>
   <p><a href="/roles">一覧に戻る</a></p>
 </body>
 </html> 

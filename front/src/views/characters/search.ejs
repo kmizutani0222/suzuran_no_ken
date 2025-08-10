@@ -3,36 +3,113 @@
 <head>
   <meta charset="utf-8" />
   <title>鈴蘭の剣 - キャラ検索</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <h1>キャラ検索</h1>
-  <form method="get" action="/characters">
-    <input type="text" name="name" placeholder="名前" value="<%= filters.name || '' %>" />
-    <select name="element">
-      <option value="">属性(任意)</option>
-      <% ["fire","water","wind","earth","light","dark"].forEach(e => { %>
-        <option value="<%= e %>" <%= filters.element === e ? 'selected' : '' %>><%= e %></option>
-      <% }) %>
-    </select>
-    <input type="text" name="weapon" placeholder="武器(任意)" value="<%= filters.weapon || '' %>" />
-    <select name="rarity">
-      <option value="">レア(任意)</option>
-      <% [1,2,3,4,5].forEach(r => { %>
-        <option value="<%= r %>" <%= String(filters.rarity) === String(r) ? 'selected' : '' %>><%= r %></option>
-      <% }) %>
-    </select>
-    <button type="submit">検索</button>
-  </form>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1>キャラ検索</h1>
+        
+        <div class="card">
+          <div class="card-content">
+            <form method="get" action="/characters">
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <input type="text" id="name" name="name" value="<%= filters.name || '' %>" />
+                  <label for="name">名前</label>
+                </div>
+                <div class="input-field col s12 m6">
+                  <select name="rarityId">
+                    <option value="">レアリティ（任意）</option>
+                    <% rarities.forEach(r => { %>
+                      <option value="<%= r.id %>" <%= filters.rarityId === r.id ? 'selected' : '' %>><%= r.name %> (★<%= r.value %>)</option>
+                    <% }) %>
+                  </select>
+                  <label>レアリティ</label>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <select name="roleId">
+                    <option value="">ロール（任意）</option>
+                    <% roles.forEach(r => { %>
+                      <option value="<%= r.id %>" <%= filters.roleId === r.id ? 'selected' : '' %>><%= r.name %></option>
+                    <% }) %>
+                  </select>
+                  <label>ロール</label>
+                </div>
+                <div class="input-field col s12 m6">
+                  <select name="weaponType">
+                    <option value="">武器種（任意）</option>
+                    <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
+                      <option value="<%= w %>" <%= filters.weaponType === w ? 'selected' : '' %>><%= w %></option>
+                    <% }) %>
+                  </select>
+                  <label>武器種</label>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col s12 text-center">
+                  <button type="submit" class="btn-large waves-effect waves-light blue">
+                    <i class="material-icons left">search</i>検索
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
 
-  <ul>
-    <% if (results.length === 0) { %>
-      <li>該当なし</li>
-    <% } %>
-    <% results.forEach(c => { %>
-      <li>
-        <a href="/characters/<%= c.id %>"><%= c.name %></a> / <%= c.element %> / <%= c.weapon %> / ★<%= c.rarity %>
-      </li>
-    <% }) %>
-  </ul>
+        <div class="row">
+          <div class="col s12">
+            <h5>検索結果 (<%= results.length %>件)</h5>
+            
+            <% if (results.length === 0) { %>
+              <div class="card-panel">
+                <p class="center-align">該当するキャラクターが見つかりませんでした。</p>
+              </div>
+            <% } %>
+            
+            <div class="row">
+              <% results.forEach(c => { %>
+                <div class="col s12 m6 l4">
+                  <div class="card">
+                    <div class="card-image">
+                      <% if (c.pixelAvatar) { %>
+                        <img src="<%= c.pixelAvatar %>" alt="<%= c.name %>" style="height: 200px; object-fit: cover;">
+                      <% } %>
+                    </div>
+                    <div class="card-content">
+                      <span class="card-title"><%= c.name %></span>
+                      <p>
+                        <strong>レアリティ:</strong> ★<%= c.rarity?.value || 'N/A' %><br>
+                        <strong>ロール:</strong> <%= c.role?.name || 'N/A' %><br>
+                        <strong>武器種:</strong> <%= c.weaponType || 'N/A' %>
+                      </p>
+                    </div>
+                    <div class="card-action">
+                      <a href="/characters/<%= c.id %>" class="waves-effect waves-light btn-small">
+                        <i class="material-icons left">visibility</i>詳細
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      M.FormSelect.init(document.querySelectorAll('select'));
+    });
+  </script>
 </body>
 </html> 

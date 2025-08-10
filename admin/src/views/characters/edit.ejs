@@ -13,7 +13,7 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <form action="/characters/<%= character.id %>" method="post">
+          <form action="/characters/<%= character.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" id="name" name="name" value="<%= character.name %>" required />
@@ -55,7 +55,7 @@
             </div>
 
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s12">
                 <select name="weaponType">
                   <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
                     <option value="<%= w %>" <%= character.weaponType === w ? 'selected' : '' %>><%= w %></option>
@@ -63,7 +63,51 @@
                 </select>
                 <label>武器種</label>
               </div>
-              <div class="input-field col s6">
+            </div>
+
+            <div class="form-section">
+              <legend>外見画像</legend>
+              <div class="row">
+                <div class="input-field col s6">
+                  <div class="file-field input-field">
+                    <div class="btn blue">
+                      <span>通常外見</span>
+                      <input type="file" name="normalAppearance" accept="image/*" />
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                    </div>
+                  </div>
+                  <% if (character.normalAppearance) { %>
+                    <div class="current-image">
+                      <p>現在の画像:</p>
+                      <img src="<%= character.normalAppearance %>" alt="通常外見" style="max-width: 100px; max-height: 100px;" />
+                    </div>
+                  <% } %>
+                </div>
+                <div class="input-field col s6">
+                  <div class="file-field input-field">
+                    <div class="btn blue">
+                      <span>ピクセルアバター</span>
+                      <input type="file" name="pixelAvatar" accept="image/*" />
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                    </div>
+                  </div>
+                  <% if (character.pixelAvatar) { %>
+                    <div class="current-image">
+                      <p>現在の画像:</p>
+                      <img src="<%= character.pixelAvatar %>" alt="ピクセルアバター" style="max-width: 100px; max-height: 100px;" />
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <legend>個性スキル</legend>
+              <div class="input-field">
                 <select name="personalitySkillId">
                   <option value="">未設定</option>
                   <% personalitySkills.forEach(s => { %>

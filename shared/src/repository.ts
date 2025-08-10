@@ -254,6 +254,7 @@ function readAllAdminUsers(): AdminUser[] { return readJson<AdminUser[]>(ADMIN_U
 function writeAllAdminUsers(values: AdminUser[]): void { writeJson(ADMIN_USER_FILE, values); }
 export const AdminUserRepository = {
   list(): AdminUser[] { return readAllAdminUsers(); },
+  findById(id: string): AdminUser | undefined { return readAllAdminUsers().find(u => u.id === id); },
   findByUsername(username: string): AdminUser | undefined { return readAllAdminUsers().find(u => u.username === username); },
   create(input: AdminUserCreateInput): AdminUser {
     const all = readAllAdminUsers();

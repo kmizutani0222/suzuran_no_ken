@@ -2,6 +2,7 @@ import { Router } from "express";
 import path from "path";
 import { SkillEffectRepository, SkillRepository } from "../../../shared/src/repository";
 import { SkillCreateInput, SkillUpdateInput, SkillTarget, SkillType, SkillCategory } from "../../../shared/src/models";
+import { upload, toPublicPath } from "../middleware/upload";
 
 export const router = Router();
 
@@ -15,7 +16,7 @@ router.get("/new", (_req, res) => {
   res.render(path.join("skills", "new"), { skillEffects });
 });
 
-router.post("/", (req, res) => {
+router.post("/", upload.single("icon"), (req, res) => {
   const body = req.body as any;
   const targets = (Array.isArray(body.targets) ? body.targets : (body.targets ? [body.targets] : [])) as SkillTarget[];
   const effectIds: string[] = Array.isArray(body.effectIds) ? body.effectIds : (body.effectIds ? [body.effectIds] : []);
@@ -29,6 +30,7 @@ router.post("/", (req, res) => {
     skillType: body.skillType as SkillType,
     skillCategory: body.skillCategory as SkillCategory,
     ...(effectIds.length > 0 ? { effectIds } : {}),
+    ...(req.file ? { icon: toPublicPath(req.file.path) } : {}),
   };
   SkillRepository.create(input);
   res.redirect("/skills");
@@ -41,7 +43,9 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("skills", "edit"), { item, skillEffects });
 });
 
-router.post("/:id", (req, res) => {
+router.post("/:id", upload.single("icon"), (req, res) => {
+  if (!req.params.id) return res.status(400).send("Bad Request");
+  
   const body = req.body as any;
   const targets = (Array.isArray(body.targets) ? body.targets : (body.targets ? [body.targets] : [])) as SkillTarget[];
   const effectIds: string[] = Array.isArray(body.effectIds) ? body.effectIds : (body.effectIds ? [body.effectIds] : []);
@@ -55,6 +59,7 @@ router.post("/:id", (req, res) => {
     ...(body.skillType ? { skillType: body.skillType as SkillType } : {}),
     ...(body.skillCategory ? { skillCategory: body.skillCategory as SkillCategory } : {}),
     ...(effectIds.length > 0 ? { effectIds } : {}),
+    ...(req.file ? { icon: toPublicPath(req.file.path) } : {}),
   };
   SkillRepository.update(req.params.id, input);
   res.redirect("/skills");

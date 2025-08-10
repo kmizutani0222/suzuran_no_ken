@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <% if (typeof user !== 'undefined' && user) { %>
   <nav class="blue darken-3">
     <div class="nav-wrapper container">
       <a href="/" class="brand-logo">鈴蘭の剣 管理</a>
@@ -38,6 +39,7 @@
     <li><a href="/skill-effects">スキル効果</a></li>
     <li><a href="/logout">ログアウト</a></li>
   </ul>
+  <% } %>
 
   <main class="container">
     <%- body %>

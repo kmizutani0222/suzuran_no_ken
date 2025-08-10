@@ -127,6 +127,8 @@ export interface Character {
   personalitySkillId?: string; // Skill(skillCategory: 個性)から単一
   skillTree?: CharacterSkillTree; // 各ランク左右に通常スキル
   exSkillIds?: string[]; // EXスキル複数
+  normalAppearance?: string; // 通常外見画像
+  pixelAvatar?: string; // ピクセルアバター画像
 }
 
 export interface CharacterCreateInput extends Omit<Character, "id"> {}

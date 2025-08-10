@@ -13,7 +13,7 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <form action="/characters" method="post">
+          <form action="/characters" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" id="name" name="name" required />
@@ -55,7 +55,7 @@
             </div>
 
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s12">
                 <select name="weaponType" required>
                   <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
                     <option value="<%= w %>"><%= w %></option>
@@ -63,7 +63,39 @@
                 </select>
                 <label>武器種</label>
               </div>
-              <div class="input-field col s6">
+            </div>
+
+            <div class="form-section">
+              <legend>外見画像</legend>
+              <div class="row">
+                <div class="input-field col s6">
+                  <div class="file-field input-field">
+                    <div class="btn blue">
+                      <span>通常外見</span>
+                      <input type="file" name="normalAppearance" accept="image/*" />
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                    </div>
+                  </div>
+                </div>
+                <div class="input-field col s6">
+                  <div class="file-field input-field">
+                    <div class="btn blue">
+                      <span>ピクセルアバター</span>
+                      <input type="file" name="pixelAvatar" accept="image/*" />
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <legend>個性スキル</legend>
+              <div class="input-field">
                 <select name="personalitySkillId">
                   <option value="">未設定</option>
                   <% personalitySkills.forEach(s => { %>

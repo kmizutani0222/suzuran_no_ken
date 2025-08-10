@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - スキル登録</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <div class="page-header">
@@ -13,11 +14,25 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <form action="/skills" method="post">
+          <form action="/skills" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" id="name" name="name" required />
                 <label for="name">名前</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <div class="file-field input-field">
+                  <div class="btn blue">
+                    <span>アイコン</span>
+                    <input type="file" name="icon" accept="image/*" />
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -3,14 +3,116 @@
 <head>
   <meta charset="utf-8" />
   <title>鈴蘭の剣 - <%= c.name %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <h1><%= c.name %></h1>
-  <p>属性: <%= c.element %></p>
-  <p>武器: <%= c.weapon %></p>
-  <p>レア: ★<%= c.rarity %></p>
-  <p>説明:</p>
-  <pre><%= c.description %></pre>
-  <p><a href="/characters">検索に戻る</a></p>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1><%= c.name %></h1>
+        
+        <div class="row">
+          <div class="col s12 m6">
+            <div class="card">
+              <div class="card-content">
+                <h5>基本情報</h5>
+                <p><strong>レアリティ:</strong> ★<%= c.rarity?.value || 'N/A' %></p>
+                <p><strong>ロール:</strong> <%= c.role?.name || 'N/A' %></p>
+                <p><strong>武器種:</strong> <%= c.weaponType || 'N/A' %></p>
+                <p><strong>陣営:</strong> <%= c.factions?.map(f => f.name).join(', ') || 'N/A' %></p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col s12 m6">
+            <div class="card">
+              <div class="card-content">
+                <h5>外見</h5>
+                <% if (c.normalAppearance) { %>
+                  <p><strong>通常外見:</strong></p>
+                  <img src="<%= c.normalAppearance %>" alt="通常外見" style="max-width: 200px; max-height: 200px;" />
+                <% } %>
+                <% if (c.pixelAvatar) { %>
+                  <p><strong>ピクセルアバター:</strong></p>
+                  <img src="<%= c.pixelAvatar %>" alt="ピクセルアバター" style="max-width: 200px; max-height: 200px;" />
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% if (c.personalitySkill) { %>
+          <div class="row">
+            <div class="col s12">
+              <div class="card">
+                <div class="card-content">
+                  <h5>個性スキル</h5>
+                  <p><strong><%= c.personalitySkill.name %></strong></p>
+                  <p><%= c.personalitySkill.description %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (c.skillTree && Object.keys(c.skillTree).length > 0) { %>
+          <div class="row">
+            <div class="col s12">
+              <div class="card">
+                <div class="card-content">
+                  <h5>スキルツリー</h5>
+                  <% Object.entries(c.skillTree).forEach(([rank, node]) => { %>
+                    <div class="row mb-10">
+                      <div class="col s12">
+                        <h6><strong><%= rank %></strong></h6>
+                        <div class="row">
+                          <div class="col s6">
+                            <p><strong>左:</strong> <%= node.left ? c.skills?.find(s => s.id === node.left)?.name || 'N/A' : 'なし' %></p>
+                          </div>
+                          <div class="col s6">
+                            <p><strong>右:</strong> <%= node.right ? c.skills?.find(s => s.id === node.right)?.name || 'N/A' : 'なし' %></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (c.exSkills && c.exSkills.length > 0) { %>
+          <div class="row">
+            <div class="col s12">
+              <div class="card">
+                <div class="card-content">
+                  <h5>EXスキル</h5>
+                  <% c.exSkills.forEach(skill => { %>
+                    <div class="skill-item">
+                      <h6><%= skill.name %></h6>
+                      <p><%= skill.description %></p>
+                      <p><small>コスト: <%= skill.cost %>, CT: <%= skill.ct %></small></p>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="row">
+          <div class="col s12">
+            <a href="/characters" class="btn waves-effect waves-light">
+              <i class="material-icons left">arrow_back</i>検索に戻る
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html> 
