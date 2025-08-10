@@ -398,7 +398,10 @@ class ImageResizer {
 
     // 元の画面に結果を反映
     this.updateOriginalField(fieldName);
-
+    
+    // ファイル入力を更新（切り抜き後の画像を反映）
+    this.updateFileInput(fieldName);
+    
     // モーダルを閉じる
     this.closeCropModal();
   }
@@ -414,9 +417,6 @@ class ImageResizer {
         <img src="${this.croppedImage}" alt="切り抜き後の画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;">
       `;
     }
-    
-    // モーダルを閉じる
-    this.closeCropModal();
   }
 
   // ファイル入力を更新
