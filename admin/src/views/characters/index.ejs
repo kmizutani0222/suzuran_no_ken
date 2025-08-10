@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>キャラクター一覧</h1>
+  <h1>キャラ一覧</h1>
 </div>
 
 <div class="row">
@@ -45,7 +45,7 @@
                     <i class="material-icons">edit</i>
                   </a>
                   <form action="/characters/<%= c.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
-                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('キャラクター「<%= c.name %>」を削除しますか？')">
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('キャラ「<%= c.name %>」を削除しますか？')">
                       <i class="material-icons">delete</i>
                     </button>
                   </form>

@@ -202,10 +202,13 @@ nav ul li a:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow: hidden;
   margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 table {
   margin: 0;
+  width: 100%;
 }
 
 table th {
@@ -214,12 +217,14 @@ table th {
   color: #424242;
   border-bottom: 2px solid #e0e0e0;
   padding-left: 20px;
+  padding-right: 20px;
 }
 
 table td {
   border-bottom: 1px solid #e0e0e0;
   vertical-align: middle;
   padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* Links */
@@ -369,6 +374,7 @@ a:hover {
 table th:last-child,
 table td:last-child {
   text-align: right;
+  padding-right: 20px;
 }
 
 /* 操作ボタンの間隔を調整 */
@@ -378,6 +384,21 @@ table td:last-child .btn-small {
 
 table td:last-child .btn-small:first-child {
   margin-left: 0;
+}
+
+/* テーブル全体の右側余白を確保 */
+/* レスポンシブ対応で左右余白を調整 */
+@media only screen and (max-width: 600px) {
+  .table-container {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  table th,
+  table td {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 /* Responsive adjustments */
