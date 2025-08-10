@@ -1,0 +1,130 @@
+<div class="page-header">
+  <h1>EXスキル編集</h1>
+</div>
+
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <form action="/ex-skills/<%= exSkill.id %>?_method=PUT" method="post" enctype="multipart/form-data">
+          <!-- 1行目: 左側に名前、右側にアイコン -->
+          <div class="row">
+            <div class="col s6">
+              <div class="input-field">
+                <input type="text" id="name" name="name" value="<%= exSkill.name %>" required />
+                <label for="name">名前</label>
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="image-upload-section">
+                <div class="image-preview-container">
+                  <div id="icon-preview" class="image-preview-large">
+                    <% if (exSkill.icon) { %>
+                      <img src="/uploads/<%= exSkill.icon %>" alt="<%= exSkill.name %>" style="max-width: 100%; max-height: 100%; object-fit: cover;" />
+                    <% } else { %>
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="image-controls">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                    <label for="icon" class="file-input-label">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>アイコンを選択</span>
+                    </label>
+                  </div>
+                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                    <i class="material-icons">refresh</i>
+                    リセット
+                  </button>
+                </div>
+                <% if (exSkill.icon) { %>
+                  <input type="hidden" name="currentIcon" value="<%= exSkill.icon %>" />
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lv1説明 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="lv1Description" name="lv1Description" class="materialize-textarea" required><%= exSkill.lv1Description %></textarea>
+              <label for="lv1Description">Lv1説明</label>
+            </div>
+          </div>
+
+          <!-- Lv2説明 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="lv2Description" name="lv2Description" class="materialize-textarea" required><%= exSkill.lv2Description %></textarea>
+              <label for="lv2Description">Lv2説明</label>
+            </div>
+          </div>
+
+          <!-- Lv3説明 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="lv3Description" name="lv3Description" class="materialize-textarea" required><%= exSkill.lv3Description %></textarea>
+              <label for="lv3Description">Lv3説明</label>
+            </div>
+          </div>
+
+          <!-- スキル効果 -->
+          <div class="row">
+            <div class="col s12">
+              <div class="form-section">
+                <legend>スキル効果（複数選択）</legend>
+                <div class="faction-selection">
+                  <% skillEffects.forEach(e => { %>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="effectIds" value="<%= e.id %>" 
+                        <%= exSkill.effectIds && exSkill.effectIds.includes(e.id) ? 'checked' : '' %> />
+                      <span><%= e.name %></span>
+                    </label>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col s12 text-center">
+              <button type="submit" class="btn-large waves-effect waves-light blue">
+                <i class="material-icons left">save</i>保存
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 固定配置の戻るボタン -->
+<a href="/ex-skills" class="btn-floating fab-back waves-effect waves-light grey">
+  <i class="material-icons">arrow_back</i>
+</a>
+
+<script>
+document.getElementById('icon').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = `<img src="${e.target.result}" alt="プレビュー" style="max-width: 100%; max-height: 100%; object-fit: cover;" />`;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Materialize CSSのselect要素を初期化
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('select');
+  var instances = M.FormSelect.init(elems);
+});
+</script> 

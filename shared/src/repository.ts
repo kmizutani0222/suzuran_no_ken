@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
-import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput } from "./models";
+import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput, ExSkill, ExSkillCreateInput, ExSkillUpdateInput } from "./models";
 
 const DATA_DIR = join(process.cwd(), "../data");
 const CHARACTER_FILE = join(DATA_DIR, "characters.json");
@@ -11,6 +11,7 @@ const SKILL_FILE = join(DATA_DIR, "skills.json");
 const SKILL_EFFECT_FILE = join(DATA_DIR, "skill_effects.json");
 const PERSONALITY_SKILL_FILE = join(DATA_DIR, "personality_skills.json");
 const ADMIN_USER_FILE = join(DATA_DIR, "admin_users.json");
+const EX_SKILL_FILE = join(DATA_DIR, "ex_skills.json");
 
 function ensureDirExists(dirPath: string): void {
   if (!existsSync(dirPath)) {
@@ -278,6 +279,38 @@ export const PersonalitySkillRepository = {
     const next = all.filter(ps => ps.id !== id);
     const changed = next.length !== all.length;
     if (changed) writeAllPersonalitySkills(next);
+    return changed;
+  }
+};
+
+// Ex Skills
+function readAllExSkills(): ExSkill[] { return readJson<ExSkill[]>(EX_SKILL_FILE); }
+function writeAllExSkills(values: ExSkill[]): void { writeJson(EX_SKILL_FILE, values); }
+
+export const ExSkillRepository = {
+  list(): ExSkill[] { return readAllExSkills(); },
+  findById(id: string): ExSkill | undefined { return readAllExSkills().find(es => es.id === id); },
+  create(input: ExSkillCreateInput): ExSkill {
+    const all = readAllExSkills();
+    const created: ExSkill = { id: generateId(), ...input } as ExSkill;
+    all.push(created);
+    writeAllExSkills(all);
+    return created;
+  },
+  update(id: string, input: ExSkillUpdateInput): ExSkill | undefined {
+    const all = readAllExSkills();
+    const idx = all.findIndex(es => es.id === id);
+    if (idx === -1) return undefined;
+    const updated: ExSkill = { ...all[idx], ...input, id } as ExSkill;
+    all[idx] = updated;
+    writeAllExSkills(all);
+    return updated;
+  },
+  delete(id: string): boolean {
+    const all = readAllExSkills();
+    const next = all.filter(es => es.id !== id);
+    const changed = next.length !== all.length;
+    if (changed) writeAllExSkills(next);
     return changed;
   }
 };

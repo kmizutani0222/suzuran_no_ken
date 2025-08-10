@@ -83,6 +83,28 @@ export interface PersonalitySkillCreateInput {
 
 export interface PersonalitySkillUpdateInput extends Partial<PersonalitySkillCreateInput> {}
 
+// EXスキルモデル
+export interface ExSkill {
+  id: string;
+  name: string;
+  icon?: string; // アップロード画像のパス
+  effectIds?: string[]; // SkillEffect 複数選択
+  lv1Description: string; // Lv1の説明
+  lv2Description: string; // Lv2の説明
+  lv3Description: string; // Lv3の説明
+}
+
+export interface ExSkillCreateInput {
+  name: string;
+  icon?: string;
+  effectIds?: string[];
+  lv1Description: string;
+  lv2Description: string;
+  lv3Description: string;
+}
+
+export interface ExSkillUpdateInput extends Partial<ExSkillCreateInput> {}
+
 export interface Rarity {
   id: string;
   name: string;
