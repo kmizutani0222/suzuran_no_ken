@@ -10,7 +10,7 @@
           <thead>
             <tr>
               <th>名前</th>
-              <th>説明</th>
+              <th>カテゴリー</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -23,7 +23,7 @@
             <% items.forEach(i => { %>
               <tr>
                 <td><%= i.name %></td>
-                <td><%= i.description %></td>
+                <td><%= i.category || '未設定' %></td>
                 <td>
                   <a href="/skill-effects/<%= i.id %>/edit" class="btn-small waves-effect waves-light blue">
                     <i class="material-icons">edit</i>
