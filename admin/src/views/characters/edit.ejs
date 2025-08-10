@@ -8,13 +8,10 @@
         <div class="card-content">
           <form action="/characters/<%= character.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <input type="text" id="name" name="name" value="<%= character.name %>" required />
                 <label for="name">名前</label>
               </div>
-            </div>
-
-            <div class="row">
               <div class="input-field col s6">
                 <select name="rarityId">
                   <% rarities.forEach(r => { %>
@@ -23,6 +20,9 @@
                 </select>
                 <label>レアリティ</label>
               </div>
+            </div>
+
+            <div class="row">
               <div class="input-field col s6">
                 <select name="roleId">
                   <% roles.forEach(r => { %>
@@ -31,30 +31,29 @@
                 </select>
                 <label>ロール</label>
               </div>
-            </div>
-
-            <div class="row">
-              <div class="col s12">
-                <label>陣営（複数選択可）:</label>
-                <div class="mt-20">
-                  <% factions.forEach(f => { %>
-                    <label class="mr-20">
-                      <input type="checkbox" name="factionIds" value="<%= f.id %>" <%= character.factionIds.includes(f.id) ? 'checked' : '' %> />
-                      <span><%= f.name %></span>
-                    </label>
-                  <% }) %>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <select name="weaponType">
                   <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
                     <option value="<%= w %>" <%= character.weaponType === w ? 'selected' : '' %>><%= w %></option>
                   <% }) %>
                 </select>
                 <label>武器種</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+                <div class="form-section">
+                  <legend>陣営（複数選択可）</legend>
+                  <div class="faction-selection">
+                    <% factions.forEach(f => { %>
+                      <label class="faction-checkbox">
+                        <input type="checkbox" name="factionIds" value="<%= f.id %>" <%= character.factionIds.includes(f.id) ? 'checked' : '' %> />
+                        <span><%= f.name %></span>
+                      </label>
+                    <% }) %>
+                  </div>
+                </div>
               </div>
             </div>
 

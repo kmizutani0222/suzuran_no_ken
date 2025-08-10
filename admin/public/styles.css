@@ -167,22 +167,63 @@ a:hover {
   margin: 0;
 }
 
-/* Form Sections */
+/* Form sections */
 .form-section {
-  background: white;
+  margin-bottom: 30px;
   padding: 20px;
+  background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
 }
 
 .form-section legend {
-  color: #1976d2;
+  font-size: 18px;
   font-weight: 500;
-  font-size: 1.1rem;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 8px;
+  color: #1976d2;
   margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e3f2fd;
+}
+
+/* 陣営選択（キャラ登録・編集画面用） */
+.faction-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.faction-checkbox {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 6px 10px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: fit-content;
+}
+
+.faction-checkbox:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.faction-checkbox input[type="checkbox"] {
+  margin-right: 4px;
+  margin-left: 0;
+}
+
+.faction-checkbox span {
+  font-size: 14px;
+  color: #495057;
+  white-space: nowrap;
 }
 
 /* Checkboxes and Radio buttons */
