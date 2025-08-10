@@ -41,9 +41,13 @@
                 <td><%= s.targets ? s.targets.join(', ') : 'なし' %></td>
                 <td><%= s.description %></td>
                 <td>
-                  <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light blue">編集</a>
+                  <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light blue">
+                    <i class="material-icons">edit</i>
+                  </a>
                   <form action="/skills/<%= s.id %>?_method=DELETE" method="POST" style="display: inline;">
-                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">削除</button>
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">
+                      <i class="material-icons">delete</i>
+                    </button>
                   </form>
                 </td>
               </tr>

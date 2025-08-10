@@ -14,7 +14,7 @@
             </tr>
           </thead>
           <tbody>
-            <% if (items.length === 0) { %>
+            <% if (items.length === 0) { %
               <tr>
                 <td colspan="2" class="text-center">データがありません</td>
               </tr>
@@ -23,7 +23,7 @@
               <tr>
                 <td><%= au.username %></td>
                 <td>
-                  <a href="/admin-users/<%= au.id %>/edit" class="btn-small waves-effect waves-light orange">
+                  <a href="/admin-users/<%= au.id %>/edit" class="btn-small waves-effect waves-light blue">
                     <i class="material-icons">edit</i>
                   </a>
                   <form action="/admin-users/<%= au.id %>/delete" method="post" style="display:inline; margin-left: 10px;">

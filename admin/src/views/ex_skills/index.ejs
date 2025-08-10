@@ -31,9 +31,13 @@
                 </td>
                 <td><%= exSkill.name %></td>
                 <td>
-                  <a href="/ex-skills/<%= exSkill.id %>/edit" class="btn-small waves-effect waves-light blue">編集</a>
+                  <a href="/ex-skills/<%= exSkill.id %>/edit" class="btn-small waves-effect waves-light blue">
+                    <i class="material-icons">edit</i>
+                  </a>
                   <form action="/ex-skills/<%= exSkill.id %>?_method=DELETE" method="POST" style="display: inline;">
-                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">削除</button>
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">
+                      <i class="material-icons">delete</i>
+                    </button>
                   </form>
                 </td>
               </tr>
