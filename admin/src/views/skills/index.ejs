@@ -3,69 +3,99 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - スキル一覧</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    .btn-small .material-icons {
+      vertical-align: middle;
+      line-height: 1;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+    .btn-small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 8px;
+    }
+  </style>
 </head>
 <body>
-<div class="page-header">
-  <h1>スキル一覧</h1>
-</div>
+  <div class="container">
+    <div class="page-header">
+      <h1>スキル一覧</h1>
+    </div>
 
-<div class="row">
-  <div class="col s12">
-    <div class="card">
-      <div class="card-content">
-        <div class="card-title">
-          <a href="/skills/new" class="btn-large waves-effect waves-light blue">
-            <i class="material-icons left">add</i>新規登録
-          </a>
-        </div>
-        
-        <div class="table-container">
-          <table class="striped responsive-table">
-            <thead>
-              <tr>
-                <th>アイコン</th>
-                <th>名前</th>
-                <th>タイプ</th>
-                <th>カテゴリー</th>
-                <th>コスト</th>
-                <th>CT</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (skills.length === 0) { %>
+    <div class="row">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            <div class="row">
+              <div class="col s12">
+                <a href="/skills/new" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">add</i>新規登録
+                </a>
+              </div>
+            </div>
+            
+            <table class="striped responsive-table">
+              <thead>
                 <tr>
-                  <td colspan="7" class="text-center">データがありません</td>
+                  <th>アイコン</th>
+                  <th>名前</th>
+                  <th>カテゴリー</th>
+                  <th>タイプ</th>
+                  <th>操作</th>
                 </tr>
-              <% } %>
-              <% skills.forEach(s => { %>
-                <tr>
-                  <td>
-                    <% if (s.icon) { %>
-                      <img src="<%= s.icon %>" alt="<%= s.name %>" style="max-width: 40px; max-height: 40px;" />
-                    <% } else { %>
-                      <span class="no-image">画像なし</span>
-                    <% } %>
-                  </td>
-                  <td><%= s.name %></td>
-                  <td><%= s.skillType %></td>
-                  <td><%= s.skillCategory %></td>
-                  <td><%= s.cost %></td>
-                  <td><%= s.ct %></td>
-                  <td>
-                    <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light blue">
-                      <i class="material-icons">edit</i>編集
-                    </a>
-                  </td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <% if (skills.length === 0) { %>
+                  <tr>
+                    <td colspan="5" class="text-center">データがありません</td>
+                  </tr>
+                <% } %>
+                <% skills.forEach(s => { %>
+                  <tr>
+                    <td>
+                      <% if (s.icon) { %>
+                        <img src="<%= s.icon %>" alt="<%= s.name %>" style="max-width: 40px; max-height: 40px;" />
+                      <% } else { %>
+                        <span class="no-image">画像なし</span>
+                      <% } %>
+                    </td>
+                    <td><%= s.name %></td>
+                    <td><%= s.skillCategory %></td>
+                    <td><%= s.skillType %></td>
+                    <td>
+                      <a href="/skills/<%= s.id %>/edit" class="btn-small waves-effect waves-light orange">
+                        <i class="material-icons">edit</i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col s12">
+        <a href="/dashboard" class="btn waves-effect waves-light">
+          <i class="material-icons left">arrow_back</i>ダッシュボードに戻る
+        </a>
+      </div>
+    </div>
   </div>
-</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      M.AutoInit();
+    });
+  </script>
 </body>
 </html> 

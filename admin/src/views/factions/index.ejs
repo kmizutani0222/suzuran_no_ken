@@ -3,35 +3,92 @@
 <head>
   <meta charset="utf-8" />
   <title>管理 - 陣営一覧</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    .btn-small .material-icons {
+      vertical-align: middle;
+      line-height: 1;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+    .btn-small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 8px;
+    }
+  </style>
 </head>
 <body>
-  <h1>陣営一覧</h1>
-  <p><a href="/factions/new">+ 新規登録</a></p>
-  <table border="1" cellpadding="6">
-    <thead>
-      <tr>
-        <th>名前</th>
-        <th>画像</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% if (items.length === 0) { %>
-        <tr><td colspan="3">データがありません</td></tr>
-      <% } %>
-      <% items.forEach(i => { %>
-        <tr>
-          <td><%= i.name %></td>
-          <td><% if (i.image) { %><img src="<%= i.image %>" alt="" width="64" /><% } %></td>
-          <td>
-            <a href="/factions/<%= i.id %>/edit">編集</a>
-            <form action="/factions/<%= i.id %>/delete" method="post" style="display:inline;">
-              <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="page-header">
+      <h1>陣営一覧</h1>
+    </div>
+
+    <div class="row">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            <div class="row">
+              <div class="col s12">
+                <a href="/factions/new" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">add</i>新規登録
+                </a>
+              </div>
+            </div>
+
+            <table class="striped responsive-table">
+              <thead>
+                <tr>
+                  <th>アイコン</th>
+                  <th>名前</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (items.length === 0) { %>
+                  <tr><td colspan="3">データがありません</td></tr>
+                <% } %>
+                <% items.forEach(i => { %>
+                  <tr>
+                    <td><% if (i.image) { %><img src="<%= i.image %>" alt="" width="64" /><% } else { %><span class="grey-text">画像なし</span><% } %></td>
+                    <td><%= i.name %></td>
+                    <td>
+                      <a href="/factions/<%= i.id %>/edit" class="btn-small waves-effect waves-light orange">
+                        <i class="material-icons">edit</i>
+                      </a>
+                      <form action="/factions/<%= i.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
+                        <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('削除しますか？')">
+                          <i class="material-icons">delete</i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12">
+        <a href="/dashboard" class="btn waves-effect waves-light">
+          <i class="material-icons left">arrow_back</i>ダッシュボードに戻る
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      M.AutoInit();
+    });
+  </script>
 </body>
 </html> 

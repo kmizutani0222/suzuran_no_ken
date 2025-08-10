@@ -5,6 +5,22 @@
   <title>管理 - 管理者一覧</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    .btn-small .material-icons {
+      vertical-align: middle;
+      line-height: 1;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+    .btn-small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 8px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -40,11 +56,11 @@
                     <td><%= item.username %></td>
                     <td>
                       <a href="/admin-users/<%= item.id %>/edit" class="btn-small waves-effect waves-light orange">
-                        <i class="material-icons left">edit</i>編集
+                        <i class="material-icons">edit</i>
                       </a>
                       <form action="/admin-users/<%= item.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
                         <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('削除しますか？')">
-                          <i class="material-icons left">delete</i>削除
+                          <i class="material-icons">delete</i>
                         </button>
                       </form>
                     </td>
