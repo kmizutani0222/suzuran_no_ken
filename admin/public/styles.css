@@ -85,6 +85,14 @@ nav ul li a:hover {
   box-shadow: 0 1px 0 0 #1976d2 !important;
 }
 
+/* テキストフォームの内部余白 */
+.input-field input,
+.input-field textarea,
+.input-field select {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
 .input-field select:focus {
   border-bottom: 1px solid #1976d2 !important;
   box-shadow: 0 1px 0 0 #1976d2 !important;
