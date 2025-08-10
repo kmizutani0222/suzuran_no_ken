@@ -208,30 +208,30 @@ export interface AdminUserUpdateInput extends Partial<AdminUserCreateInput> {}
 export interface Equipment {
   id: string;
   name: string;
-  icon?: string;
-  rarityId: string;
-  category: 'weapon' | 'armor';
-  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff';
-  equipmentSkill: string;
-  description: string;
-  acquisitionMethod?: string; // カンマ区切りの文字列（例: "神兵試練１, 神兵試練２"）
+  icon?: string | null;
+  rarityId?: string | null;
+  category?: 'weapon' | 'armor' | null;
+  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff' | null;
+  equipmentSkill?: string | null;
+  description?: string | null;
+  acquisitionMethod?: string | null; // カンマ区切りの文字列（例: "神兵試練１, 神兵試練２"）
   createdAt: string;
   updatedAt: string;
 }
 
 export interface EquipmentCreateInput {
   name: string;
-  icon?: string;
-  rarityId: string;
-  category: 'weapon' | 'armor';
-  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff';
-  equipmentSkill: string;
-  description: string;
-  acquisitionMethod?: string; // カンマ区切りの文字列
+  icon?: string | null;
+  rarityId?: string | null;
+  category?: 'weapon' | 'armor' | null;
+  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff' | null;
+  equipmentSkill?: string | null;
+  description?: string | null;
+  acquisitionMethod?: string | null; // カンマ区切りの文字列
 }
 
 export interface EquipmentUpdateInput extends Partial<EquipmentCreateInput> {}
 
 export interface EquipmentWithRarity extends Equipment {
-  rarity: Rarity;
+  rarity: Rarity | null;
 } 

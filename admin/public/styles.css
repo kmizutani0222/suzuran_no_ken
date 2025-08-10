@@ -687,3 +687,52 @@ table td:last-child .btn-small:first-child {
   color: var(--theme-text);
   white-space: nowrap;
 } 
+
+/* 装備アイコンのプレビュー用スタイル */
+.equipment-icon-preview {
+  width: 100%;
+  height: 120px; /* 装備アイコン用に高さを調整 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.equipment-icon-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.equipment-icon-preview.no-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #9e9e9e;
+  text-align: center;
+}
+
+.equipment-icon-preview.no-image .material-icons {
+  font-size: 32px; /* 装備アイコン用にサイズを調整 */
+  opacity: 0.5;
+}
+
+.equipment-icon-preview.no-image span {
+  font-size: 12px; /* 装備アイコン用にサイズを調整 */
+  font-style: italic;
+} 
+
+/* 装備一覧画面用の小さなアイコンスタイル */
+.equipment-icon-small {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+} 

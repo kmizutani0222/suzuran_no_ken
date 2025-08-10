@@ -1,38 +1,12 @@
 import express from 'express';
-import { EquipmentRepository, RarityRepository } from '../../../shared/src/repository';
-import multer from 'multer';
+import { EquipmentRepository } from '../../../shared/src/repository';
+import { RarityRepository } from '../../../shared/src/repository';
+import { upload, toPublicPath } from '../middleware/upload';
 import path from 'path';
 import fs from 'fs';
 import { Equipment, Rarity } from '../../../shared/src/models';
 
 const router = express.Router();
-
-// アップロード設定
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(process.cwd(), '../../uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const ext = path.extname(file.originalname);
-    cb(null, `${timestamp}_${file.originalname}`);
-  }
-});
-
-const upload = multer({ 
-  storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('画像ファイルのみアップロード可能です'));
-    }
-  }
-});
 
 // 一覧表示
 router.get('/', (req, res) => {
@@ -71,23 +45,30 @@ router.post('/', upload.single('icon'), (req, res) => {
       name
     };
 
-    // オプショナル項目の処理（空文字列も含める）
-    if (rarityId !== undefined) input.rarityId = rarityId || null;
-    if (category !== undefined) input.category = category || null;
-    if (weaponType !== undefined) input.weaponType = weaponType || null;
-    if (equipmentSkill !== undefined) input.equipmentSkill = equipmentSkill || null;
-    if (description !== undefined) input.description = description || null;
+    // オプショナル項目の処理（空文字列はnullに変換）
+    if (rarityId !== undefined) input.rarityId = rarityId === '' ? null : rarityId;
+    if (category !== undefined) input.category = category === '' ? null : category;
+    if (weaponType !== undefined) input.weaponType = weaponType === '' ? null : weaponType;
+    if (equipmentSkill !== undefined) input.equipmentSkill = equipmentSkill === '' ? null : equipmentSkill;
+    if (description !== undefined) input.description = description === '' ? null : description;
     
     // 入手方法の複数選択を配列として処理
     if (acquisitionMethod !== undefined) {
       if (Array.isArray(acquisitionMethod)) {
         input.acquisitionMethod = acquisitionMethod.length > 0 ? acquisitionMethod.join(', ') : null;
+      } else if (acquisitionMethod === '') {
+        input.acquisitionMethod = null;
       } else {
-        input.acquisitionMethod = acquisitionMethod || null;
+        input.acquisitionMethod = acquisitionMethod;
       }
     }
     
-    if (req.file) input.icon = req.file.filename;
+    // アイコンの処理
+    if (req.file) {
+      input.icon = toPublicPath(req.file.filename);
+    } else {
+      input.icon = null;
+    }
 
     EquipmentRepository.create(input);
     res.redirect('/equipment');
@@ -121,39 +102,64 @@ router.put('/:id', upload.single('icon'), (req, res) => {
       return res.status(400).send('IDが指定されていません');
     }
     
-    const { name, rarityId, category, weaponType, equipmentSkill, description, acquisitionMethod } = req.body;
+    const { name, rarityId, category, weaponType, equipmentSkill, description, acquisitionMethod, iconClear } = req.body;
     
     const input: any = {
       name
     };
 
-    // オプショナル項目の処理（空文字列も含める）
-    if (rarityId !== undefined) input.rarityId = rarityId || null;
-    if (category !== undefined) input.category = category || null;
-    if (weaponType !== undefined) input.weaponType = weaponType || null;
-    if (equipmentSkill !== undefined) input.equipmentSkill = equipmentSkill || null;
-    if (description !== undefined) input.description = description || null;
+    // オプショナル項目の処理（空文字列はnullに変換）
+    if (rarityId !== undefined) input.rarityId = rarityId === '' ? null : rarityId;
+    if (category !== undefined) input.category = category === '' ? null : category;
+    if (weaponType !== undefined) input.weaponType = weaponType === '' ? null : weaponType;
+    if (equipmentSkill !== undefined) input.equipmentSkill = equipmentSkill === '' ? null : equipmentSkill;
+    if (description !== undefined) input.description = description === '' ? null : description;
     
     // 入手方法の複数選択を配列として処理
     if (acquisitionMethod !== undefined) {
       if (Array.isArray(acquisitionMethod)) {
         input.acquisitionMethod = acquisitionMethod.length > 0 ? acquisitionMethod.join(', ') : null;
+      } else if (acquisitionMethod === '') {
+        input.acquisitionMethod = null;
       } else {
-        input.acquisitionMethod = acquisitionMethod || null;
+        input.acquisitionMethod = acquisitionMethod;
       }
     }
 
-    // 新しいアイコンがアップロードされた場合のみ更新
-    if (req.file) {
-      input.icon = req.file.filename;
+    // アイコンの処理
+    if (iconClear === 'true') {
+      // アイコンリセットが要求された場合
+      input.icon = null;
       
       // 古いアイコンファイルを削除
       const oldEquipment = EquipmentRepository.findById(id);
       if (oldEquipment?.icon) {
-        const oldIconPath = path.join(process.cwd(), '../../uploads', oldEquipment.icon);
+        const filename = oldEquipment.icon.replace('/uploads/', '');
+        const oldIconPath = path.join(process.cwd(), '../../uploads', filename);
         if (fs.existsSync(oldIconPath)) {
           fs.unlinkSync(oldIconPath);
         }
+      }
+    } else if (req.file) {
+      // 新しいアイコンがアップロードされた場合
+      input.icon = toPublicPath(req.file.filename);
+      
+      // 古いアイコンファイルを削除
+      const oldEquipment = EquipmentRepository.findById(id);
+      if (oldEquipment?.icon) {
+        const filename = oldEquipment.icon.replace('/uploads/', '');
+        const oldIconPath = path.join(process.cwd(), '../../uploads', filename);
+        if (fs.existsSync(oldIconPath)) {
+          fs.unlinkSync(oldIconPath);
+        }
+      }
+    } else {
+      // アイコンがアップロードされていない場合は既存のアイコンを保持
+      const existingEquipment = EquipmentRepository.findById(id);
+      if (existingEquipment?.icon && existingEquipment.icon.trim() !== '') {
+        input.icon = existingEquipment.icon;
+      } else {
+        input.icon = null;
       }
     }
 
@@ -179,7 +185,8 @@ router.delete('/:id', (req, res) => {
     
     const equipment = EquipmentRepository.findById(id);
     if (equipment?.icon) {
-      const iconPath = path.join(process.cwd(), '../../uploads', equipment.icon);
+      const filename = equipment.icon.replace('/uploads/', '');
+      const iconPath = path.join(process.cwd(), '../../uploads', filename);
       if (fs.existsSync(iconPath)) {
         fs.unlinkSync(iconPath);
       }

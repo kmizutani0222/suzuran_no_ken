@@ -403,7 +403,7 @@ export const EquipmentRepository = {
     
     return equipments.map(equipment => ({
       ...equipment,
-      rarity: rarities.find(r => r.id === equipment.rarityId)!
+      rarity: equipment.rarityId ? rarities.find(r => r.id === equipment.rarityId) || null : null
     }));
   },
   findByCategory(category: 'weapon' | 'armor'): EquipmentWithRarity[] {
