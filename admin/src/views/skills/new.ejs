@@ -7,25 +7,27 @@
       <div class="card">
         <div class="card-content">
           <form action="/skills" method="post" enctype="multipart/form-data">
-            <!-- 1行目: 名前(50%)、CT(25%)、コスト(25%) -->
+            <!-- 1行目: 名前 -->
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s12">
                 <input type="text" id="name" name="name" required />
                 <label for="name">名前</label>
               </div>
-              <div class="input-field col s3">
-                <input type="number" id="ct" name="ct" min="0" />
-                <label for="ct">CT</label>
-              </div>
-              <div class="input-field col s3">
-                <input type="number" id="cost" name="cost" min="0" />
-                <label for="cost">コスト</label>
-              </div>
             </div>
 
-            <!-- 2行目以降: 左側にスキルカテゴリー・スキルタイプ、右側にアイコン -->
+            <!-- 2行目: 左側にCT・コスト・スキルカテゴリー・スキルタイプ、右側にアイコン -->
             <div class="row">
               <div class="col s6">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="ct" name="ct" min="0" />
+                    <label for="ct">CT</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="cost" name="cost" min="0" />
+                    <label for="cost">コスト</label>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="input-field col s12">
                     <select name="skillCategory" required>
@@ -90,14 +92,16 @@
             <!-- スキル効果 -->
             <div class="row">
               <div class="col s12">
-                <label>スキル効果（複数選択）:</label>
-                <div class="mt-20">
-                  <% skillEffects.forEach(e => { %>
-                    <label class="mr-20">
-                      <input type="checkbox" name="effectIds" value="<%= e.id %>" />
-                      <span><%= e.name %></span>
-                    </label>
-                  <% }) %>
+                <div class="form-section">
+                  <legend>スキル効果（複数選択）</legend>
+                  <div class="faction-selection">
+                    <% skillEffects.forEach(e => { %>
+                      <label class="faction-checkbox">
+                        <input type="checkbox" name="effectIds" value="<%= e.id %>" />
+                        <span><%= e.name %></span>
+                      </label>
+                    <% }) %>
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,24 +109,26 @@
             <!-- 射程・範囲の1行目: スキルターゲット -->
             <div class="row">
               <div class="col s12">
-                <label>射程・範囲（未指定のものはフロントでは非表示）:</label>
-                <div class="mt-20">
-                  <label class="mr-20">
-                    <input type="checkbox" name="targets" value="対ユニット" />
-                    <span>対ユニット</span>
-                  </label>
-                  <label class="mr-20">
-                    <input type="checkbox" name="targets" value="対地面" />
-                    <span>対地面</span>
-                  </label>
-                  <label class="mr-20">
-                    <input type="checkbox" name="targets" value="近接" />
-                    <span>近接</span>
-                  </label>
-                  <label class="mr-20">
-                    <input type="checkbox" name="targets" value="範囲攻撃" />
-                    <span>範囲攻撃</span>
-                  </label>
+                <div class="form-section">
+                  <legend>射程・範囲（未指定のものはフロントでは非表示）</legend>
+                  <div class="faction-selection">
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="対ユニット" />
+                      <span>対ユニット</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="対地面" />
+                      <span>対地面</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="近接" />
+                      <span>近接</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="範囲攻撃" />
+                      <span>範囲攻撃</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
