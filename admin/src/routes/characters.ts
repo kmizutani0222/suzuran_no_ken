@@ -17,7 +17,46 @@ function categorizeSkills() {
 
 router.get("/", (_req, res) => {
   const characters = CharacterRepository.list();
-  res.render(path.join("characters", "index"), { characters });
+  
+  // レアリティと陣営のデータを取得
+  const rarities = RarityRepository.list();
+  const factions = FactionRepository.list();
+  
+  // キャラクターにレアリティと陣営の情報を追加
+  const charactersWithDetails = characters.map(character => {
+    const rarity = rarities.find(r => r.id === character.rarityId);
+    
+    // 陣営は指定された6つの陣営のうち1つだけを表示
+    const priorityFactions = ['鈴蘭の剣', 'イリヤ', '騎士連合', '法皇国', 'ウィルダ', '漂泊者'];
+    let displayFaction = null;
+    
+    if (character.factionIds && character.factionIds.length > 0) {
+      // 優先順位の高い陣営から順にチェック
+      for (const factionName of priorityFactions) {
+        const faction = factions.find(f => f.name === factionName);
+        if (faction && character.factionIds.includes(faction.id)) {
+          displayFaction = faction;
+          break;
+        }
+      }
+      
+      // 優先陣営が見つからない場合は、最初の陣営を表示
+      if (!displayFaction) {
+        const firstFaction = factions.find(f => character.factionIds.includes(f.id));
+        if (firstFaction) {
+          displayFaction = firstFaction;
+        }
+      }
+    }
+    
+    return {
+      ...character,
+      rarity,
+      faction: displayFaction
+    };
+  });
+  
+  res.render(path.join("characters", "index"), { characters: charactersWithDetails });
 });
 
 router.get("/new", (_req, res) => {

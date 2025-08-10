@@ -61,6 +61,11 @@
                       <a href="/characters/<%= c.id %>/edit" class="btn-small waves-effect waves-light orange">
                         <i class="material-icons">edit</i>
                       </a>
+                      <form action="/characters/<%= c.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
+                        <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('キャラクター「<%= c.name %>」を削除しますか？')">
+                          <i class="material-icons">delete</i>
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 <% }) %>
