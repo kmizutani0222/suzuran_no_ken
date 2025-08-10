@@ -98,6 +98,58 @@ nav ul li a:hover {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* 固定配置の新規登録ボタン */
+.fab-new {
+  position: fixed;
+  bottom: 30px;
+  right: 100px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-new:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.fab-new .material-icons {
+  font-size: 24px;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
+
+/* 固定配置の戻るボタン */
+.fab-back {
+  position: fixed;
+  bottom: 30px;
+  right: 100px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-back:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.fab-back .material-icons {
+  font-size: 24px;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
+
 .btn:hover {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
@@ -216,8 +268,9 @@ a:hover {
 }
 
 .page-header h1 {
-  color: #1976d2;
-  font-weight: 300;
+  color: #424242;
+  font-weight: 400;
+  font-size: 1.8rem;
   margin: 0;
 }
 
