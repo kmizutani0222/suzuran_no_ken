@@ -84,6 +84,16 @@ nav {
   padding: 0;
 }
 
+/* リセットボタンの色を赤くする */
+.btn-small.reset-btn {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.btn-small.reset-btn:hover {
+  background-color: #d32f2f !important;
+}
+
 /* Tables */
 .table-container {
   background: white;
