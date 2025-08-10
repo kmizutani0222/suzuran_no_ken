@@ -1,13 +1,11 @@
 import { Router } from "express";
 import path from "path";
-import multer from "multer";
+import fs from "fs";
 import { RarityRepository } from "../../../shared/src/repository";
 import { RarityCreateInput, RarityUpdateInput } from "../../../shared/src/models";
+import { upload, toPublicPath } from "../middleware/upload";
 
 export const router = Router();
-
-// Multer設定
-const upload = multer({ dest: path.join(process.cwd(), "..", "..", "uploads") });
 
 router.get("/", (_req, res) => {
   const items = RarityRepository.list();
@@ -19,9 +17,9 @@ router.get("/new", (_req, res) => {
 });
 
 // 新規作成処理
-router.post('/', (req, res) => {
+router.post('/', upload.single('icon'), (req, res) => {
   try {
-    const { name, value, icon } = req.body;
+    const { name, value } = req.body;
     
     const input: any = {
       name
@@ -29,7 +27,7 @@ router.post('/', (req, res) => {
 
     // オプショナル項目の処理（空文字列も含める）
     if (value !== undefined) input.value = value || null;
-    if (icon !== undefined) input.image = icon || null;
+    if (req.file?.filename) input.image = toPublicPath(req.file.filename);
 
     RarityRepository.create(input);
     res.redirect('/rarities');
@@ -46,10 +44,10 @@ router.get("/:id/edit", (req, res) => {
 });
 
 // 更新処理
-router.put('/:id', (req, res) => {
+router.post('/:id', upload.single('icon'), (req, res) => {
   try {
     const id = req.params.id!;
-    const { name, value, icon } = req.body;
+    const { name, value, currentIcon } = req.body;
     
     const input: any = {
       name
@@ -57,7 +55,39 @@ router.put('/:id', (req, res) => {
 
     // オプショナル項目の処理（空文字列も含める）
     if (value !== undefined) input.value = value || null;
-    if (icon !== undefined) input.image = icon || null;
+    
+    // アイコンの処理
+    if (req.file?.filename) {
+      input.image = toPublicPath(req.file.filename);
+      // 既存のアイコンファイルを削除
+      if (currentIcon && currentIcon !== '') {
+        const oldIconPath = currentIcon.replace('/uploads/', '');
+        const oldIconFullPath = path.join(process.cwd(), '..', 'uploads', oldIconPath);
+        try {
+          if (fs.existsSync(oldIconFullPath)) {
+            fs.unlinkSync(oldIconFullPath);
+          }
+        } catch (error) {
+          console.error('古いアイコンファイルの削除に失敗:', error);
+        }
+      }
+    } else if (req.body.iconReset === 'true') {
+      input.image = "";
+      // 既存のアイコンファイルを削除
+      if (currentIcon && currentIcon !== '') {
+        const oldIconPath = currentIcon.replace('/uploads/', '');
+        const oldIconFullPath = path.join(process.cwd(), '..', 'uploads', oldIconPath);
+        try {
+          if (fs.existsSync(oldIconFullPath)) {
+            fs.unlinkSync(oldIconFullPath);
+          }
+        } catch (error) {
+          console.error('古いアイコンファイルの削除に失敗:', error);
+        }
+      }
+    } else if (currentIcon && currentIcon !== '') {
+      input.image = currentIcon;
+    }
 
     const updated = RarityRepository.update(id, input);
     if (!updated) {

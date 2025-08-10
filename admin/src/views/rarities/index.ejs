@@ -25,9 +25,9 @@
               <tr>
                 <td>
                   <div class="character-images">
-                    <% if (r.icon) { %>
+                    <% if (r.image) { %>
                       <div class="image-preview">
-                        <img src="<%= r.icon %>" alt="アイコン" title="アイコン" />
+                        <img src="<%= r.image %>" alt="アイコン" title="アイコン" />
                       </div>
                     <% } else { %>
                       <div class="no-image">
@@ -37,7 +37,7 @@
                   </div>
                 </td>
                 <td><%= r.name %></td>
-                <td><%= r.rarityValue %></td>
+                <td><%= r.value %></td>
                 <td>
                   <a href="/rarities/<%= r.id %>/edit" class="btn-small waves-effect waves-light blue">
                     <i class="material-icons">edit</i>
