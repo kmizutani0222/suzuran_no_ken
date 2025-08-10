@@ -260,5 +260,22 @@ document.querySelector('form').addEventListener('submit', function(e) {
   document.querySelectorAll('input[name="effectIds"]:not(:checked)').forEach(cb => {
     cb.disabled = true;
   });
+  
+  // 空の配列を送信するための隠しフィールドを追加
+  if (targetCheckboxes.length === 0) {
+    const hiddenTarget = document.createElement('input');
+    hiddenTarget.type = 'hidden';
+    hiddenTarget.name = 'targets';
+    hiddenTarget.value = '';
+    document.querySelector('form').appendChild(hiddenTarget);
+  }
+  
+  if (effectCheckboxes.length === 0) {
+    const hiddenEffect = document.createElement('input');
+    hiddenEffect.type = 'hidden';
+    hiddenEffect.name = 'effectIds';
+    hiddenEffect.value = '';
+    document.querySelector('form').appendChild(hiddenEffect);
+  }
 });
 </script> 

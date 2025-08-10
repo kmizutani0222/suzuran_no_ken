@@ -166,9 +166,9 @@ router.post("/:id", upload.fields([
     ...(cost !== undefined && { cost }),
     ...(ct !== undefined && { ct }),
     ...(body.description !== undefined && { description: body.description }),
-    ...(body.targets !== undefined && { targets: Array.isArray(body.targets) ? body.targets : [body.targets] }),
+    ...(body.targets !== undefined && { targets: body.targets === '' ? [] : (Array.isArray(body.targets) ? body.targets : [body.targets]) }),
     ...(body.skillType !== undefined && { skillType: body.skillType === '' ? null : body.skillType as SkillType }),
-    ...(body.effectIds !== undefined && { effectIds: Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds] }),
+    ...(body.effectIds !== undefined && { effectIds: body.effectIds === '' ? [] : (Array.isArray(body.effectIds) ? body.effectIds : [body.effectIds]) }),
     ...(range && { range })
   };
   
