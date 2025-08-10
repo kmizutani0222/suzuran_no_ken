@@ -44,7 +44,10 @@ class ImageResizer {
       // プレビューを表示
       const preview = document.getElementById(fieldName + '-preview');
       if (preview) {
-        preview.style.display = 'block';
+        // no-imageを非表示にして、プレビューを表示
+        preview.innerHTML = `
+          <img src="${e.target.result}" alt="プレビュー" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;">
+        `;
       }
       
       // 元の画像を保存
@@ -400,22 +403,20 @@ class ImageResizer {
     this.closeCropModal();
   }
 
-  // 元の画面に結果を反映
+  // 元のフィールドを更新
   updateOriginalField(fieldName) {
+    if (!this.croppedImage) return;
+    
     // プレビューを更新
     const preview = document.getElementById(fieldName + '-preview');
     if (preview) {
       preview.innerHTML = `
-        <div class="cropped-preview">
-          <img src="${this.croppedImage}" alt="切り抜き後の画像" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;">
-          <p>切り抜き完了</p>
-          <button type="button" class="btn-small red" onclick="imageResizer.resetImage('${fieldName}')">リセット</button>
-        </div>
+        <img src="${this.croppedImage}" alt="切り抜き後の画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;">
       `;
     }
-
-    // ファイル入力を更新
-    this.updateFileInput(fieldName);
+    
+    // モーダルを閉じる
+    this.closeCropModal();
   }
 
   // ファイル入力を更新
@@ -431,16 +432,29 @@ class ImageResizer {
       });
   }
 
-  // 画像リセット
+  // 画像をリセット
   resetImage(fieldName) {
+    // ファイル入力をクリア
     const fileInput = document.querySelector(`input[name="${fieldName}"]`);
-    fileInput.value = '';
-    
-    const preview = document.getElementById(fieldName + '-preview');
-    if (preview) {
-      preview.innerHTML = '';
+    if (fileInput) {
+      fileInput.value = '';
+      // DataTransferを使用してファイル入力を確実にクリア
+      const dt = new DataTransfer();
+      fileInput.files = dt.files;
     }
     
+    // プレビューをno-imageプレースホルダーにリセット
+    const preview = document.getElementById(fieldName + '-preview');
+    if (preview) {
+      preview.innerHTML = `
+        <div class="no-image">
+          <i class="material-icons">image</i>
+          <span>画像が選択されていません</span>
+        </div>
+      `;
+    }
+    
+    // 内部状態をリセット
     this.originalImage = null;
     this.croppedImage = null;
   }

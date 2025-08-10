@@ -3,7 +3,7 @@ import path from "path";
 import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository } from "../../../shared/src/repository";
 import { CharacterCreateInput, CharacterUpdateInput } from "../../../shared/src/models";
 import { WeaponType } from "../../../shared/src/models";
-import { upload } from "../middleware/upload";
+import { upload, toPublicPath } from "../middleware/upload";
 
 export const router = Router();
 
@@ -104,8 +104,8 @@ router.post("/", upload.fields([
     ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
     ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
     ...(exSkillIds.length ? { exSkillIds } : {}),
-    ...(files.normalAppearance?.[0] ? { normalAppearance: files.normalAppearance[0].path.replace(/\\/g, '/') } : {}),
-    ...(files.pixelAvatar?.[0] ? { pixelAvatar: files.pixelAvatar[0].path.replace(/\\/g, '/') } : {}),
+    ...(files.normalAppearance?.[0] ? { normalAppearance: toPublicPath(files.normalAppearance[0].filename) } : {}),
+    ...(files.pixelAvatar?.[0] ? { pixelAvatar: toPublicPath(files.pixelAvatar[0].filename) } : {}),
   };
 
   CharacterRepository.create(input);
@@ -159,8 +159,8 @@ router.post("/:id", upload.fields([
     ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
     ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
     ...(exSkillIds.length ? { exSkillIds } : {}),
-    ...(files.normalAppearance?.[0] ? { normalAppearance: files.normalAppearance[0].path.replace(/\\/g, '/') } : {}),
-    ...(files.pixelAvatar?.[0] ? { pixelAvatar: files.pixelAvatar[0].path.replace(/\\/g, '/') } : {}),
+    ...(files.normalAppearance?.[0] ? { normalAppearance: toPublicPath(files.normalAppearance[0].filename) } : {}),
+    ...(files.pixelAvatar?.[0] ? { pixelAvatar: toPublicPath(files.pixelAvatar[0].filename) } : {}),
   };
 
   if (!req.params.id) {
