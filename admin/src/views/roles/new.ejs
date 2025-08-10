@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - ロール登録</title>
+</head>
+<body>
+  <h1>ロール登録</h1>
+  <form action="/roles" method="post">
+    <div>
+      <label>名前: <input type="text" name="name" required /></label>
+    </div>
+    <div>
+      <label>画像URL: <input type="text" name="image" /></label>
+    </div>
+    <div>
+      <label>移動力: <input type="number" name="movementPower" required min="0" /></label>
+    </div>
+    <div>
+      <label>ジャンプ高: <input type="number" name="jumpHigh" required min="0" /></label>
+    </div>
+    <div>
+      <label>ジャンプ低: <input type="number" name="jumpLow" required min="0" /></label>
+    </div>
+    <div>
+      <label>地形適正:
+        <select name="terrainSuitability" required>
+          <option value="normal">通常</option>
+        </select>
+      </label>
+    </div>
+    <button type="submit">保存</button>
+  </form>
+  <p><a href="/roles">一覧に戻る</a></p>
+</body>
+</html> 

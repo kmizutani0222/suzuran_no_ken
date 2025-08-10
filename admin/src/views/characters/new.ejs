@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - キャラ登録</title>
+</head>
+<body>
+  <div class="page-header">
+    <h1>キャラ登録</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/characters" method="post">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="name" name="name" required />
+                <label for="name">名前</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <select name="rarityId" required>
+                  <% rarities.forEach(r => { %>
+                    <option value="<%= r.id %>"><%= r.name %> (★<%= r.value %>)</option>
+                  <% }) %>
+                </select>
+                <label>レアリティ</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="roleId" required>
+                  <% roles.forEach(r => { %>
+                    <option value="<%= r.id %>"><%= r.name %></option>
+                  <% }) %>
+                </select>
+                <label>ロール</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+                <label>陣営（複数選択可）:</label>
+                <div class="mt-20">
+                  <% factions.forEach(f => { %>
+                    <label class="mr-20">
+                      <input type="checkbox" name="factionIds" value="<%= f.id %>" />
+                      <span><%= f.name %></span>
+                    </label>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <select name="weaponType" required>
+                  <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
+                    <option value="<%= w %>"><%= w %></option>
+                  <% }) %>
+                </select>
+                <label>武器種</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="personalitySkillId">
+                  <option value="">未設定</option>
+                  <% personalitySkills.forEach(s => { %>
+                    <option value="<%= s.id %>"><%= s.name %></option>
+                  <% }) %>
+                </select>
+                <label>個性スキル</label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <legend>スキルツリー（通常スキルを左右に1つずつ）</legend>
+              <% const ranks = ["RK1","RK3","RK5","RK7","RK9","RK11"]; %>
+              <% ranks.forEach(rk => { %>
+                <div class="row mb-20">
+                  <div class="col s12">
+                    <h6><strong><%= rk %></strong></h6>
+                    <div class="row">
+                      <div class="input-field col s6">
+                        <select name="<%= rk %>_left">
+                          <option value="">なし</option>
+                          <% normalSkills.forEach(s => { %>
+                            <option value="<%= s.id %>"><%= s.name %></option>
+                          <% }) %>
+                        </select>
+                        <label>左スキル</label>
+                      </div>
+                      <div class="input-field col s6">
+                        <select name="<%= rk %>_right">
+                          <option value="">なし</option>
+                          <% normalSkills.forEach(s => { %>
+                            <option value="<%= s.id %>"><%= s.name %></option>
+                          <% }) %>
+                        </select>
+                        <label>右スキル</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <div class="form-section">
+              <legend>EXスキル（複数選択）</legend>
+              <div class="input-field">
+                <select name="exSkillIds" multiple>
+                  <% exSkills.forEach(s => { %>
+                    <option value="<%= s.id %>"><%= s.name %></option>
+                  <% }) %>
+                </select>
+                <label>EXスキル</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">save</i>保存
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p><a href="/characters">一覧に戻る</a></p>
+</body>
+</html> 

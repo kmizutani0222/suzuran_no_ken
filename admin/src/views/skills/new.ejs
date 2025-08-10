@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - スキル登録</title>
+</head>
+<body>
+  <div class="page-header">
+    <h1>スキル登録</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/skills" method="post">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="name" name="name" required />
+                <label for="name">名前</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <select name="skillType" required>
+                  <% ["パッシブ","アクティブ","即時","オーラ","通常攻撃","リアクション"].forEach(t => { %>
+                    <option value="<%= t %>"><%= t %></option>
+                  <% }) %>
+                </select>
+                <label>スキルタイプ</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="skillCategory" required>
+                  <% ["個性","EX","通常"].forEach(c => { %>
+                    <option value="<%= c %>"><%= c %></option>
+                  <% }) %>
+                </select>
+                <label>スキルカテゴリー</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="number" id="cost" name="cost" min="0" required />
+                <label for="cost">コスト</label>
+              </div>
+              <div class="input-field col s6">
+                <input type="number" id="ct" name="ct" min="0" required />
+                <label for="ct">CT</label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <legend>スキルターゲット（複数選択）</legend>
+              <div class="row">
+                <% ["対ユニット","対地面","近接","範囲攻撃"].forEach(t => { %>
+                  <div class="col s6">
+                    <label>
+                      <input type="checkbox" name="targets" value="<%= t %>" />
+                      <span><%= t %></span>
+                    </label>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <legend>スキル効果（複数選択）</legend>
+              <div class="input-field">
+                <select name="effectIds" multiple>
+                  <% skillEffects.forEach(e => { %>
+                    <option value="<%= e.id %>"><%= e.name %></option>
+                  <% }) %>
+                </select>
+                <label>スキル効果</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="description" name="description" class="materialize-textarea" rows="6" required></textarea>
+                <label for="description">説明</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">save</i>保存
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p><a href="/skills">一覧に戻る</a></p>
+</body>
+</html> 

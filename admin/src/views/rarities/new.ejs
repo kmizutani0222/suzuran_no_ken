@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - レアリティ登録</title>
+</head>
+<body>
+  <h1>レアリティ登録</h1>
+  <form action="/rarities" method="post">
+    <div>
+      <label>名前: <input type="text" name="name" required /></label>
+    </div>
+    <div>
+      <label>画像URL: <input type="text" name="image" /></label>
+    </div>
+    <div>
+      <label>値: <input type="number" name="value" required min="1" /></label>
+    </div>
+    <button type="submit">保存</button>
+  </form>
+  <p><a href="/rarities">一覧に戻る</a></p>
+</body>
+</html> 

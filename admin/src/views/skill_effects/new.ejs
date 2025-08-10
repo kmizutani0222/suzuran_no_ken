@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - スキル効果登録</title>
+</head>
+<body>
+  <h1>スキル効果登録</h1>
+  <form action="/skill-effects" method="post">
+    <div><label>名前: <input type="text" name="name" required /></label></div>
+    <div>
+      <label>効果説明:<br />
+        <textarea name="description" rows="6" cols="60" required></textarea>
+      </label>
+    </div>
+    <button type="submit">保存</button>
+  </form>
+  <p><a href="/skill-effects">一覧に戻る</a></p>
+</body>
+</html> 

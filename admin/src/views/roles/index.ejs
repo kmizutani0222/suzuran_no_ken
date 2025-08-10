@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>管理 - ロール一覧</title>
+</head>
+<body>
+  <h1>ロール一覧</h1>
+  <p><a href="/roles/new">+ 新規登録</a></p>
+  <table border="1" cellpadding="6">
+    <thead>
+      <tr>
+        <th>名前</th>
+        <th>画像</th>
+        <th>移動力</th>
+        <th>ジャンプ高</th>
+        <th>ジャンプ低</th>
+        <th>地形適正</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (items.length === 0) { %>
+        <tr><td colspan="7">データがありません</td></tr>
+      <% } %>
+      <% items.forEach(i => { %>
+        <tr>
+          <td><%= i.name %></td>
+          <td><% if (i.image) { %><img src="<%= i.image %>" alt="" width="64" /><% } %></td>
+          <td><%= i.movementPower %></td>
+          <td><%= i.jumpHigh %></td>
+          <td><%= i.jumpLow %></td>
+          <td><%= i.terrainSuitability %></td>
+          <td>
+            <a href="/roles/<%= i.id %>/edit">編集</a>
+            <form action="/roles/<%= i.id %>/delete" method="post" style="display:inline;">
+              <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html> 
