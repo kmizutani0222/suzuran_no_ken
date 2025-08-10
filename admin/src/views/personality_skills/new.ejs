@@ -33,7 +33,7 @@
                       <span>アイコンを選択</span>
                     </label>
                   </div>
-                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
                     <i class="material-icons">refresh</i>
                     リセット
                   </button>
@@ -45,40 +45,40 @@
           <!-- 星1の説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="star1Description" name="star1Description" class="materialize-textarea" required></textarea>
-              <label for="star1Description">星1の説明</label>
+              <textarea id="star1Description" name="star1Description" class="materialize-textarea"></textarea>
+              <label for="star1Description">星1の説明（任意）</label>
             </div>
           </div>
 
           <!-- 星2の説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="star2Description" name="star2Description" class="materialize-textarea" required></textarea>
-              <label for="star2Description">星2の説明</label>
+              <textarea id="star2Description" name="star2Description" class="materialize-textarea"></textarea>
+              <label for="star2Description">星2の説明（任意）</label>
             </div>
           </div>
 
           <!-- 星3の説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="star3Description" name="star3Description" class="materialize-textarea" required></textarea>
-              <label for="star3Description">星3の説明</label>
+              <textarea id="star3Description" name="star3Description" class="materialize-textarea"></textarea>
+              <label for="star3Description">星3の説明（任意）</label>
             </div>
           </div>
 
           <!-- 星4の説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="star4Description" name="star4Description" class="materialize-textarea" required></textarea>
-              <label for="star4Description">星4の説明</label>
-            </div>
+              <textarea id="star4Description" name="star4Description" class="materialize-textarea"></textarea>
+              <label for="star4Description">星4の説明（任意）</label>
+              </div>
           </div>
 
           <!-- 星5の説明 -->
           <div class="row">
             <div class="input-field col s12">
-              <textarea id="star5Description" name="star5Description" class="materialize-textarea" required></textarea>
-              <label for="star5Description">星5の説明</label>
+              <textarea id="star5Description" name="star5Description" class="materialize-textarea"></textarea>
+              <label for="star5Description">星5の説明（任意）</label>
             </div>
           </div>
 
@@ -126,4 +126,10 @@
     M.textareaAutoResize(document.getElementById('star4Description'));
     M.textareaAutoResize(document.getElementById('star5Description'));
   });
+
+  // アイコンリセット処理
+  function resetIcon() {
+    // ImageResizerのリセット処理を実行
+    imageResizer.resetImage('icon');
+  }
 </script> 
