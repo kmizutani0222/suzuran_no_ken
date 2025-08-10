@@ -371,6 +371,26 @@ a:hover {
   transition: background-color 0.2s ease;
   text-align: center;
   justify-content: center;
+  flex-direction: row;
+}
+
+.file-input-label .material-icons {
+  font-size: 18px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  width: 18px;
+}
+
+.file-input-label span {
+  font-weight: 500;
+  line-height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
 }
 
 .file-input-label:hover {
