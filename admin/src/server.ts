@@ -3,17 +3,22 @@ import path from "path";
 import methodOverride from "method-override";
 import session from "express-session";
 import expressLayouts from "express-ejs-layouts";
+import multer from "multer";
 import { router as characterRouter } from "./routes/characters";
 import { router as rarityRouter } from "./routes/rarities";
 import { router as roleRouter } from "./routes/roles";
 import { router as factionRouter } from "./routes/factions";
 import { router as skillRouter } from "./routes/skills";
 import { router as skillEffectRouter } from "./routes/skill-effects";
+import { router as adminUserRouter } from "./routes/admin-users";
 import { router as authRouter } from "./routes/auth";
 import { attachLocals, requireLogin } from "./middleware/auth";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Multer設定
+const upload = multer({ dest: path.join(process.cwd(), "..", "uploads") });
 
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "src", "views"));
@@ -44,6 +49,7 @@ app.use("/roles", requireLogin, roleRouter);
 app.use("/factions", requireLogin, factionRouter);
 app.use("/skills", requireLogin, skillRouter);
 app.use("/skill-effects", requireLogin, skillEffectRouter);
+app.use("/admin-users", requireLogin, adminUserRouter);
 
 app.listen(PORT, () => {
   console.log(`[admin] listening on http://localhost:${PORT}`);

@@ -8,9 +8,22 @@
         <div class="card-content">
           <form action="/skill-effects" method="post">
             <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
                 <input type="text" id="name" name="name" required />
                 <label for="name">名前</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="category" required>
+                  <option value="">選択してください</option>
+                  <option value="バフ">バフ</option>
+                  <option value="デバフ">デバフ</option>
+                  <option value="状態">状態</option>
+                  <option value="地形・行動">地形・行動</option>
+                  <option value="スキル">スキル</option>
+                  <option value="ダメージ">ダメージ</option>
+                  <option value="その他">その他</option>
+                </select>
+                <label>カテゴリー</label>
               </div>
             </div>
 

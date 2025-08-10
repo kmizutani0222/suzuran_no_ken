@@ -6,14 +6,14 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <form action="/rarities/<%= rarity.id %>" method="post" enctype="multipart/form-data">
+          <form action="/rarities/<%= item.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="input-field col s6">
-                <input type="text" id="name" name="name" value="<%= rarity.name %>" required />
+                <input type="text" id="name" name="name" value="<%= item.name %>" required />
                 <label for="name">名前</label>
               </div>
               <div class="input-field col s6">
-                <input type="number" id="value" name="value" min="1" max="10" value="<%= rarity.value %>" required />
+                <input type="number" id="value" name="value" min="1" max="10" value="<%= item.value %>" required />
                 <label for="value">レア度（1-10）</label>
               </div>
             </div>
@@ -27,10 +27,10 @@
                     <span>アイコンを選択</span>
                   </label>
                 </div>
-                <% if (rarity.icon) { %>
+                <% if (item.image) { %>
                   <div class="current-image">
                     <p>現在のアイコン:</p>
-                    <img src="<%= rarity.icon %>" alt="アイコン" style="max-width: 100px; max-height: 100px;" />
+                    <img src="<%= item.image %>" alt="アイコン" style="max-width: 100px; max-height: 100px;" />
                   </div>
                 <% } %>
                 <img id="iconImg" class="preview-image" style="display: none;" />
@@ -49,7 +49,7 @@
 
           <div class="row mt-20">
             <div class="col s12 text-center">
-              <form action="/rarities/<%= rarity.id %>/delete" method="post" style="display: inline;">
+              <form action="/rarities/<%= item.id %>/delete" method="post" style="display: inline;">
                 <button type="submit" class="btn-large waves-effect waves-light red" onclick="return confirm('削除しますか？')">
                   <i class="material-icons left">delete</i>削除
                 </button>

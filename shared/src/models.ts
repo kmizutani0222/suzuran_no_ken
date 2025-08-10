@@ -14,15 +14,19 @@ export type SkillTarget = "対ユニット" | "対地面" | "近接" | "範囲�
 export type SkillType = "パッシブ" | "アクティブ" | "即時" | "オーラ" | "通常攻撃" | "リアクション";
 export type SkillCategory = "個性" | "EX" | "通常";
 
+export type SkillEffectCategory = "バフ" | "デバフ" | "状態" | "地形・行動" | "スキル" | "ダメージ" | "その他";
+
 export interface SkillEffect {
   id: string;
   name: string;
   description: string;
+  category: SkillEffectCategory;
 }
 
 export interface SkillEffectCreateInput {
   name: string;
   description: string;
+  category: SkillEffectCategory;
 }
 
 export interface SkillEffectUpdateInput extends Partial<SkillEffectCreateInput> {}
@@ -59,24 +63,27 @@ export interface SkillUpdateInput extends Partial<SkillCreateInput> {}
 export interface Rarity {
   id: string;
   name: string;
-  image: string;
+  image?: string;
   value: number; // 数値で指定
 }
 
 export interface RarityCreateInput {
   name: string;
-  image: string;
+  image?: string;
+  icon?: string; // アップロードされたファイルのパス
   value: number;
 }
 
-export interface RarityUpdateInput extends Partial<RarityCreateInput> {}
+export interface RarityUpdateInput extends Partial<RarityCreateInput> {
+  image?: string;
+}
 
 export type TerrainSuitability = "normal";
 
 export interface Role {
   id: string;
   name: string;
-  image: string;
+  image?: string;
   movementPower: number; // 移動力
   jumpHigh: number;      // ジャンプ高
   jumpLow: number;       // ジャンプ低
@@ -85,27 +92,33 @@ export interface Role {
 
 export interface RoleCreateInput {
   name: string;
-  image: string;
+  image?: string;
+  icon?: string; // アップロードされたファイルのパス
   movementPower: number;
   jumpHigh: number;
   jumpLow: number;
   terrainSuitability: TerrainSuitability;
 }
 
-export interface RoleUpdateInput extends Partial<RoleCreateInput> {}
+export interface RoleUpdateInput extends Partial<RoleCreateInput> {
+  image?: string;
+}
 
 export interface Faction {
   id: string;
   name: string;
-  image: string;
+  image?: string;
 }
 
 export interface FactionCreateInput {
   name: string;
-  image: string;
+  image?: string;
+  icon?: string; // アップロードされたファイルのパス
 }
 
-export interface FactionUpdateInput extends Partial<FactionCreateInput> {}
+export interface FactionUpdateInput extends Partial<FactionCreateInput> {
+  image?: string;
+}
 
 export interface CharacterSkillTreeNode { left?: string; right?: string; }
 export interface CharacterSkillTree {

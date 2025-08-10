@@ -9,6 +9,19 @@
   <form action="/skill-effects/<%= item.id %>" method="post">
     <div><label>名前: <input type="text" name="name" value="<%= item.name %>" required /></label></div>
     <div>
+      <label>カテゴリー: 
+        <select name="category" required>
+          <option value="バフ" <%= item.category === 'バフ' ? 'selected' : '' %>>バフ</option>
+          <option value="デバフ" <%= item.category === 'デバフ' ? 'selected' : '' %>>デバフ</option>
+          <option value="状態" <%= item.category === '状態' ? 'selected' : '' %>>状態</option>
+          <option value="地形・行動" <%= item.category === '地形・行動' ? 'selected' : '' %>>地形・行動</option>
+          <option value="スキル" <%= item.category === 'スキル' ? 'selected' : '' %>>スキル</option>
+          <option value="ダメージ" <%= item.category === 'ダメージ' ? 'selected' : '' %>>ダメージ</option>
+          <option value="その他" <%= item.category === 'その他' ? 'selected' : '' %>>その他</option>
+        </select>
+      </label>
+    </div>
+    <div>
       <label>効果説明:<br />
         <textarea name="description" rows="6" cols="60" required><%= item.description %></textarea>
       </label>

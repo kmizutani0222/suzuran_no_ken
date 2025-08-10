@@ -11,17 +11,19 @@
     <thead>
       <tr>
         <th>名前</th>
+        <th>カテゴリー</th>
         <th>効果説明</th>
         <th>操作</th>
       </tr>
     </thead>
     <tbody>
       <% if (items.length === 0) { %>
-        <tr><td colspan="3">データがありません</td></tr>
+        <tr><td colspan="4">データがありません</td></tr>
       <% } %>
       <% items.forEach(i => { %>
         <tr>
           <td><%= i.name %></td>
+          <td><%= i.category %></td>
           <td><pre><%= i.description %></pre></td>
           <td>
             <a href="/skill-effects/<%= i.id %>/edit">編集</a>
