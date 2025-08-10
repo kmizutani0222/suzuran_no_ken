@@ -24,21 +24,33 @@
 
             <div class="row">
               <div class="input-field col s12">
-                <div class="file-field input-field">
-                  <div class="btn blue">
-                    <span>アイコン</span>
-                    <input type="file" name="icon" accept="image/*" />
+                <div class="image-upload-section">
+                  <div class="image-preview-container">
+                    <div id="icon-preview" class="image-preview-large">
+                      <% if (item.icon) { %>
+                        <img src="<%= item.icon %>" alt="アイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
+                      <% } else { %>
+                        <div class="no-image">
+                          <i class="material-icons">image</i>
+                          <span>画像が選択されていません</span>
+                        </div>
+                      <% } %>
+                    </div>
                   </div>
-                  <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="画像を選択してください" />
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                      <label for="icon" class="file-input-label">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>アイコンを選択</span>
+                      </label>
+                    </div>
+                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                      <i class="material-icons">refresh</i>
+                      リセット
+                    </button>
                   </div>
                 </div>
-                <% if (item.icon) { %>
-                  <div class="image-preview">
-                    <p>現在のアイコン:</p>
-                    <img src="<%= item.icon %>" alt="現在のアイコン" style="max-width: 100px; max-height: 100px;" />
-                  </div>
-                <% } %>
               </div>
             </div>
 
