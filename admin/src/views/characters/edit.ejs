@@ -168,13 +168,13 @@
 
             <div class="form-section">
               <legend>EXスキル（複数選択）</legend>
-              <div class="input-field">
-                <select name="exSkillIds" multiple>
-                  <% exSkills.forEach(s => { %>
-                    <option value="<%= s.id %>" <%= (character.exSkillIds || []).includes(s.id) ? 'selected' : '' %>><%= s.name %></option>
-                  <% }) %>
-                </select>
-                <label>EXスキル</label>
+              <div class="faction-selection">
+                <% exSkills.forEach(s => { %>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="exSkillIds" value="<%= s.id %>" <%= (character.exSkillIds || []).includes(s.id) ? 'checked' : '' %> />
+                    <span><%= s.name %></span>
+                  </label>
+                <% }) %>
               </div>
             </div>
 

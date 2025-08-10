@@ -1,6 +1,6 @@
 import { Router } from "express";
 import path from "path";
-import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository, PersonalitySkillRepository } from "../../../shared/src/repository";
+import { CharacterRepository, RarityRepository, RoleRepository, FactionRepository, SkillRepository, PersonalitySkillRepository, ExSkillRepository } from "../../../shared/src/repository";
 import { CharacterCreateInput, CharacterUpdateInput } from "../../../shared/src/models";
 import { WeaponType } from "../../../shared/src/models";
 import { upload, toPublicPath } from "../middleware/upload";
@@ -58,11 +58,10 @@ router.get("/new", async (req, res) => {
     const factions = await FactionRepository.list();
     const allSkills = await SkillRepository.list();
     const personalitySkills = await PersonalitySkillRepository.list();
+    const exSkills = await ExSkillRepository.list();
     
     // スキルを個性、通常、EXに分類（skillCategoryが削除されたため、PersonalitySkillを使用）
     const normal = allSkills.filter((s) => !personalitySkills.find(ps => ps.id === s.id));
-    // EXスキルは個性スキルと通常スキル以外のものとして扱う
-    const ex = allSkills.filter((s) => s.skillType === "アクティブ" || s.skillType === "即時");
 
     res.render("characters/new", {
       rarities,
@@ -70,7 +69,7 @@ router.get("/new", async (req, res) => {
       factions,
       personalitySkills,
       normalSkills: normal,
-      exSkills: ex,
+      exSkills,
     });
   } catch (error) {
     console.error("キャラクター新規作成画面表示エラー:", error);
@@ -135,10 +134,10 @@ router.get("/:id/edit", async (req, res) => {
     const factions = await FactionRepository.list();
     const allSkills = await SkillRepository.list();
     const personalitySkills = await PersonalitySkillRepository.list();
+    const exSkills = await ExSkillRepository.list();
     
     // スキルを個性、通常、EXに分類
     const normal = allSkills.filter((s) => !personalitySkills.find(ps => ps.id === s.id));
-    const ex = allSkills.filter((s) => s.skillType === "アクティブ" || s.skillType === "即時");
 
     res.render("characters/edit", {
       character,
@@ -147,7 +146,7 @@ router.get("/:id/edit", async (req, res) => {
       factions,
       personalitySkills,
       normalSkills: normal,
-      exSkills: ex,
+      exSkills,
     });
   } catch (error) {
     console.error("キャラクター編集画面表示エラー:", error);
