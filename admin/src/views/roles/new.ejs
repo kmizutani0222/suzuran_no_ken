@@ -8,36 +8,42 @@
         <div class="card-content">
           <form action="/roles" method="post" enctype="multipart/form-data">
             <div class="row">
-              <div class="input-field col s6">
-                <input type="text" id="name" name="name" required />
-                <label for="name">名前</label>
+              <div class="col s6">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input type="text" id="name" name="name" required />
+                    <label for="name">名前</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input type="number" id="movementPower" name="movementPower" min="1" max="10" required />
+                    <label for="movementPower">移動力（1-10）</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input type="number" id="jumpHigh" name="jumpHigh" min="1" max="10" required />
+                    <label for="jumpHigh">ジャンプ高（1-10）</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input type="number" id="jumpLow" name="jumpLow" min="1" max="10" required />
+                    <label for="jumpLow">ジャンプ低（1-10）</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select name="terrainSuitability" required>
+                      <option value="">選択してください</option>
+                      <option value="通常">通常</option>
+                    </select>
+                    <label>地形適正</label>
+                  </div>
+                </div>
               </div>
-              <div class="input-field col s6">
-                <input type="number" id="movementPower" name="movementPower" min="1" max="10" required />
-                <label for="movementPower">移動力（1-10）</label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s6">
-                <input type="number" id="jumpHigh" name="jumpHigh" min="1" max="10" required />
-                <label for="jumpHigh">ジャンプ高（1-10）</label>
-              </div>
-              <div class="input-field col s6">
-                <input type="number" id="jumpLow" name="jumpLow" min="1" max="10" required />
-                <label for="jumpLow">ジャンプ低（1-10）</label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s6">
-                <select name="terrainSuitability" required>
-                  <option value="">選択してください</option>
-                  <option value="通常">通常</option>
-                </select>
-                <label>地形適正</label>
-              </div>
-              <div class="input-field col s6">
+              <div class="col s6">
                 <div class="image-upload-section">
                   <div class="image-preview-container">
                     <div id="icon-preview" class="image-preview-large">
