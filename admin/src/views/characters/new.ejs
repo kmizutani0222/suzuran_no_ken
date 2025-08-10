@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>管理 - キャラ登録</title>
-</head>
-<body>
-  <div class="page-header">
-    <h1>キャラ登録</h1>
-  </div>
+<div class="page-header">
+  <h1>キャラ登録</h1>
+</div>
 
   <div class="row">
     <div class="col s12">
@@ -33,7 +26,7 @@
               <div class="input-field col s6">
                 <select name="roleId" required>
                   <% roles.forEach(r => { %>
-                    <option value="<%= r.id %>"><%= r.name %></option>
+                    <option value="<%= r.name %></option>
                   <% }) %>
                 </select>
                 <label>ロール</label>
@@ -69,26 +62,24 @@
               <legend>外見画像</legend>
               <div class="row">
                 <div class="input-field col s6">
-                  <div class="file-field input-field">
-                    <div class="btn blue">
-                      <span>通常外見</span>
-                      <input type="file" name="normalAppearance" accept="image/*" />
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
-                    </div>
+                  <div class="file-input-wrapper">
+                    <input type="file" name="normalAppearance" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'normalAppearance')" />
+                    <label for="normalAppearance" class="file-input-label">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>通常外見を選択</span>
+                    </label>
                   </div>
+                  <div id="normalAppearance-preview" class="image-preview"></div>
                 </div>
                 <div class="input-field col s6">
-                  <div class="file-field input-field">
-                    <div class="btn blue">
-                      <span>ピクセルアバター</span>
-                      <input type="file" name="pixelAvatar" accept="image/*" />
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text" placeholder="画像を選択してください" />
-                    </div>
+                  <div class="file-input-wrapper">
+                    <input type="file" name="pixelAvatar" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'pixelAvatar')" />
+                    <label for="pixelAvatar" class="file-input-label">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>ピクセルアバターを選択</span>
+                    </label>
                   </div>
+                  <div id="pixelAvatar-preview" class="image-preview"></div>
                 </div>
               </div>
             </div>
@@ -162,6 +153,4 @@
       </div>
     </div>
   </div>
-  <p><a href="/characters">一覧に戻る</a></p>
-</body>
-</html> 
+  <p><a href="/characters">一覧に戻る</a></p> 

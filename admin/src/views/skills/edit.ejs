@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>管理 - スキル編集</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body>
   <div class="page-header">
     <h1>スキル編集</h1>
   </div>
@@ -14,94 +6,147 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <form action="/skills/<%= item.id %>" method="post" enctype="multipart/form-data">
+          <form action="/skills/<%= skill.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="input-field col s12">
-                <input type="text" id="name" name="name" value="<%= item.name %>" required />
+                <input type="text" id="name" name="name" value="<%= skill.name %>" required />
                 <label for="name">名前</label>
               </div>
             </div>
 
             <div class="row">
-              <div class="input-field col s12">
-                <div class="file-field input-field">
-                  <div class="btn blue">
-                    <span>アイコン</span>
-                    <input type="file" name="icon" accept="image/*" />
-                  </div>
-                  <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="画像を選択してください" />
-                  </div>
+              <div class="input-field col s6">
+                <div class="file-input-wrapper">
+                  <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                  <label for="icon" class="file-input-label">
+                    <i class="material-icons">cloud_upload</i>
+                    <span>アイコンを選択</span>
+                  </label>
                 </div>
-                <% if (item.icon) { %>
-                  <div class="image-preview">
+                <% if (skill.icon) { %>
+                  <div class="current-image">
                     <p>現在のアイコン:</p>
-                    <img src="<%= item.icon %>" alt="現在のアイコン" style="max-width: 100px; max-height: 100px;" />
+                    <img src="<%= skill.icon %>" alt="アイコン" style="max-width: 100px; max-height: 100px;" />
                   </div>
                 <% } %>
+                <%- imageResizer.createPreviewHTML('icon') %>
+              </div>
+              <div class="input-field col s6">
+                <input type="number" id="cost" name="cost" min="0" value="<%= skill.cost || '' %>" />
+                <label for="cost">コスト</label>
               </div>
             </div>
 
             <div class="row">
               <div class="input-field col s6">
-                <select name="skillType">
-                  <% ["パッシブ","アクティブ","即時","オーラ","通常攻撃","リアクション"].forEach(t => { %>
-                    <option value="<%= t %>" <%= item.skillType === t ? 'selected' : '' %>><%= t %></option>
-                  <% }) %>
+                <input type="number" id="ct" name="ct" min="0" value="<%= skill.ct || '' %>" />
+                <label for="ct">CT</label>
+              </div>
+              <div class="input-field col s6">
+                <select name="skillType" required>
+                  <option value="">選択してください</option>
+                  <option value="パッシブ" <%= skill.skillType === 'パッシブ' ? 'selected' : '' %>>パッシブ</option>
+                  <option value="アクティブ" <%= skill.skillType === 'アクティブ' ? 'selected' : '' %>>アクティブ</option>
+                  <option value="即時" <%= skill.skillType === '即時' ? 'selected' : '' %>>即時</option>
+                  <option value="オーラ" <%= skill.skillType === 'オーラ' ? 'selected' : '' %>>オーラ</option>
+                  <option value="通常攻撃" <%= skill.skillType === '通常攻撃' ? 'selected' : '' %>>通常攻撃</option>
+                  <option value="リアクション" <%= skill.skillType === 'リアクション' ? 'selected' : '' %>>リアクション</option>
                 </select>
                 <label>スキルタイプ</label>
               </div>
-              <div class="input-field col s6">
-                <select name="skillCategory">
-                  <% ["個性","EX","通常"].forEach(c => { %>
-                    <option value="<%= c %>" <%= item.skillCategory === c ? 'selected' : '' %>><%= c %></option>
-                  <% }) %>
-                </select>
-                <label>スキルカテゴリー</label>
-              </div>
             </div>
 
             <div class="row">
               <div class="input-field col s6">
-                <input type="number" id="cost" name="cost" min="0" value="<%= item.cost %>" required />
-                <label for="cost">コスト</label>
+                <select name="skillCategory" required>
+                  <option value="">選択してください</option>
+                  <option value="個性" <%= skill.skillCategory === '個性' ? 'selected' : '' %>>個性</option>
+                  <option value="EX" <%= skill.skillCategory === 'EX' ? 'selected' : '' %>>EX</option>
+                  <option value="通常" <%= skill.skillCategory === '通常' ? 'selected' : '' %>>通常</option>
+                </select>
+                <label>スキルカテゴリー</label>
               </div>
               <div class="input-field col s6">
-                <input type="number" id="ct" name="ct" min="0" value="<%= item.ct %>" required />
-                <label for="ct">CT</label>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <legend>スキルターゲット（複数選択）</legend>
-              <div class="row">
-                <% ["対ユニット","対地面","近接","範囲攻撃"].forEach(t => { %>
-                  <div class="col s6">
-                    <label>
-                      <input type="checkbox" name="targets" value="<%= t %>" <%= (item.targets || []).includes(t) ? 'checked' : '' %> />
-                      <span><%= t %></span>
-                    </label>
-                  </div>
-                <% }) %>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <legend>スキル効果（複数選択）</legend>
-              <div class="input-field">
-                <select name="effectIds" multiple>
-                  <% skillEffects.forEach(e => { %>
-                    <option value="<%= e.id %>" <%= (item.effectIds || []).includes(e.id) ? 'selected' : '' %>><%= e.name %></option>
-                  <% }) %>
+                <select name="targets" multiple>
+                  <option value="対ユニット" <%= (skill.targets || []).includes('対ユニット') ? 'selected' : '' %>>対ユニット</option>
+                  <option value="対地面" <%= (skill.targets || []).includes('対地面') ? 'selected' : '' %>>対地面</option>
+                  <option value="近接" <%= (skill.targets || []).includes('近接') ? 'selected' : '' %>>近接</option>
+                  <option value="範囲攻撃" <%= (skill.targets || []).includes('範囲攻撃') ? 'selected' : '' %>>範囲攻撃</option>
                 </select>
-                <label>スキル効果</label>
+                <label>スキルターゲット（複数選択）</label>
               </div>
             </div>
 
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="description" name="description" class="materialize-textarea" rows="6" required><%= item.description %></textarea>
+                <textarea id="description" name="description" class="materialize-textarea" rows="3"><%= skill.description || '' %></textarea>
                 <label for="description">説明</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+                <label>スキル効果（複数選択）:</label>
+                <div class="mt-20">
+                  <% skillEffects.forEach(e => { %>
+                    <label class="mr-20">
+                      <input type="checkbox" name="effectIds" value="<%= e.id %>" <%= (skill.effectIds || []).includes(e.id) ? 'checked' : '' %> />
+                      <span><%= e.name %></span>
+                    </label>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+                <label>射程・範囲（未指定のものはフロントでは非表示）:</label>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="rangeFrom" name="rangeFrom" min="0" value="<%= skill.range?.from || '' %>" />
+                    <label for="rangeFrom">射程 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="rangeTo" name="rangeTo" min="0" value="<%= skill.range?.to || '' %>" />
+                    <label for="rangeTo">射程 To</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="rangeHeightFrom" name="rangeHeightFrom" value="<%= skill.range?.heightFrom || '' %>" />
+                    <label for="rangeHeightFrom">射程高低差 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="rangeHeightTo" name="rangeHeightTo" value="<%= skill.range?.heightTo || '' %>" />
+                    <label for="rangeHeightTo">射程高低差 To</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="areaHeightFrom" name="areaHeightFrom" value="<%= skill.range?.areaHeightFrom || '' %>" />
+                    <label for="areaHeightFrom">範囲高低差 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="areaHeightTo" name="areaHeightTo" value="<%= skill.range?.areaTo || '' %>" />
+                    <label for="areaHeightTo">範囲高低差 To</label>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="range" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'range')" />
+                    <label for="range" class="file-input-label">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>範囲画像を選択</span>
+                    </label>
+                  </div>
+                  <% if (skill.range?.image) { %>
+                    <div class="current-image">
+                      <p>現在の範囲画像:</p>
+                      <img src="<%= skill.range.image %>" alt="範囲画像" style="max-width: 100px; max-height: 100px;" />
+                    </div>
+                  <% } %>
+                  <%- imageResizer.createPreviewHTML('range') %>
+                </div>
               </div>
             </div>
 
@@ -113,17 +158,19 @@
               </div>
             </div>
           </form>
+
+          <div class="row mt-20">
+            <div class="col s12 text-center">
+              <form action="/skills/<%= skill.id %>/delete" method="post" style="display: inline;">
+                <button type="submit" class="btn-large waves-effect waves-light red" onclick="return confirm('削除しますか？')">
+                  <i class="material-icons left">delete</i>削除
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col s12 text-center">
-      <a href="/skills" class="btn waves-effect waves-light grey">
-        <i class="material-icons left">arrow_back</i>一覧に戻る
-      </a>
-    </div>
-  </div>
-</body>
-</html> 
+  <p><a href="/skills">一覧に戻る</a></p> 
