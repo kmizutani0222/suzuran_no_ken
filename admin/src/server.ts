@@ -15,6 +15,7 @@ import { router as exSkillRouter } from "./routes/ex-skills";
 import { router as adminUserRouter } from "./routes/admin-users";
 import { router as authRouter } from "./routes/auth";
 import { attachLocals, requireLogin } from "./middleware/auth";
+import equipmentRouter from './routes/equipment';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -54,6 +55,7 @@ app.use("/skill-effects", requireLogin, skillEffectRouter);
 app.use("/personality-skills", requireLogin, personalitySkillRouter);
 app.use("/ex-skills", requireLogin, exSkillRouter);
 app.use("/admin-users", requireLogin, adminUserRouter);
+app.use('/equipment', requireLogin, equipmentRouter);
 
 app.listen(PORT, () => {
   console.log(`[admin] listening on http://localhost:${PORT}`);

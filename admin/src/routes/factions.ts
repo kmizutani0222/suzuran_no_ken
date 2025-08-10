@@ -18,16 +18,24 @@ router.get("/new", (_req, res) => {
   res.render(path.join("factions", "new"));
 });
 
-router.post("/", upload.single("icon"), (req, res) => {
-  const input = req.body as FactionCreateInput;
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 新規作成処理
+router.post('/', (req, res) => {
+  try {
+    const { name, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (icon !== undefined) input.icon = icon || null;
+
+    FactionRepository.create(input);
+    res.redirect('/factions');
+  } catch (error) {
+    console.error('陣営作成エラー:', error);
+    res.status(500).send('陣営の作成に失敗しました');
   }
-  
-  FactionRepository.create(input);
-  res.redirect("/factions");
 });
 
 router.get("/:id/edit", (req, res) => {
@@ -36,16 +44,29 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("factions", "edit"), { item });
 });
 
-router.post("/:id", upload.single("icon"), (req, res) => {
-  const input = req.body as FactionUpdateInput;
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 更新処理
+router.put('/:id', (req, res) => {
+  try {
+    const id = req.params.id!;
+    const { name, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (icon !== undefined) input.icon = icon || null;
+
+    const updated = FactionRepository.update(id, input);
+    if (!updated) {
+      return res.status(404).send('陣営が見つかりません');
+    }
+    
+    res.redirect('/factions');
+  } catch (error) {
+    console.error('陣営更新エラー:', error);
+    res.status(500).send('陣営の更新に失敗しました');
   }
-  
-  FactionRepository.update(req.params.id!, input);
-  res.redirect("/factions");
 });
 
 router.post("/:id/delete", (req, res) => {

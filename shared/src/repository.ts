@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
-import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput, ExSkill, ExSkillCreateInput, ExSkillUpdateInput } from "./models";
+import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput, ExSkill, ExSkillCreateInput, ExSkillUpdateInput, Equipment, EquipmentCreateInput, EquipmentUpdateInput, EquipmentWithRarity } from "./models";
 
 const DATA_DIR = join(process.cwd(), "../data");
 const CHARACTER_FILE = join(DATA_DIR, "characters.json");
@@ -355,3 +355,63 @@ export function ensureDefaultAdminUser(username: string, passwordHash: string): 
     writeAllAdminUsers(all);
   }
 } 
+
+// Equipment
+const EQUIPMENT_FILE = join(DATA_DIR, "equipment.json");
+function readAllEquipment(): Equipment[] { return readJson<Equipment[]>(EQUIPMENT_FILE); }
+function writeAllEquipment(values: Equipment[]): void { writeJson(EQUIPMENT_FILE, values); }
+
+export const EquipmentRepository = {
+  list(): Equipment[] { return readAllEquipment(); },
+  findById(id: string): Equipment | undefined { return readAllEquipment().find(e => e.id === id); },
+  create(input: EquipmentCreateInput): Equipment {
+    const all = readAllEquipment();
+    const created: Equipment = { 
+      id: generateId(), 
+      ...input,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as Equipment;
+    all.push(created);
+    writeAllEquipment(all);
+    return created;
+  },
+  update(id: string, input: EquipmentUpdateInput): Equipment | undefined {
+    const all = readAllEquipment();
+    const idx = all.findIndex(e => e.id === id);
+    if (idx === -1) return undefined;
+    const updated: Equipment = { 
+      ...all[idx], 
+      ...input, 
+      id,
+      updatedAt: new Date().toISOString()
+    } as Equipment;
+    all[idx] = updated;
+    writeAllEquipment(all);
+    return updated;
+  },
+  delete(id: string): boolean {
+    const all = readAllEquipment();
+    const next = all.filter(e => e.id !== id);
+    const changed = next.length !== all.length;
+    if (changed) writeAllEquipment(next);
+    return changed;
+  },
+  findAllWithRarity(): EquipmentWithRarity[] {
+    const equipments = readAllEquipment();
+    const rarities = readAllRarities();
+    
+    return equipments.map(equipment => ({
+      ...equipment,
+      rarity: rarities.find(r => r.id === equipment.rarityId)!
+    }));
+  },
+  findByCategory(category: 'weapon' | 'armor'): EquipmentWithRarity[] {
+    const equipments = this.findAllWithRarity();
+    return equipments.filter(e => e.category === category);
+  },
+  findByRarity(rarityId: string): EquipmentWithRarity[] {
+    const equipments = this.findAllWithRarity();
+    return equipments.filter(e => e.rarityId === rarityId);
+  }
+}; 

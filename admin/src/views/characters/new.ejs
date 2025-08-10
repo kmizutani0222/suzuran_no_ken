@@ -13,31 +13,34 @@
                 <label for="name">名前</label>
               </div>
               <div class="input-field col s6">
-                <select name="rarityId" required>
+                <select name="rarityId">
+                  <option value="">未選択</option>
                   <% rarities.forEach(r => { %>
                     <option value="<%= r.id %>"><%= r.name %> (★<%= r.value %>)</option>
                   <% }) %>
                 </select>
-                <label>レアリティ</label>
+                <label>レアリティ（任意）</label>
               </div>
             </div>
 
             <div class="row">
               <div class="input-field col s6">
-                <select name="roleId" required>
+                <select name="roleId">
+                  <option value="">未選択</option>
                   <% roles.forEach(r => { %>
                     <option value="<%= r.name %>"><%= r.name %></option>
                   <% }) %>
                 </select>
-                <label>ロール</label>
+                <label>ロール（任意）</label>
               </div>
               <div class="input-field col s6">
-                <select name="weaponType" required>
+                <select name="weaponType">
+                  <option value="">未選択</option>
                   <% ["剣","槍","斧","杖","弓"].forEach(w => { %>
                     <option value="<%= w %>"><%= w %></option>
                   <% }) %>
                 </select>
-                <label>武器種</label>
+                <label>武器種（任意）</label>
               </div>
             </div>
 

@@ -1,0 +1,209 @@
+<div class="page-header">
+  <h1>装備登録</h1>
+</div>
+
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <form action="/equipment" method="POST" enctype="multipart/form-data">
+          <!-- 1行目: 名前 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="name" name="name" type="text" required>
+              <label for="name">名前</label>
+            </div>
+          </div>
+
+          <!-- 2行目: 左側にレアリティ・カテゴリー・武器種、右側にアイコン -->
+          <div class="row">
+            <div class="col s6">
+              <div class="row">
+                <div class="input-field col s12">
+                  <select id="rarityId" name="rarityId">
+                    <option value="" selected>レアリティを選択してください（任意）</option>
+                    <% rarities.forEach(function(r) { %>
+                      <option value="<%= r.id %>"><%= r.name %></option>
+                    <% }); %>
+                  </select>
+                  <label for="rarityId">レアリティ</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <select id="category" name="category">
+                    <option value="" selected>カテゴリーを選択してください（任意）</option>
+                    <option value="weapon">武器</option>
+                    <option value="armor">装具</option>
+                  </select>
+                  <label for="category">カテゴリー</label>
+                </div>
+                <div class="input-field col s6">
+                  <select id="weaponType" name="weaponType">
+                    <option value="" selected>武器種を選択してください（任意）</option>
+                    <option value="sword">剣</option>
+                    <option value="spear">槍</option>
+                    <option value="axe">斧</option>
+                    <option value="bow">弓</option>
+                    <option value="staff">杖</option>
+                  </select>
+                  <label for="weaponType">武器種</label>
+                </div>
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="image-upload-section">
+                <div class="image-preview-container">
+                  <div id="icon-preview" class="image-preview-large">
+                    <div class="no-image">
+                      <i class="material-icons">image</i>
+                      <span>画像が選択されていません</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="image-controls">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                    <label for="icon" class="file-input-label">
+                      <i class="material-icons">cloud_upload</i>
+                      <span>アイコンを選択</span>
+                    </label>
+                  </div>
+                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                    <i class="material-icons">refresh</i>
+                    リセット
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 装備スキル -->
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="equipmentSkill" name="equipmentSkill" class="materialize-textarea" rows="3"></textarea>
+              <label for="equipmentSkill">装備スキル（任意）</label>
+            </div>
+          </div>
+
+          <!-- 説明 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="description" name="description" class="materialize-textarea" rows="3"></textarea>
+              <label for="description">説明（任意）</label>
+            </div>
+          </div>
+
+          <!-- 入手方法 -->
+          <div class="row">
+            <div class="col s12">
+              <div class="form-section">
+                <legend>入手方法（任意、複数選択）</legend>
+                <div class="faction-selection">
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethod" value="神兵試練１" />
+                    <span>神兵試練１</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethod" value="神兵試練２" />
+                    <span>神兵試練２</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethod" value="神兵試練３" />
+                    <span>神兵試練３</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col s12 text-center">
+              <button type="submit" class="btn-large waves-effect waves-light blue">
+                <i class="material-icons left">save</i>登録
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // カテゴリー変更時の処理
+  const categorySelect = document.getElementById('category');
+  const weaponTypeSelect = document.getElementById('weaponType');
+  
+  if (categorySelect && weaponTypeSelect) {
+    categorySelect.addEventListener('change', function() {
+      if (this.value === 'armor') {
+        weaponTypeSelect.value = '';
+        weaponTypeSelect.disabled = true;
+      } else {
+        weaponTypeSelect.disabled = false;
+      }
+    });
+  }
+  
+  // フォーム送信時の処理
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      // 空文字列の場合はnullに変換
+      const raritySelect = document.getElementById('rarityId');
+      const categorySelect = document.getElementById('category');
+      const weaponTypeSelect = document.getElementById('weaponType');
+      const equipmentSkillTextarea = document.getElementById('equipmentSkill');
+      const descriptionTextarea = document.getElementById('description');
+      
+      if (raritySelect && raritySelect.value === '') {
+        raritySelect.value = '';
+        // hidden inputを追加して空文字列を送信
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'rarityId';
+        hiddenInput.value = '';
+        form.appendChild(hiddenInput);
+      }
+      
+      if (categorySelect && categorySelect.value === '') {
+        categorySelect.value = '';
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'category';
+        hiddenInput.value = '';
+        form.appendChild(hiddenInput);
+      }
+      
+      if (weaponTypeSelect && weaponTypeSelect.value === '') {
+        weaponTypeSelect.value = '';
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'weaponType';
+        hiddenInput.value = '';
+        form.appendChild(hiddenInput);
+      }
+      
+      if (equipmentSkillTextarea && equipmentSkillTextarea.value === '') {
+        equipmentSkillTextarea.value = '';
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'equipmentSkill';
+        hiddenInput.value = '';
+        form.appendChild(hiddenInput);
+      }
+      
+      if (descriptionTextarea && descriptionTextarea.value === '') {
+        descriptionTextarea.value = '';
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'description';
+        hiddenInput.value = '';
+        form.appendChild(hiddenInput);
+      }
+    });
+  }
+});
+</script> 

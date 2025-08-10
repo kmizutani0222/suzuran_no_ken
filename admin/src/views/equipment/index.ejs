@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h1>装備一覧</h1>
+</div>
+
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <table class="striped responsive-table">
+          <thead>
+            <tr>
+              <th>アイコン</th>
+              <th>名前</th>
+              <th>レアリティ</th>
+              <th>カテゴリー</th>
+              <th>武器種</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (equipment.length === 0) { %>
+              <tr>
+                <td colspan="6" class="text-center">データがありません</td>
+              </tr>
+            <% } else { %>
+              <% equipment.forEach(function(e) { %>
+              <tr>
+                <td>
+                  <% if (e.icon) { %>
+                    <img src="/uploads/<%= e.icon %>" alt="<%= e.name %>" style="width: 50px; height: 50px; object-fit: cover;">
+                  <% } else { %>
+                    <span>なし</span>
+                  <% } %>
+                </td>
+                <td><%= e.name %></td>
+                <td><%= e.rarity ? e.rarity.name : '未選択' %></td>
+                <td><%= e.category === 'weapon' ? '武器' : e.category === 'armor' ? '装具' : '未選択' %></td>
+                <td>
+                  <% if (e.weaponType) { %>
+                    <%= e.weaponType %>
+                  <% } else { %>
+                    未選択
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/equipment/<%= e.id %>/edit" class="btn-small waves-effect waves-light blue">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <form action="/equipment/<%= e.id %>?_method=DELETE" method="POST" style="display: inline; margin-left: 10px;">
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('装備「<%= e.name %>」を削除しますか？')">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <% }); %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 固定配置の新規登録ボタン -->
+<a href="/equipment/new" class="btn-floating fab-new waves-effect waves-light green">
+  <i class="material-icons">add</i>
+</a> 

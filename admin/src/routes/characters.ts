@@ -81,45 +81,54 @@ router.post("/", upload.fields([
   { name: 'normalAppearance', maxCount: 1 },
   { name: 'pixelAvatar', maxCount: 1 }
 ]), (req, res) => {
-  const body = req.body as any;
-  const files = req.files as any;
-  const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
-  const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
+  try {
+    const body = req.body as any;
+    const files = req.files as any;
+    
+    // 陣営IDの処理（チェックが外された場合は空配列）
+    const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
+    
+    // EXスキルIDの処理（チェックが外された場合は空配列）
+    const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
 
-  const buildNode = (rk: string) => {
-    const left = body[`${rk}_left`];
-    const right = body[`${rk}_right`];
-    const node: any = {};
-    if (left) node.left = left;
-    if (right) node.right = right;
-    return Object.keys(node).length ? node : undefined;
-  };
+    const buildNode = (rk: string) => {
+      const left = body[`${rk}_left`];
+      const right = body[`${rk}_right`];
+      const node: any = {};
+      if (left && left !== '') node.left = left;
+      if (right && right !== '') node.right = right;
+      return Object.keys(node).length ? node : undefined;
+    };
 
-  const potentialTree: any = {
-    RK1: buildNode("RK1"),
-    RK3: buildNode("RK3"),
-    RK5: buildNode("RK5"),
-    RK7: buildNode("RK7"),
-    RK9: buildNode("RK9"),
-    RK11: buildNode("RK11"),
-  };
-  const skillTree = Object.fromEntries(Object.entries(potentialTree).filter(([, v]) => v));
+    const potentialTree: any = {
+      RK1: buildNode("RK1"),
+      RK3: buildNode("RK3"),
+      RK5: buildNode("RK5"),
+      RK7: buildNode("RK7"),
+      RK9: buildNode("RK9"),
+      RK11: buildNode("RK11"),
+    };
+    const skillTree = Object.fromEntries(Object.entries(potentialTree).filter(([, v]) => v));
 
-  const input: CharacterCreateInput = {
-    name: body.name,
-    rarityId: body.rarityId,
-    roleId: body.roleId,
-    factionIds,
-    weaponType: body.weaponType as WeaponType,
-    ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
-    ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
-    ...(exSkillIds.length ? { exSkillIds } : {}),
-    ...(files.normalAppearance?.[0] ? { normalAppearance: toPublicPath(files.normalAppearance[0].filename) } : {}),
-    ...(files.pixelAvatar?.[0] ? { pixelAvatar: toPublicPath(files.pixelAvatar[0].filename) } : {}),
-  };
+    const input: CharacterCreateInput = {
+      name: body.name,
+      rarityId: body.rarityId || null,
+      roleId: body.roleId || null,
+      factionIds,
+      weaponType: body.weaponType || null,
+      personalitySkillId: body.personalitySkillId || null,
+      skillTree: Object.keys(skillTree).length ? skillTree as any : null,
+      exSkillIds,
+      normalAppearance: files.normalAppearance?.[0] ? toPublicPath(files.normalAppearance[0].filename) : null,
+      pixelAvatar: files.pixelAvatar?.[0] ? toPublicPath(files.pixelAvatar[0].filename) : null,
+    };
 
-  CharacterRepository.create(input);
-  res.redirect("/characters");
+    CharacterRepository.create(input);
+    res.redirect("/characters");
+  } catch (error) {
+    console.error("キャラクター作成エラー:", error);
+    res.status(500).send("キャラクターの作成に失敗しました");
+  }
 });
 
 router.get("/:id/edit", async (req, res) => {
@@ -158,48 +167,58 @@ router.post("/:id", upload.fields([
   { name: 'normalAppearance', maxCount: 1 },
   { name: 'pixelAvatar', maxCount: 1 }
 ]), (req, res) => {
-  const body = req.body as any;
-  const files = req.files as any;
-  const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
-  const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
+  try {
+    const body = req.body as any;
+    const files = req.files as any;
+    
+    // 陣営IDの処理（チェックが外された場合は空配列）
+    const factionIds: string[] = Array.isArray(body.factionIds) ? body.factionIds : (body.factionIds ? [body.factionIds] : []);
+    
+    // EXスキルIDの処理（チェックが外された場合は空配列）
+    const exSkillIds: string[] = Array.isArray(body.exSkillIds) ? body.exSkillIds : (body.exSkillIds ? [body.exSkillIds] : []);
 
-  const buildNode = (rk: string) => {
-    const left = body[`${rk}_left`];
-    const right = body[`${rk}_right`];
-    const node: any = {};
-    if (left) node.left = left;
-    if (right) node.right = right;
-    return Object.keys(node).length ? node : undefined;
-  };
+    const buildNode = (rk: string) => {
+      const left = body[`${rk}_left`];
+      const right = body[`${rk}_right`];
+      const node: any = {};
+      if (left && left !== '') node.left = left;
+      if (right && right !== '') node.right = right;
+      return Object.keys(node).length ? node : undefined;
+    };
 
-  const potentialTree: any = {
-    RK1: buildNode("RK1"),
-    RK3: buildNode("RK3"),
-    RK5: buildNode("RK5"),
-    RK7: buildNode("RK7"),
-    RK9: buildNode("RK9"),
-    RK11: buildNode("RK11"),
-  };
-  const skillTree = Object.fromEntries(Object.entries(potentialTree).filter(([, v]) => v));
+    const potentialTree: any = {
+      RK1: buildNode("RK1"),
+      RK3: buildNode("RK3"),
+      RK5: buildNode("RK5"),
+      RK7: buildNode("RK7"),
+      RK9: buildNode("RK9"),
+      RK11: buildNode("RK11"),
+    };
+    const skillTree = Object.fromEntries(Object.entries(potentialTree).filter(([, v]) => v));
 
-  const input: CharacterUpdateInput = {
-    ...(body.name ? { name: body.name } : {}),
-    ...(body.rarityId ? { rarityId: body.rarityId } : {}),
-    ...(body.roleId ? { roleId: body.roleId } : {}),
-    ...(factionIds.length ? { factionIds } : {}),
-    ...(body.weaponType ? { weaponType: body.weaponType as WeaponType } : {}),
-    ...(body.personalitySkillId ? { personalitySkillId: body.personalitySkillId } : {}),
-    ...(Object.keys(skillTree).length ? { skillTree: skillTree as any } : {}),
-    ...(exSkillIds.length ? { exSkillIds } : {}),
-    ...(files.normalAppearance?.[0] ? { normalAppearance: toPublicPath(files.normalAppearance[0].filename) } : {}),
-    ...(files.pixelAvatar?.[0] ? { pixelAvatar: toPublicPath(files.pixelAvatar[0].filename) } : {}),
-  };
+    const input: CharacterUpdateInput = {
+      name: body.name,
+      rarityId: body.rarityId || null,
+      roleId: body.roleId || null,
+      factionIds,
+      weaponType: body.weaponType || null,
+      personalitySkillId: body.personalitySkillId || null,
+      skillTree: Object.keys(skillTree).length ? skillTree as any : null,
+      exSkillIds,
+      normalAppearance: files.normalAppearance?.[0] ? toPublicPath(files.normalAppearance[0].filename) : null,
+      pixelAvatar: files.pixelAvatar?.[0] ? toPublicPath(files.pixelAvatar[0].filename) : null,
+    };
 
-  if (!req.params.id) {
-    return res.status(400).send("ID is required");
+    if (!req.params.id) {
+      return res.status(400).send("ID is required");
+    }
+    
+    CharacterRepository.update(req.params.id, input);
+    res.redirect("/characters");
+  } catch (error) {
+    console.error("キャラクター更新エラー:", error);
+    res.status(500).send("キャラクターの更新に失敗しました");
   }
-  CharacterRepository.update(req.params.id, input);
-  res.redirect("/characters");
 });
 
 router.post("/:id/delete", (req, res) => {

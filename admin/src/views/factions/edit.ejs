@@ -16,37 +16,16 @@
         <div class="card-content">
           <form action="/factions/<%= item.id %>" method="post" enctype="multipart/form-data">
             <div class="row">
-              <div class="input-field col s6">
-                <input type="text" id="name" name="name" value="<%= item.name %>" required />
-                <label for="name">名前</label>
+              <div class="col s6">
+                <div class="input-field">
+                  <input type="text" id="name" name="name" value="<%= faction.name %>" required>
+                  <label for="name">名前 *</label>
+                </div>
               </div>
-              <div class="input-field col s6">
-                <div class="image-upload-section">
-                  <div class="image-preview-container">
-                    <div id="icon-preview" class="image-preview-large">
-                      <% if (item.icon) { %>
-                        <img src="<%= item.icon %>" alt="アイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
-                      <% } else { %>
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      <% } %>
-                    </div>
-                  </div>
-                  <div class="image-controls">
-                    <div class="file-input-wrapper">
-                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                      <label for="icon" class="file-input-label">
-                        <i class="material-icons">cloud_upload</i>
-                        <span>アイコンを選択</span>
-                      </label>
-                    </div>
-                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
-                      <i class="material-icons">refresh</i>
-                      リセット
-                    </button>
-                  </div>
+              <div class="col s6">
+                <div class="input-field">
+                  <input type="text" id="icon" name="icon" value="<%= faction.icon || '' %>">
+                  <label for="icon">アイコン（任意）</label>
                 </div>
               </div>
             </div>

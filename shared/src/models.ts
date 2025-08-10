@@ -178,15 +178,15 @@ export interface CharacterSkillTree {
 export interface Character {
   id: string;
   name: string;
-  rarityId: string; // Rarity
-  roleId: string;   // Role
+  rarityId?: string | null; // Rarity（任意）
+  roleId?: string | null;   // Role（任意）
   factionIds: string[]; // 複数選択
-  weaponType: WeaponType; // 武器種
-  personalitySkillId?: string; // PersonalitySkillから単一
-  skillTree?: CharacterSkillTree; // 各ランク左右に通常スキル
-  exSkillIds?: string[]; // EXスキル複数
-  normalAppearance?: string; // 通常外見画像
-  pixelAvatar?: string; // ピクセルアバター画像
+  weaponType?: WeaponType | null; // 武器種（任意）
+  personalitySkillId?: string | null; // PersonalitySkillから単一（任意）
+  skillTree?: CharacterSkillTree | null; // 各ランク左右に通常スキル（任意）
+  exSkillIds?: string[]; // EXスキル複数（任意）
+  normalAppearance?: string | null; // 通常外見画像（任意）
+  pixelAvatar?: string | null; // ピクセルアバター画像（任意）
 }
 
 export interface CharacterCreateInput extends Omit<Character, "id"> {}
@@ -204,3 +204,34 @@ export interface AdminUserCreateInput {
 }
 
 export interface AdminUserUpdateInput extends Partial<AdminUserCreateInput> {} 
+
+export interface Equipment {
+  id: string;
+  name: string;
+  icon?: string;
+  rarityId: string;
+  category: 'weapon' | 'armor';
+  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff';
+  equipmentSkill: string;
+  description: string;
+  acquisitionMethod?: string; // カンマ区切りの文字列（例: "神兵試練１, 神兵試練２"）
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EquipmentCreateInput {
+  name: string;
+  icon?: string;
+  rarityId: string;
+  category: 'weapon' | 'armor';
+  weaponType?: 'sword' | 'spear' | 'axe' | 'bow' | 'staff';
+  equipmentSkill: string;
+  description: string;
+  acquisitionMethod?: string; // カンマ区切りの文字列
+}
+
+export interface EquipmentUpdateInput extends Partial<EquipmentCreateInput> {}
+
+export interface EquipmentWithRarity extends Equipment {
+  rarity: Rarity;
+} 

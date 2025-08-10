@@ -18,19 +18,28 @@ router.get("/new", (_req, res) => {
   res.render(path.join("roles", "new"));
 });
 
-router.post("/", upload.single("icon"), (req, res) => {
-  const input = req.body as RoleCreateInput;
-  input.movementPower = Number(input.movementPower);
-  input.jumpHigh = Number(input.jumpHigh);
-  input.jumpLow = Number(input.jumpLow);
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 新規作成処理
+router.post('/', (req, res) => {
+  try {
+    const { name, movementPower, jumpHigh, jumpLow, terrainSuitability, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (movementPower !== undefined) input.movementPower = movementPower || null;
+    if (jumpHigh !== undefined) input.jumpHigh = jumpHigh || null;
+    if (jumpLow !== undefined) input.jumpLow = jumpLow || null;
+    if (terrainSuitability !== undefined) input.terrainSuitability = terrainSuitability || null;
+    if (icon !== undefined) input.icon = icon || null;
+
+    RoleRepository.create(input);
+    res.redirect('/roles');
+  } catch (error) {
+    console.error('ロール作成エラー:', error);
+    res.status(500).send('ロールの作成に失敗しました');
   }
-  
-  RoleRepository.create(input);
-  res.redirect("/roles");
 });
 
 router.get("/:id/edit", (req, res) => {
@@ -39,19 +48,33 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("roles", "edit"), { item });
 });
 
-router.post("/:id", upload.single("icon"), (req, res) => {
-  const input = req.body as RoleUpdateInput;
-  if (typeof input.movementPower !== "undefined") input.movementPower = Number(input.movementPower as any);
-  if (typeof input.jumpHigh !== "undefined") input.jumpHigh = Number(input.jumpHigh as any);
-  if (typeof input.jumpLow !== "undefined") input.jumpLow = Number(input.jumpLow as any);
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 更新処理
+router.put('/:id', (req, res) => {
+  try {
+    const id = req.params.id!;
+    const { name, movementPower, jumpHigh, jumpLow, terrainSuitability, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (movementPower !== undefined) input.movementPower = movementPower || null;
+    if (jumpHigh !== undefined) input.jumpHigh = jumpHigh || null;
+    if (jumpLow !== undefined) input.jumpLow = jumpLow || null;
+    if (terrainSuitability !== undefined) input.terrainSuitability = terrainSuitability || null;
+    if (icon !== undefined) input.icon = icon || null;
+
+    const updated = RoleRepository.update(id, input);
+    if (!updated) {
+      return res.status(404).send('ロールが見つかりません');
+    }
+    
+    res.redirect('/roles');
+  } catch (error) {
+    console.error('ロール更新エラー:', error);
+    res.status(500).send('ロールの更新に失敗しました');
   }
-  
-  RoleRepository.update(req.params.id!, input);
-  res.redirect("/roles");
 });
 
 router.post("/:id/delete", (req, res) => {

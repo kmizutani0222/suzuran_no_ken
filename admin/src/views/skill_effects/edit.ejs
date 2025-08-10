@@ -16,11 +16,12 @@
           <form action="/skill-effects/<%= skillEffect.id %>" method="post">
             <div class="row">
               <div class="input-field col s6">
-                <input type="text" id="name" name="name" value="<%= skillEffect.name %>" required />
-                <label for="name">名前</label>
+                <input type="text" id="name" name="name" value="<%= skillEffect.name %>" required>
+                <label for="name">名前 *</label>
               </div>
               <div class="input-field col s6">
-                <select name="category" required>
+                <select name="category">
+                  <option value="">未選択</option>
                   <option value="バフ" <%= skillEffect.category === 'バフ' ? 'selected' : '' %>>バフ</option>
                   <option value="デバフ" <%= skillEffect.category === 'デバフ' ? 'selected' : '' %>>デバフ</option>
                   <option value="状態" <%= skillEffect.category === '状態' ? 'selected' : '' %>>状態</option>
@@ -29,14 +30,14 @@
                   <option value="ダメージ" <%= skillEffect.category === 'ダメージ' ? 'selected' : '' %>>ダメージ</option>
                   <option value="その他" <%= skillEffect.category === 'その他' ? 'selected' : '' %>>その他</option>
                 </select>
-                <label>カテゴリー</label>
+                <label>カテゴリー（任意）</label>
               </div>
             </div>
 
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="description" name="description" class="materialize-textarea" rows="6" required><%= skillEffect.description %></textarea>
-                <label for="description">効果説明</label>
+                <textarea id="description" name="description" class="materialize-textarea" rows="6"><%= skillEffect.description || '' %></textarea>
+                <label for="description">効果説明（任意）</label>
               </div>
             </div>
 

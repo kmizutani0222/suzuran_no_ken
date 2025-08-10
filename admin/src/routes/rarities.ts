@@ -18,17 +18,25 @@ router.get("/new", (_req, res) => {
   res.render(path.join("rarities", "new"));
 });
 
-router.post("/", upload.single("icon"), (req, res) => {
-  const input = req.body as RarityCreateInput;
-  input.value = Number(input.value);
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 新規作成処理
+router.post('/', (req, res) => {
+  try {
+    const { name, value, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (value !== undefined) input.value = value || null;
+    if (icon !== undefined) input.image = icon || null;
+
+    RarityRepository.create(input);
+    res.redirect('/rarities');
+  } catch (error) {
+    console.error('レアリティ作成エラー:', error);
+    res.status(500).send('レアリティの作成に失敗しました');
   }
-  
-  RarityRepository.create(input);
-  res.redirect("/rarities");
 });
 
 router.get("/:id/edit", (req, res) => {
@@ -37,17 +45,30 @@ router.get("/:id/edit", (req, res) => {
   res.render(path.join("rarities", "edit"), { item });
 });
 
-router.post("/:id", upload.single("icon"), (req, res) => {
-  const input: RarityUpdateInput = { ...req.body };
-  if (typeof input.value !== "undefined") input.value = Number(input.value as any);
-  
-  // ファイルがアップロードされた場合、パスを設定
-  if (req.file && req.file.filename) {
-    input.image = `/uploads/${req.file.filename}`;
+// 更新処理
+router.put('/:id', (req, res) => {
+  try {
+    const id = req.params.id!;
+    const { name, value, icon } = req.body;
+    
+    const input: any = {
+      name
+    };
+
+    // オプショナル項目の処理（空文字列も含める）
+    if (value !== undefined) input.value = value || null;
+    if (icon !== undefined) input.image = icon || null;
+
+    const updated = RarityRepository.update(id, input);
+    if (!updated) {
+      return res.status(404).send('レアリティが見つかりません');
+    }
+    
+    res.redirect('/rarities');
+  } catch (error) {
+    console.error('レアリティ更新エラー:', error);
+    res.status(500).send('レアリティの更新に失敗しました');
   }
-  
-  RarityRepository.update(req.params.id!, input);
-  res.redirect("/rarities");
 });
 
 router.post("/:id/delete", (req, res) => {
