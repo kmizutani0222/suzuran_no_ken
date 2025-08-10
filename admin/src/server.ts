@@ -10,6 +10,7 @@ import { router as roleRouter } from "./routes/roles";
 import { router as factionRouter } from "./routes/factions";
 import { router as skillRouter } from "./routes/skills";
 import { router as skillEffectRouter } from "./routes/skill-effects";
+import { router as personalitySkillRouter } from "./routes/personality-skills";
 import { router as adminUserRouter } from "./routes/admin-users";
 import { router as authRouter } from "./routes/auth";
 import { attachLocals, requireLogin } from "./middleware/auth";
@@ -49,6 +50,7 @@ app.use("/roles", requireLogin, roleRouter);
 app.use("/factions", requireLogin, factionRouter);
 app.use("/skills", requireLogin, skillRouter);
 app.use("/skill-effects", requireLogin, skillEffectRouter);
+app.use("/personality-skills", requireLogin, personalitySkillRouter);
 app.use("/admin-users", requireLogin, adminUserRouter);
 
 app.listen(PORT, () => {

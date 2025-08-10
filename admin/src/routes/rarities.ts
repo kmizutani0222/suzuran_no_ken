@@ -32,7 +32,7 @@ router.post("/", upload.single("icon"), (req, res) => {
 });
 
 router.get("/:id/edit", (req, res) => {
-  const item = RarityRepository.findById(req.params.id);
+  const item = RarityRepository.findById(req.params.id!);
   if (!item) return res.status(404).send("Not Found");
   res.render(path.join("rarities", "edit"), { item });
 });
@@ -46,11 +46,11 @@ router.post("/:id", upload.single("icon"), (req, res) => {
     input.image = `/uploads/${req.file.filename}`;
   }
   
-  RarityRepository.update(req.params.id, input);
+  RarityRepository.update(req.params.id!, input);
   res.redirect("/rarities");
 });
 
 router.post("/:id/delete", (req, res) => {
-  RarityRepository.delete(req.params.id);
+  RarityRepository.delete(req.params.id!);
   res.redirect("/rarities");
 }); 

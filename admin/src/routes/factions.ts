@@ -31,7 +31,7 @@ router.post("/", upload.single("icon"), (req, res) => {
 });
 
 router.get("/:id/edit", (req, res) => {
-  const item = FactionRepository.findById(req.params.id);
+  const item = FactionRepository.findById(req.params.id!);
   if (!item) return res.status(404).send("Not Found");
   res.render(path.join("factions", "edit"), { item });
 });
@@ -44,11 +44,11 @@ router.post("/:id", upload.single("icon"), (req, res) => {
     input.image = `/uploads/${req.file.filename}`;
   }
   
-  FactionRepository.update(req.params.id, input);
+  FactionRepository.update(req.params.id!, input);
   res.redirect("/factions");
 });
 
 router.post("/:id/delete", (req, res) => {
-  FactionRepository.delete(req.params.id);
+  FactionRepository.delete(req.params.id!);
   res.redirect("/factions");
 }); 

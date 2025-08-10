@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
-import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput } from "./models";
+import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput } from "./models";
 
 const DATA_DIR = join(process.cwd(), "../data");
 const CHARACTER_FILE = join(DATA_DIR, "characters.json");
@@ -9,6 +9,7 @@ const ROLE_FILE = join(DATA_DIR, "roles.json");
 const FACTION_FILE = join(DATA_DIR, "factions.json");
 const SKILL_FILE = join(DATA_DIR, "skills.json");
 const SKILL_EFFECT_FILE = join(DATA_DIR, "skill_effects.json");
+const PERSONALITY_SKILL_FILE = join(DATA_DIR, "personality_skills.json");
 const ADMIN_USER_FILE = join(DATA_DIR, "admin_users.json");
 
 function ensureDirExists(dirPath: string): void {
@@ -245,6 +246,38 @@ export const SkillEffectRepository = {
     const next = all.filter(v => v.id !== id);
     const changed = next.length !== all.length;
     if (changed) writeAllSkillEffects(next);
+    return changed;
+  }
+};
+
+// PersonalitySkills
+function readAllPersonalitySkills(): PersonalitySkill[] { return readJson<PersonalitySkill[]>(PERSONALITY_SKILL_FILE); }
+function writeAllPersonalitySkills(values: PersonalitySkill[]): void { writeJson(PERSONALITY_SKILL_FILE, values); }
+
+export const PersonalitySkillRepository = {
+  list(): PersonalitySkill[] { return readAllPersonalitySkills(); },
+  findById(id: string): PersonalitySkill | undefined { return readAllPersonalitySkills().find(ps => ps.id === id); },
+  create(input: PersonalitySkillCreateInput): PersonalitySkill {
+    const all = readAllPersonalitySkills();
+    const created: PersonalitySkill = { id: generateId(), ...input } as PersonalitySkill;
+    all.push(created);
+    writeAllPersonalitySkills(all);
+    return created;
+  },
+  update(id: string, input: PersonalitySkillUpdateInput): PersonalitySkill | undefined {
+    const all = readAllPersonalitySkills();
+    const idx = all.findIndex(ps => ps.id === id);
+    if (idx === -1) return undefined;
+    const updated: PersonalitySkill = { ...all[idx], ...input, id } as PersonalitySkill;
+    all[idx] = updated;
+    writeAllPersonalitySkills(all);
+    return updated;
+  },
+  delete(id: string): boolean {
+    const all = readAllPersonalitySkills();
+    const next = all.filter(ps => ps.id !== id);
+    const changed = next.length !== all.length;
+    if (changed) writeAllPersonalitySkills(next);
     return changed;
   }
 };

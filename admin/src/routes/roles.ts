@@ -34,7 +34,7 @@ router.post("/", upload.single("icon"), (req, res) => {
 });
 
 router.get("/:id/edit", (req, res) => {
-  const item = RoleRepository.findById(req.params.id);
+  const item = RoleRepository.findById(req.params.id!);
   if (!item) return res.status(404).send("Not Found");
   res.render(path.join("roles", "edit"), { item });
 });
@@ -50,11 +50,11 @@ router.post("/:id", upload.single("icon"), (req, res) => {
     input.image = `/uploads/${req.file.filename}`;
   }
   
-  RoleRepository.update(req.params.id, input);
+  RoleRepository.update(req.params.id!, input);
   res.redirect("/roles");
 });
 
 router.post("/:id/delete", (req, res) => {
-  RoleRepository.delete(req.params.id);
+  RoleRepository.delete(req.params.id!);
   res.redirect("/roles");
 }); 

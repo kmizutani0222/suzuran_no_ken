@@ -60,6 +60,32 @@ export interface SkillCreateInput {
 
 export interface SkillUpdateInput extends Partial<SkillCreateInput> {}
 
+// 個性スキルモデル
+export interface PersonalitySkill {
+  id: string;
+  name: string;
+  icon?: string; // アップロード画像のパス
+  effectIds?: string[]; // SkillEffect 複数選択
+  star1Description: string; // 星1の説明
+  star2Description: string; // 星2の説明
+  star3Description: string; // 星3の説明
+  star4Description: string; // 星4の説明
+  star5Description: string; // 星5の説明
+}
+
+export interface PersonalitySkillCreateInput {
+  name: string;
+  icon?: string;
+  effectIds?: string[];
+  star1Description: string;
+  star2Description: string;
+  star3Description: string;
+  star4Description: string;
+  star5Description: string;
+}
+
+export interface PersonalitySkillUpdateInput extends Partial<PersonalitySkillCreateInput> {}
+
 export interface Rarity {
   id: string;
   name: string;

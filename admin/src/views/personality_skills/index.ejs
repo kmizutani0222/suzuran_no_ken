@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="page-header">
+    <h1>個性スキル一覧</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>アイコン</th>
+                <th>名前</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% personalitySkills.forEach(function(personalitySkill) { %>
+                <tr>
+                  <td>
+                    <% if (personalitySkill.icon) { %>
+                      <img src="/uploads/<%= personalitySkill.icon %>" alt="<%= personalitySkill.name %>" style="width: 50px; height: 50px; object-fit: contain; border-radius: 4px;">
+                    <% } else { %>
+                      <span class="grey-text">アイコンなし</span>
+                    <% } %>
+                  </td>
+                  <td><%= personalitySkill.name %></td>
+                  <td>
+                    <a href="/personality-skills/<%= personalitySkill.id %>/edit" class="btn-small waves-effect waves-light blue">
+                      <i class="material-icons">edit</i>
+                    </a>
+                    <form action="/personality-skills/<%= personalitySkill.id %>?_method=DELETE" method="post" style="display: inline;">
+                      <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('本当に削除しますか？')">
+                        <i class="material-icons">delete</i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 固定配置の新規登録ボタン -->
+  <a href="/personality-skills/new" class="btn-floating fab-new waves-effect waves-light green">
+    <i class="material-icons">add</i>
+  </a>
+</div> 

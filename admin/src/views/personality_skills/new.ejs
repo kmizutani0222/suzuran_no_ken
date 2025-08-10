@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="page-header">
+    <h1>個性スキル新規作成</h1>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <form action="/personality-skills" method="post" enctype="multipart/form-data">
+            <!-- 1行目: 左側に名前、右側にアイコン -->
+            <div class="row">
+              <div class="col s6">
+                <div class="input-field">
+                  <input type="text" id="name" name="name" required />
+                  <label for="name">名前</label>
+                </div>
+              </div>
+              <div class="col s6">
+                <div class="image-upload-section">
+                  <div class="image-preview-container">
+                    <div id="icon-preview" class="image-preview-large">
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
+                      <label for="icon" class="file-input-label">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>アイコンを選択</span>
+                      </label>
+                    </div>
+                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('icon')">
+                      <i class="material-icons">refresh</i>
+                      リセット
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 星1の説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="star1Description" name="star1Description" class="materialize-textarea" required></textarea>
+                <label for="star1Description">星1の説明</label>
+              </div>
+            </div>
+
+            <!-- 星2の説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="star2Description" name="star2Description" class="materialize-textarea" required></textarea>
+                <label for="star2Description">星2の説明</label>
+              </div>
+            </div>
+
+            <!-- 星3の説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="star3Description" name="star3Description" class="materialize-textarea" required></textarea>
+                <label for="star3Description">星3の説明</label>
+              </div>
+            </div>
+
+            <!-- 星4の説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="star4Description" name="star4Description" class="materialize-textarea" required></textarea>
+                <label for="star4Description">星4の説明</label>
+              </div>
+            </div>
+
+            <!-- 星5の説明 -->
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="star5Description" name="star5Description" class="materialize-textarea" required></textarea>
+                <label for="star5Description">星5の説明</label>
+              </div>
+            </div>
+
+            <!-- スキル効果 -->
+            <div class="row">
+              <div class="col s12">
+                <div class="form-section">
+                  <legend>スキル効果（複数選択）</legend>
+                  <div class="faction-selection">
+                    <% skillEffects.forEach(e => { %>
+                      <label class="faction-checkbox">
+                        <input type="checkbox" name="effectIds" value="<%= e.id %>" />
+                        <span><%= e.name %></span>
+                      </label>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 text-center">
+                <button type="submit" class="btn-large waves-effect waves-light blue">
+                  <i class="material-icons left">save</i>保存
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 固定配置の戻るボタン -->
+  <a href="/personality-skills" class="btn-floating fab-back waves-effect waves-light grey">
+    <i class="material-icons">arrow_back</i>
+  </a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // テキストエリアのラベルを適切に配置
+      M.textareaAutoResize(document.getElementById('star1Description'));
+      M.textareaAutoResize(document.getElementById('star2Description'));
+      M.textareaAutoResize(document.getElementById('star3Description'));
+      M.textareaAutoResize(document.getElementById('star4Description'));
+      M.textareaAutoResize(document.getElementById('star5Description'));
+    });
+  </script>
+</div> 
