@@ -1,87 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>管理 - キャラ一覧</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="/css/list-pages.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <div class="row valign-wrapper">
-      <div class="col s8">
-        <h1 class="page-title">キャラクター一覧</h1>
-      </div>
-      <div class="col s4 right-align">
-        <a href="/characters/new" class="btn-large waves-effect waves-light green">
-          <i class="material-icons left">add</i>
-          新規登録
-        </a>
-      </div>
+<div class="page-header">
+  <div class="row valign-wrapper">
+    <div class="col s8">
+      <h1 class="page-title">キャラクター一覧</h1>
     </div>
+    <div class="col s4 right-align">
+      <a href="/characters/new" class="btn-large waves-effect waves-light green">
+        <i class="material-icons left">add</i>
+        新規登録
+      </a>
+    </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col s12">
     <div class="card">
       <div class="card-content">
-            <table class="striped responsive-table">
-              <thead>
-                <tr>
-                  <th>ピクセルアバター</th>
-                  <th>名前</th>
-                  <th>レアリティ</th>
-                  <th>陣営</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if (characters.length === 0) { %>
-                  <tr>
-                    <td colspan="5" class="text-center">データがありません</td>
-                  </tr>
-                <% } %>
-                <% characters.forEach(c => { %>
-                  <tr>
-                    <td>
-                      <div class="character-images">
-                        <% if (c.pixelAvatar) { %>
-                          <div class="image-preview">
-                            <img src="<%= c.pixelAvatar %>" alt="ピクセルアバター" title="ピクセルアバター" />
-                          </div>
-                        <% } else { %>
-                          <div class="no-image">
-                            <span class="grey-text">画像なし</span>
-                          </div>
-                        <% } %>
+        <table class="striped responsive-table">
+          <thead>
+            <tr>
+              <th>ピクセルアバター</th>
+              <th>名前</th>
+              <th>レアリティ</th>
+              <th>陣営</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (characters.length === 0) { %>
+              <tr>
+                <td colspan="5" class="text-center">データがありません</td>
+              </tr>
+            <% } %>
+            <% characters.forEach(c => { %>
+              <tr>
+                <td>
+                  <div class="character-images">
+                    <% if (c.pixelAvatar) { %>
+                      <div class="image-preview">
+                        <img src="<%= c.pixelAvatar %>" alt="ピクセルアバター" title="ピクセルアバター" />
                       </div>
-                    </td>
-                    <td><%= c.name %></td>
-                    <td><%= c.rarity ? c.rarity.name : '未設定' %></td>
-                    <td><%= c.faction ? c.faction.name : '未設定' %></td>
-                    <td>
-                      <a href="/characters/<%= c.id %>/edit" class="btn-small waves-effect waves-light orange">
-                        <i class="material-icons">edit</i>
-                      </a>
-                      <form action="/characters/<%= c.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
-                        <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('キャラクター「<%= c.name %>」を削除しますか？')">
-                          <i class="material-icons">delete</i>
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </div>
+                    <% } else { %>
+                      <div class="no-image">
+                        <span class="grey-text">画像なし</span>
+                      </div>
+                    <% } %>
+                  </div>
+                </td>
+                <td><%= c.name %></td>
+                <td><%= c.rarity ? c.rarity.name : '未設定' %></td>
+                <td><%= c.faction ? c.faction.name : '未設定' %></td>
+                <td>
+                  <a href="/characters/<%= c.id %>/edit" class="btn-small waves-effect waves-light orange">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <form action="/characters/<%= c.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('キャラクター「<%= c.name %>」を削除しますか？')">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      M.AutoInit();
-    });
-  </script>
-</body>
-</html> 
+</div> 

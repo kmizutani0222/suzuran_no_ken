@@ -1,69 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>管理 - 陣営一覧</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="/css/list-pages.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-    <div class="row valign-wrapper">
-      <div class="col s8">
-        <h1 class="page-title">陣営一覧</h1>
-      </div>
-      <div class="col s4 right-align">
-        <a href="/factions/new" class="btn-large waves-effect waves-light green">
-          <i class="material-icons left">add</i>
-          新規登録
-        </a>
-      </div>
+<div class="page-header">
+  <div class="row valign-wrapper">
+    <div class="col s8">
+      <h1 class="page-title">陣営一覧</h1>
     </div>
+    <div class="col s4 right-align">
+      <a href="/factions/new" class="btn-large waves-effect waves-light green">
+        <i class="material-icons left">add</i>
+        新規登録
+      </a>
+    </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col s12">
     <div class="card">
       <div class="card-content">
-            <table class="striped responsive-table">
-              <thead>
-                <tr>
-                  <th>アイコン</th>
-                  <th>名前</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if (items.length === 0) { %>
-                  <tr><td colspan="3">データがありません</td></tr>
-                <% } %>
-                <% items.forEach(i => { %>
-                  <tr>
-                    <td><% if (i.image) { %><img src="<%= i.image %>" alt="" width="64" /><% } else { %><span class="grey-text">画像なし</span><% } %></td>
-                    <td><%= i.name %></td>
-                    <td>
-                      <a href="/factions/<%= i.id %>/edit" class="btn-small waves-effect waves-light orange">
-                        <i class="material-icons">edit</i>
-                      </a>
-                      <form action="/factions/<%= i.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
-                        <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('削除しますか？')">
-                          <i class="material-icons">delete</i>
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <table class="striped responsive-table">
+          <thead>
+            <tr>
+              <th>アイコン</th>
+              <th>名前</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (factions.length === 0) { %>
+              <tr>
+                <td colspan="3" class="text-center">データがありません</td>
+              </tr>
+            <% } %>
+            <% factions.forEach(f => { %>
+              <tr>
+                <td>
+                  <div class="character-images">
+                    <% if (f.icon) { %>
+                      <div class="image-preview">
+                        <img src="<%= f.icon %>" alt="アイコン" title="アイコン" />
+                      </div>
+                    <% } else { %>
+                      <div class="no-image">
+                        <span class="grey-text">画像なし</span>
+                      </div>
+                    <% } %>
+                  </div>
+                </td>
+                <td><%= f.name %></td>
+                <td>
+                  <a href="/factions/<%= f.id %>/edit" class="btn-small waves-effect waves-light orange">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <form action="/factions/<%= f.id %>/delete" method="post" style="display:inline; margin-left: 10px;">
+                    <button type="submit" class="btn-small waves-effect waves-light red" onclick="return confirm('削除しますか？')">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      M.AutoInit();
-    });
-  </script>
-</body>
-</html> 
+</div> 
