@@ -61,55 +61,36 @@
             </div>
 
             <div class="form-section">
-              <legend>外見画像</legend>
               <div class="row">
                 <div class="input-field col s6">
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="normalAppearance-preview" class="image-preview-large">
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="normalAppearance" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'normalAppearance')" />
-                        <label for="normalAppearance" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>通常外見を選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('normalAppearance')">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
+                  <h6 class="image-section-title">通常外見</h6>
+                <div class="image-preview-container">
+                  <div id="normalAppearance-preview" class="image-preview-large clickable-preview" onclick="selectNormalAppearance()">
+                    <div class="no-image">
+                      <i class="material-icons">image</i>
+                      <span>画像が選択されていません</span>
                     </div>
                   </div>
                 </div>
+                <div class="image-controls">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="normalAppearance" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'normalAppearance')" id="normalAppearance-file-input" style="display: none;" />
+                  </div>
+                </div>
+                </div>
                 <div class="input-field col s6">
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="pixelAvatar-preview" class="image-preview-large">
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
+                  <h6 class="image-section-title">ピクセルアバター</h6>
+                  <div class="image-preview-container">
+                    <div id="pixelAvatar-preview" class="image-preview-large clickable-preview" onclick="selectPixelAvatar()">
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
                       </div>
                     </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="pixelAvatar" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'pixelAvatar')" />
-                        <label for="pixelAvatar" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>ピクセルアバターを選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="imageResizer.resetImage('pixelAvatar')">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="pixelAvatar" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'pixelAvatar')" id="pixelAvatar-file-input" style="display: none;" />
                     </div>
                   </div>
                 </div>
@@ -188,4 +169,130 @@
 <!-- 固定配置の戻るボタン -->
 <a href="/characters" class="btn-floating fab-back waves-effect waves-light grey">
   <i class="material-icons">arrow_back</i>
-</a> 
+</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ファイル入力の変更を監視してプレビューを更新
+  const normalAppearanceFileInput = document.getElementById('normalAppearance-file-input');
+  const pixelAvatarFileInput = document.getElementById('pixelAvatar-file-input');
+  
+  if (normalAppearanceFileInput) {
+    normalAppearanceFileInput.addEventListener('change', handleNormalAppearanceFileChange);
+  }
+  
+  if (pixelAvatarFileInput) {
+    pixelAvatarFileInput.addEventListener('change', handlePixelAvatarFileChange);
+  }
+});
+
+// 通常外見選択機能
+function selectNormalAppearance() {
+  document.getElementById('normalAppearance-file-input').click();
+}
+
+// ピクセルアバター選択機能
+function selectPixelAvatar() {
+  document.getElementById('pixelAvatar-file-input').click();
+}
+
+// 通常外見ファイル入力の変更を監視してプレビューを更新
+function handleNormalAppearanceFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const normalAppearancePreview = document.getElementById('normalAppearance-preview');
+      if (normalAppearancePreview) {
+        normalAppearancePreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択された通常外見" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetNormalAppearance()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        normalAppearancePreview.classList.remove('clickable-preview');
+        normalAppearancePreview.onclick = null;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// ピクセルアバターファイル入力の変更を監視してプレビューを更新
+function handlePixelAvatarFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const pixelAvatarPreview = document.getElementById('pixelAvatar-preview');
+      if (pixelAvatarPreview) {
+        pixelAvatarPreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択されたピクセルアバター" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetPixelAvatar()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        pixelAvatarPreview.classList.remove('clickable-preview');
+        pixelAvatarPreview.onclick = null;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// 通常外見リセット機能
+function resetNormalAppearance() {
+  const normalAppearancePreview = document.getElementById('normalAppearance-preview');
+  const fileInput = document.getElementById('normalAppearance-file-input');
+  
+  if (normalAppearancePreview) {
+    // プレビューを完全にクリア
+    normalAppearancePreview.innerHTML = `
+      <div class="no-image">
+        <i class="material-icons">image</i>
+        <span>画像が選択されていません</span>
+      </div>
+    `;
+    // クリック可能にする
+    normalAppearancePreview.classList.add('clickable-preview');
+    normalAppearancePreview.onclick = selectNormalAppearance;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = normalAppearancePreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
+  }
+  
+  if (fileInput) {
+    fileInput.value = '';
+  }
+}
+
+// ピクセルアバターリセット機能
+function resetPixelAvatar() {
+  const pixelAvatarPreview = document.getElementById('pixelAvatar-preview');
+  const fileInput = document.getElementById('pixelAvatar-file-input');
+  
+  if (pixelAvatarPreview) {
+    // プレビューを完全にクリア
+    pixelAvatarPreview.innerHTML = `
+      <div class="no-image">
+        <i class="material-icons">image</i>
+        <span>画像が選択されていません</span>
+      </div>
+    `;
+    // クリック可能にする
+    pixelAvatarPreview.classList.add('clickable-preview');
+    pixelAvatarPreview.onclick = selectPixelAvatar;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = pixelAvatarPreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
+  }
+  
+  if (fileInput) {
+    fileInput.value = '';
+  }
+}
+</script> 
