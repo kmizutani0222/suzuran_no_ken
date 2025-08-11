@@ -1,10 +1,20 @@
 /* 画像リサイザー共通スタイル */
 .image-preview-container {
-  margin: 20px 0;
-  padding: 20px;
+  margin: 10px 0;
+  padding: 15px;
   border: 2px dashed #ddd;
   border-radius: 8px;
   background: #fafafa;
+}
+
+/* 画像セクションのタイトル */
+.image-section-title {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2e7d32;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #c8e6c9;
 }
 
 .cropped-preview {
@@ -402,4 +412,6 @@ canvas {
     min-width: auto;
     flex: 1;
   }
-} 
+}
+
+ 

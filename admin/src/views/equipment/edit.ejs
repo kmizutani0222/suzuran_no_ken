@@ -52,26 +52,25 @@
               </div>
             </div>
             <div class="col s6">
-              <div class="image-upload-section">
-                <div class="image-preview-container">
-                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
-                    <% if (equipment.icon && equipment.icon.trim() !== '') { %>
-                      <img src="<%= equipment.icon %>" alt="現在のアイコン" />
-                      <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
-                        <i class="material-icons">close</i>
-                      </button>
-                    <% } else { %>
-                      <div class="no-image">
-                        <i class="material-icons">image</i>
-                        <span>画像が選択されていません</span>
-                      </div>
-                    <% } %>
-                  </div>
+              <h6 class="image-section-title">アイコン</h6>
+              <div class="image-preview-container">
+                <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
+                  <% if (equipment.icon && equipment.icon.trim() !== '') { %>
+                    <img src="<%= equipment.icon %>" alt="現在のアイコン" />
+                    <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+                      <i class="material-icons">close</i>
+                    </button>
+                  <% } else { %>
+                    <div class="no-image">
+                      <i class="material-icons">image</i>
+                      <span>画像が選択されていません</span>
+                    </div>
+                  <% } %>
                 </div>
-                <div class="image-controls">
-                  <div class="file-input-wrapper">
-                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
-                  </div>
+              </div>
+              <div class="image-controls">
+                <div class="file-input-wrapper">
+                  <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
                 </div>
               </div>
             </div>
@@ -152,31 +151,23 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.value = '';
         form.appendChild(hiddenInput);
       }
+      
+      // アイコンの処理
+      const fileInput = document.getElementById('icon-file-input');
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        // 新しい画像が選択されている場合、iconClearフラグを削除
+        const existingHidden = form.querySelector('input[name="iconClear"]');
+        if (existingHidden) {
+          existingHidden.remove();
+        }
+      }
     });
   }
 
   // ファイル入力の変更を監視してプレビューを更新
   const fileInput = document.getElementById('icon-file-input');
   if (fileInput) {
-    fileInput.addEventListener('change', function(e) {
-      if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const iconPreview = document.getElementById('icon-preview');
-          iconPreview.innerHTML = `
-            <img src="${e.target.result}" alt="選択されたアイコン" />
-            <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
-              <i class="material-icons">close</i>
-            </button>
-          `;
-          // 画像選択後はクリック不可にする
-          iconPreview.classList.remove('clickable-preview');
-          iconPreview.onclick = null;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    fileInput.addEventListener('change', handleFileChange);
   }
 
   // imageResizerの処理は元のままにして、切り抜き完了後に×ボタンを表示
@@ -229,6 +220,38 @@ function resetIcon() {
     hiddenInput.name = 'iconClear';
     hiddenInput.value = 'true';
     form.appendChild(hiddenInput);
+  }
+}
+
+// ファイル入力の変更を監視してプレビューを更新し、iconClearフラグをリセット
+function handleFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const iconPreview = document.getElementById('icon-preview');
+      if (iconPreview) {
+        iconPreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択されたアイコン" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        iconPreview.classList.remove('clickable-preview');
+        iconPreview.onclick = null;
+      }
+      
+      // 新しい画像が選択されたら、iconClearフラグを削除
+      const form = document.querySelector('form');
+      if (form) {
+        const existingHidden = form.querySelector('input[name="iconClear"]');
+        if (existingHidden) {
+          existingHidden.remove();
+        }
+      }
+    };
+    reader.readAsDataURL(file);
   }
 }
 
