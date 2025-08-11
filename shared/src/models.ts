@@ -234,4 +234,41 @@ export interface EquipmentUpdateInput extends Partial<EquipmentCreateInput> {}
 
 export interface EquipmentWithRarity extends Equipment {
   rarity: Rarity | null;
+}
+
+// タロットモデル
+export type TarotAcquisitionMethod = 
+  | "静寂の地-1" 
+  | "静寂の地-2" 
+  | "静寂の地-3" 
+  | "期間限定イベントドロップ" 
+  | "入手方法はありません";
+
+export interface Tarot {
+  id: string;
+  name: string;
+  rarityId: string; // Rarityから単一選択
+  icon?: string; // アップロード画像のパス
+  equipmentSkill?: string; // 複数行テキスト
+  additionalSkill?: string; // 複数行テキスト
+  description?: string; // 複数行テキスト
+  acquisitionMethods: TarotAcquisitionMethod[]; // 複数選択
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TarotCreateInput {
+  name: string;
+  rarityId: string;
+  icon?: string;
+  equipmentSkill?: string;
+  additionalSkill?: string;
+  description?: string;
+  acquisitionMethods: TarotAcquisitionMethod[];
+}
+
+export interface TarotUpdateInput extends Partial<TarotCreateInput> {}
+
+export interface TarotWithRarity extends Tarot {
+  rarity: Rarity;
 } 

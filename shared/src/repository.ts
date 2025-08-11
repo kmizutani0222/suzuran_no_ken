@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
-import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput, ExSkill, ExSkillCreateInput, ExSkillUpdateInput, Equipment, EquipmentCreateInput, EquipmentUpdateInput, EquipmentWithRarity } from "./models";
+import { Character, CharacterCreateInput, CharacterUpdateInput, Rarity, RarityCreateInput, RarityUpdateInput, Role, RoleCreateInput, RoleUpdateInput, Faction, FactionCreateInput, FactionUpdateInput, Skill, SkillCreateInput, SkillUpdateInput, SkillEffect, SkillEffectCreateInput, SkillEffectUpdateInput, PersonalitySkill, PersonalitySkillCreateInput, PersonalitySkillUpdateInput, AdminUser, AdminUserCreateInput, AdminUserUpdateInput, ExSkill, ExSkillCreateInput, ExSkillUpdateInput, Equipment, EquipmentCreateInput, EquipmentUpdateInput, EquipmentWithRarity, Tarot, TarotCreateInput, TarotUpdateInput, TarotWithRarity } from "./models";
 
 const DATA_DIR = join(process.cwd(), "../data");
 const CHARACTER_FILE = join(DATA_DIR, "characters.json");
@@ -12,6 +12,7 @@ const SKILL_EFFECT_FILE = join(DATA_DIR, "skill_effects.json");
 const PERSONALITY_SKILL_FILE = join(DATA_DIR, "personality_skills.json");
 const ADMIN_USER_FILE = join(DATA_DIR, "admin_users.json");
 const EX_SKILL_FILE = join(DATA_DIR, "ex_skills.json");
+const TAROT_FILE = join(DATA_DIR, "tarots.json");
 
 function ensureDirExists(dirPath: string): void {
   if (!existsSync(dirPath)) {
@@ -413,5 +414,63 @@ export const EquipmentRepository = {
   findByRarity(rarityId: string): EquipmentWithRarity[] {
     const equipments = this.findAllWithRarity();
     return equipments.filter(e => e.rarityId === rarityId);
+  }
+};
+
+// Tarots
+function readAllTarots(): Tarot[] {
+  return readJson<Tarot[]>(TAROT_FILE);
+}
+function writeAllTarots(values: Tarot[]): void {
+  writeJson(TAROT_FILE, values);
+}
+
+export const TarotRepository = {
+  list(): Tarot[] {
+    return readAllTarots();
+  },
+  findById(id: string): Tarot | undefined {
+    return readAllTarots().find(t => t.id === id);
+  },
+  create(input: TarotCreateInput): Tarot {
+    const all = readAllTarots();
+    const now = new Date().toISOString();
+    const created: Tarot = { 
+      id: generateId(), 
+      ...input,
+      createdAt: now,
+      updatedAt: now
+    } as Tarot;
+    all.push(created);
+    writeAllTarots(all);
+    return created;
+  },
+  update(id: string, input: TarotUpdateInput): Tarot | undefined {
+    const all = readAllTarots();
+    const idx = all.findIndex(t => t.id === id);
+    if (idx === -1) return undefined;
+    const updated: Tarot = { 
+      ...all[idx], 
+      ...input, 
+      id,
+      updatedAt: new Date().toISOString()
+    } as Tarot;
+    all[idx] = updated;
+    writeAllTarots(all);
+    return updated;
+  },
+  delete(id: string): boolean {
+    const all = readAllTarots();
+    const next = all.filter(t => t.id !== id);
+    const changed = next.length !== all.length;
+    if (changed) writeAllTarots(next);
+    return changed;
+  },
+  findAllWithRarity(): TarotWithRarity[] {
+    const all = readAllTarots();
+    return all.map(t => ({
+      ...t,
+      rarity: RarityRepository.findById(t.rarityId)!
+    }));
   }
 }; 

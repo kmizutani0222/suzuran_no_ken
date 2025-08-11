@@ -1,0 +1,204 @@
+<div class="page-header">
+  <h1>タロット編集</h1>
+</div>
+
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+          
+        <form action="/tarots/<%= tarot.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+          <!-- 1行目: 名前 -->
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="name" name="name" type="text" value="<%= tarot.name %>" required>
+              <label for="name" class="active">名前</label>
+            </div>
+          </div>
+
+          <!-- 2行目: 左側にレアリティ、右側にアイコン -->
+          <div class="row">
+            <div class="col s6">
+              <div class="row">
+                <div class="input-field col s12">
+                  <select id="rarityId" name="rarityId" required>
+                    <option value="" disabled>レアリティを選択してください</option>
+                    <% rarities.forEach(function(rarity) { %>
+                      <option value="<%= rarity.id %>" <%= tarot.rarityId === rarity.id ? 'selected' : '' %>>
+                        <%= rarity.name %>
+                      </option>
+                    <% }); %>
+                  </select>
+                  <label for="rarityId">レアリティ</label>
+                </div>
+              </div>
+            </div>
+            <div class="col s6">
+              <h6 class="image-section-title">アイコン</h6>
+              <div class="image-preview-container">
+                <% if (tarot.icon) { %>
+                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
+                    <img src="<%= tarot.icon %>" alt="<%= tarot.name %>">
+                    <button type="button" class="remove-icon-btn" onclick="resetIcon()">
+                      <i class="material-icons">close</i>
+                    </button>
+                  </div>
+                <% } else { %>
+                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
+                    <div class="no-image">
+                      <i class="material-icons">image</i>
+                      <span>画像が選択されていません</span>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+              <div class="image-controls">
+                <div class="file-input-wrapper">
+                  <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
+                </div>
+              </div>
+            </div>
+          </div>
+            
+
+            
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="equipmentSkill" name="equipmentSkill" class="materialize-textarea" rows="3"><%= tarot.equipmentSkill || '' %></textarea>
+                <label for="equipmentSkill" class="active">装備スキル</label>
+                <small class="grey-text">装備時に付与されるスキルの説明を入力してください</small>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="additionalSkill" name="additionalSkill" class="materialize-textarea" rows="3"><%= tarot.additionalSkill || '' %></textarea>
+                <label for="additionalSkill" class="active">追加スキル</label>
+                <small class="grey-text">追加で付与されるスキルの説明を入力してください</small>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="description" name="description" class="materialize-textarea" rows="4"><%= tarot.description || '' %></textarea>
+                <label for="description" class="active">説明</label>
+                <small class="grey-text">タロットの詳細な説明を入力してください</small>
+              </div>
+            </div>
+            
+          <!-- 入手方法 -->
+          <div class="row">
+            <div class="col s12">
+              <div class="form-section">
+                <legend>入手方法（複数選択）</legend>
+                <div class="faction-selection">
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethods" value="静寂の地-1" 
+                           <%= tarot.acquisitionMethods.includes('静寂の地-1') ? 'checked' : '' %> />
+                    <span>静寂の地-1</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethods" value="静寂の地-2" 
+                           <%= tarot.acquisitionMethods.includes('静寂の地-2') ? 'checked' : '' %> />
+                    <span>静寂の地-2</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethods" value="静寂の地-3" 
+                           <%= tarot.acquisitionMethods.includes('静寂の地-3') ? 'checked' : '' %> />
+                    <span>静寂の地-3</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethods" value="期間限定イベントドロップ" 
+                           <%= tarot.acquisitionMethods.includes('期間限定イベントドロップ') ? 'checked' : '' %> />
+                    <span>期間限定イベントドロップ</span>
+                  </label>
+                  <label class="faction-checkbox">
+                    <input type="checkbox" name="acquisitionMethods" value="入手方法はありません" 
+                           <%= tarot.acquisitionMethods.includes('入手方法はありません') ? 'checked' : '' %> />
+                    <span>入手方法はありません</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          <!-- ボタン -->
+          <div class="row">
+            <div class="col s12 center-align">
+              <button type="submit" class="btn-large waves-effect waves-light blue">
+                <i class="material-icons left">save</i>更新
+              </button>
+              <a href="/tarots" class="btn-large waves-effect waves-light grey" style="margin-left: 10px;">
+                <i class="material-icons left">cancel</i>キャンセル
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Materializeの初期化
+  M.FormSelect.init(document.querySelectorAll('select'));
+  
+  // ファイル入力の変更を監視してプレビューを更新
+  const fileInput = document.getElementById('icon-file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', handleFileChange);
+  }
+  
+  // フォームバリデーション
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function(e) {
+    const acquisitionMethods = document.querySelectorAll('input[name="acquisitionMethods"]:checked');
+    if (acquisitionMethods.length === 0) {
+      e.preventDefault();
+      alert('入手方法を少なくとも1つ選択してください');
+      return false;
+    }
+  });
+});
+
+// アイコン選択関数
+function selectIcon() {
+  document.getElementById('icon-file-input').click();
+}
+
+// ファイル変更時の処理
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (file) {
+    // ファイルが選択された場合の処理
+    console.log('ファイルが選択されました:', file.name);
+  }
+}
+
+// アイコンリセット関数
+function resetIcon() {
+  const preview = document.getElementById('icon-preview');
+  preview.innerHTML = `
+    <div class="no-image">
+      <i class="material-icons">image</i>
+      <span>画像が選択されていません</span>
+    </div>
+  `;
+  preview.className = 'image-preview-large clickable-preview';
+  preview.onclick = selectIcon;
+  
+  // ファイル入力をクリア
+  document.getElementById('icon-file-input').value = '';
+  
+  // 隠しフィールドを追加してアイコン削除フラグを設定
+  let hiddenInput = document.querySelector('input[name="iconClear"]');
+  if (!hiddenInput) {
+    hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'iconClear';
+    hiddenInput.value = 'true';
+    document.querySelector('form').appendChild(hiddenInput);
+  }
+}
+</script> 

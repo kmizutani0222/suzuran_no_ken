@@ -16,6 +16,7 @@ import { router as adminUserRouter } from "./routes/admin-users";
 import { router as authRouter } from "./routes/auth";
 import { attachLocals, requireLogin } from "./middleware/auth";
 import equipmentRouter from './routes/equipment';
+import tarotRouter from './routes/tarots';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -56,6 +57,7 @@ app.use("/personality-skills", requireLogin, personalitySkillRouter);
 app.use("/ex-skills", requireLogin, exSkillRouter);
 app.use("/admin-users", requireLogin, adminUserRouter);
 app.use('/equipment', requireLogin, equipmentRouter);
+app.use('/tarots', requireLogin, tarotRouter);
 
 app.listen(PORT, () => {
   console.log(`[admin] listening on http://localhost:${PORT}`);
