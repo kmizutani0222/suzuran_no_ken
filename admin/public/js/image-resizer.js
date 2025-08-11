@@ -44,6 +44,10 @@ class ImageResizer {
       // プレビューを表示
       const preview = document.getElementById(fieldName + '-preview');
       if (preview) {
+        // 既存の×ボタンを削除
+        const removeButtons = preview.querySelectorAll('.remove-icon-btn');
+        removeButtons.forEach(btn => btn.remove());
+        
         // no-imageを非表示にして、プレビューを表示
         preview.innerHTML = `
           <img src="${e.target.result}" alt="プレビュー" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;">
@@ -64,6 +68,13 @@ class ImageResizer {
     // 既存のモーダルがあれば削除
     if (this.modal) {
       document.body.removeChild(this.modal);
+    }
+
+    // プレビューから×ボタンを確実に削除
+    const preview = document.getElementById(fieldName + '-preview');
+    if (preview) {
+      const removeButtons = preview.querySelectorAll('.remove-icon-btn');
+      removeButtons.forEach(btn => btn.remove());
     }
 
     // モーダルを作成
@@ -415,7 +426,16 @@ class ImageResizer {
     if (preview) {
       preview.innerHTML = `
         <img src="${this.croppedImage}" alt="切り抜き後の画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;">
+        <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+          <i class="material-icons">close</i>
+        </button>
       `;
+      
+      // 装備編集画面の場合、クリック不可にする
+      if (fieldName === 'icon') {
+        preview.classList.remove('clickable-preview');
+        preview.onclick = null;
+      }
     }
   }
 

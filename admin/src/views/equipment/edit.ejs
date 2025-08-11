@@ -54,9 +54,12 @@
             <div class="col s6">
               <div class="image-upload-section">
                 <div class="image-preview-container">
-                  <div id="icon-preview" class="image-preview-large">
+                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
                     <% if (equipment.icon && equipment.icon.trim() !== '') { %>
-                      <img src="<%= equipment.icon %>" alt="現在のアイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
+                      <img src="<%= equipment.icon %>" alt="現在のアイコン" />
+                      <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+                        <i class="material-icons">close</i>
+                      </button>
                     <% } else { %>
                       <div class="no-image">
                         <i class="material-icons">image</i>
@@ -67,16 +70,8 @@
                 </div>
                 <div class="image-controls">
                   <div class="file-input-wrapper">
-                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                    <label for="icon" class="file-input-label">
-                      <i class="material-icons">cloud_upload</i>
-                      <span>アイコンを選択</span>
-                    </label>
+                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
                   </div>
-                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
-                    <i class="material-icons">refresh</i>
-                    リセット
-                  </button>
                 </div>
               </div>
             </div>
@@ -159,20 +154,60 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // ファイル入力の変更を監視してプレビューを更新
+  const fileInput = document.getElementById('icon-file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', function(e) {
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const iconPreview = document.getElementById('icon-preview');
+          iconPreview.innerHTML = `
+            <img src="${e.target.result}" alt="選択されたアイコン" />
+            <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+              <i class="material-icons">close</i>
+            </button>
+          `;
+          // 画像選択後はクリック不可にする
+          iconPreview.classList.remove('clickable-preview');
+          iconPreview.onclick = null;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // imageResizerの処理は元のままにして、切り抜き完了後に×ボタンを表示
+  // 切り抜きモーダル中は×ボタンを表示しない
 });
+
+// アイコン選択機能
+function selectIcon() {
+  document.getElementById('icon-file-input').click();
+}
 
 // アイコンリセット機能
 function resetIcon() {
   const iconPreview = document.getElementById('icon-preview');
-  const fileInput = document.querySelector('input[name="icon"]');
+  const fileInput = document.getElementById('icon-file-input');
   
   if (iconPreview) {
+    // プレビューを完全にクリア
     iconPreview.innerHTML = `
       <div class="no-image">
         <i class="material-icons">image</i>
         <span>画像が選択されていません</span>
       </div>
     `;
+    // クリック可能にする
+    iconPreview.classList.add('clickable-preview');
+    iconPreview.onclick = selectIcon;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = iconPreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
   }
   
   if (fileInput) {
@@ -196,4 +231,6 @@ function resetIcon() {
     form.appendChild(hiddenInput);
   }
 }
+
+
 </script> 
