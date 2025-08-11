@@ -77,102 +77,103 @@
             </div>
 
             <!-- スキル効果 -->
-            <div class="form-section">
-              <legend>スキル効果</legend>
-              <div class="faction-selection">
-                <% skillEffects.forEach(effect => { %>
-                  <label class="faction-checkbox">
-                    <input type="checkbox" name="effectIds" value="<%= effect.id %>" <%= skill.effectIds && skill.effectIds.includes(effect.id) ? 'checked' : '' %> />
-                    <span><%= effect.name %></span>
-                  </label>
-                <% }); %>
+            <div class="row">
+              <div class="col s12">
+                <div class="form-section">
+                  <legend>スキル効果（複数選択）</legend>
+                  <div class="faction-selection">
+                    <% skillEffects.forEach(effect => { %>
+                      <label class="faction-checkbox">
+                        <input type="checkbox" name="effectIds" value="<%= effect.id %>" <%= skill.effectIds && skill.effectIds.includes(effect.id) ? 'checked' : '' %> />
+                        <span><%= effect.name %></span>
+                      </label>
+                    <% }); %>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- 射程・範囲 -->
-            <div class="form-section">
-              <legend>射程・範囲</legend>
-              
-              <!-- スキルターゲット -->
-              <div class="faction-selection">
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="targets" value="近接" <%= skill.targets && skill.targets.includes('近接') ? 'checked' : '' %> />
-                  <span>近接</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="targets" value="範囲攻撃" <%= skill.targets && skill.targets.includes('範囲攻撃') ? 'checked' : '' %> />
-                  <span>範囲攻撃</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="targets" value="対ユニット" <%= skill.targets && skill.targets.includes('対ユニット') ? 'checked' : '' %> />
-                  <span>対ユニット</span>
-                </label>
-                <label class="faction-checkbox">
-                  <input type="checkbox" name="targets" value="対地面" <%= skill.targets && skill.targets.includes('対地面') ? 'checked' : '' %> />
-                  <span>対地面</span>
-                </label>
-              </div>
-
-              <!-- 範囲画像と射程・範囲情報 -->
-              <div class="row">
-                                <div class="col s6">
-                  <h6 class="image-section-title">範囲画像</h6>
-                  <div class="image-preview-container">
-                    <div id="rangeImage-preview" class="image-preview-large clickable-preview" onclick="selectRangeImage()">
-                      <% if (skill.range && skill.range.image) { %>
-                        <img src="<%= skill.range.image %>" alt="範囲画像" />
-                        <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetRangeImage()">
-                          <i class="material-icons">close</i>
-                        </button>
-                      <% } else { %>
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      <% } %>
-                    </div>
-                  </div>
-                  <div class="image-controls">
-                    <div class="file-input-wrapper">
-                      <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" id="rangeImage-file-input" style="display: none;" />
-                    </div>
+            <!-- 射程・範囲の1行目: スキルターゲット -->
+            <div class="row">
+              <div class="col s12">
+                <div class="form-section">
+                  <legend>射程・範囲</legend>
+                  <div class="faction-selection">
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="近接" <%= skill.targets && skill.targets.includes('近接') ? 'checked' : '' %> />
+                      <span>近接</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="範囲攻撃" <%= skill.targets && skill.targets.includes('範囲攻撃') ? 'checked' : '' %> />
+                      <span>範囲攻撃</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="対ユニット" <%= skill.targets && skill.targets.includes('対ユニット') ? 'checked' : '' %> />
+                      <span>対ユニット</span>
+                    </label>
+                    <label class="faction-checkbox">
+                      <input type="checkbox" name="targets" value="対地面" <%= skill.targets && skill.targets.includes('対地面') ? 'checked' : '' %> />
+                      <span>対地面</span>
+                    </label>
                   </div>
                 </div>
-                <div class="col s6">
-                  <!-- 射程 From-To -->
-                  <div class="row">
-                    <div class="input-field col s6">
-                      <input type="number" id="distanceFrom" name="distanceFrom" min="0" value="<%= skill.range && skill.range.distanceFrom ? skill.range.distanceFrom : '' %>" />
-                      <label for="distanceFrom">射程 From</label>
-                    </div>
-                    <div class="input-field col s6">
-                      <input type="number" id="distanceTo" name="distanceTo" min="0" value="<%= skill.range && skill.range.distanceTo ? skill.range.distanceTo : '' %>" />
-                      <label for="distanceTo">射程 To</label>
-                    </div>
+              </div>
+            </div>
+
+            <!-- 射程・範囲の2行目以降: 左側に範囲画像、右側に射程from-to -->
+            <div class="row">
+              <div class="col s6">
+                <h6 class="image-section-title">範囲画像</h6>
+                <div class="image-preview-container">
+                  <div id="rangeImage-preview" class="image-preview-large clickable-preview" onclick="selectRangeImage()">
+                    <% if (skill.range && skill.range.image) { %>
+                      <img src="<%= skill.range.image %>" alt="範囲画像" />
+                      <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetRangeImage()">
+                        <i class="material-icons">close</i>
+                      </button>
+                    <% } else { %>
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
+                      </div>
+                    <% } %>
                   </div>
-                  
-                  <!-- 射程高低差 -->
-                  <div class="row">
-                    <div class="input-field col s6">
-                      <input type="number" id="heightDiffFrom" name="heightDiffFrom" value="<%= skill.range && skill.range.heightDiffFrom ? skill.range.heightDiffFrom : '' %>" />
-                      <label for="heightDiffFrom">射程高低差 From</label>
-                    </div>
-                    <div class="input-field col s6">
-                      <input type="number" id="heightDiffTo" name="heightDiffTo" value="<%= skill.range && skill.range.heightDiffTo ? skill.range.heightDiffTo : '' %>" />
-                      <label for="heightDiffTo">射程高低差 To</label>
-                    </div>
+                </div>
+                <div class="image-controls">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" id="rangeImage-file-input" style="display: none;" />
                   </div>
-                  
-                  <!-- 範囲高低差 -->
-                  <div class="row">
-                    <div class="input-field col s6">
-                      <input type="number" id="areaHeightDiffFrom" name="areaHeightDiffFrom" value="<%= skill.range && skill.range.areaHeightDiffFrom ? skill.range.areaHeightDiffFrom : '' %>" />
-                      <label for="areaHeightDiffFrom">範囲高低差 From</label>
-                    </div>
-                    <div class="input-field col s6">
-                      <input type="number" id="areaHeightDiffTo" name="areaHeightDiffTo" value="<%= skill.range && skill.range.areaHeightDiffTo ? skill.range.areaHeightDiffTo : '' %>" />
-                      <label for="areaHeightDiffTo">範囲高低差 To</label>
-                    </div>
+                </div>
+              </div>
+              <div class="col s6">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="distanceFrom" name="distanceFrom" min="0" value="<%= skill.range && skill.range.distanceFrom ? skill.range.distanceFrom : '' %>" />
+                    <label for="distanceFrom">射程 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="distanceTo" name="distanceTo" min="0" value="<%= skill.range && skill.range.distanceTo ? skill.range.distanceTo : '' %>" />
+                    <label for="distanceTo">射程 To</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="heightDiffFrom" name="heightDiffFrom" value="<%= skill.range && skill.range.heightDiffFrom ? skill.range.heightDiffFrom : '' %>" />
+                    <label for="heightDiffFrom">射程高低差 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="heightDiffTo" name="heightDiffTo" value="<%= skill.range && skill.range.heightDiffTo ? skill.range.heightDiffTo : '' %>" />
+                    <label for="heightDiffTo">射程高低差 To</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input type="number" id="areaHeightDiffFrom" name="areaHeightDiffFrom" value="<%= skill.range && skill.range.areaHeightDiffFrom ? skill.range.areaHeightDiffFrom : '' %>" />
+                    <label for="areaHeightDiffFrom">範囲高低差 From</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <input type="number" id="areaHeightDiffTo" name="areaHeightDiffTo" value="<%= skill.range && skill.range.areaHeightDiffTo ? skill.range.areaHeightDiffTo : '' %>" />
+                    <label for="areaHeightDiffTo">範囲高低差 To</label>
                   </div>
                 </div>
               </div>
