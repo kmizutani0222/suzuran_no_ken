@@ -20,13 +20,21 @@
       <a href="/" class="brand-logo">鈴蘭の剣 管理</a>
       <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/characters">キャラ</a></li>
-        <li><a href="/equipment">装備</a></li>
+        <li><a class="dropdown-trigger" href="#!" data-target="basic-info-dropdown">基本情報<i class="material-icons right">arrow_drop_down</i></a></li>
         <li><a class="dropdown-trigger" href="#!" data-target="skills-dropdown">スキル管理<i class="material-icons right">arrow_drop_down</i></a></li>
         <li><a class="dropdown-trigger" href="#!" data-target="settings-dropdown">設定<i class="material-icons right">arrow_drop_down</i></a></li>
       </ul>
     </div>
   </nav>
+
+  <!-- Basic Info Dropdown -->
+  <ul id="basic-info-dropdown" class="dropdown-content">
+    <li><a href="/characters">キャラ</a></li>
+    <li><a href="/equipment">装備</a></li>
+    <li><a href="/rarities">レアリティ</a></li>
+    <li><a href="/roles">ロール</a></li>
+    <li><a href="/factions">陣営</a></li>
+  </ul>
 
   <!-- Skills Dropdown -->
   <ul id="skills-dropdown" class="dropdown-content">
@@ -38,17 +46,25 @@
 
   <!-- Settings Dropdown -->
   <ul id="settings-dropdown" class="dropdown-content">
-    <li><a href="/rarities">レアリティ</a></li>
-    <li><a href="/roles">ロール</a></li>
-    <li><a href="/factions">陣営</a></li>
-    <li class="divider"></li>
     <li><a href="/logout">ログアウト</a></li>
   </ul>
 
   <!-- Mobile Navigation -->
   <ul class="sidenav" id="mobile-nav">
-    <li><a href="/characters">キャラ</a></li>
-    <li><a href="/equipment">装備</a></li>
+    <li>
+      <div class="collapsible-header">
+        <i class="material-icons">info</i>基本情報
+      </div>
+      <div class="collapsible-body">
+        <ul>
+          <li><a href="/characters">キャラ</a></li>
+          <li><a href="/equipment">装備</a></li>
+          <li><a href="/rarities">レアリティ</a></li>
+          <li><a href="/roles">ロール</a></li>
+          <li><a href="/factions">陣営</a></li>
+        </ul>
+      </div>
+    </li>
     <li>
       <div class="collapsible-header">
         <i class="material-icons">build</i>スキル管理
@@ -62,10 +78,6 @@
         </ul>
       </div>
     </li>
-    <li class="divider"></li>
-    <li><a href="/rarities">レアリティ</a></li>
-    <li><a href="/roles">ロール</a></li>
-    <li><a href="/factions">陣営</a></li>
     <li class="divider"></li>
     <li><a href="/logout">ログアウト</a></li>
   </ul>
