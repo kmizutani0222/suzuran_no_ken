@@ -52,9 +52,9 @@
               </div>
             </div>
             <div class="col s6">
-              <div class="image-upload-section">
+                              <h6 class="image-section-title">アイコン</h6>
                 <div class="image-preview-container">
-                  <div id="icon-preview" class="image-preview-large">
+                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
                     <div class="no-image">
                       <i class="material-icons">image</i>
                       <span>画像が選択されていません</span>
@@ -63,18 +63,9 @@
                 </div>
                 <div class="image-controls">
                   <div class="file-input-wrapper">
-                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                    <label for="icon" class="file-input-label">
-                      <i class="material-icons">cloud_upload</i>
-                      <span>アイコンを選択</span>
-                    </label>
+                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
                   </div>
-                  <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
-                    <i class="material-icons">refresh</i>
-                    リセット
-                  </button>
                 </div>
-              </div>
             </div>
           </div>
 
@@ -132,7 +123,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // カテゴリー変更時の処理を削除（連動しない）
+  // ファイル入力の変更を監視してプレビューを更新
+  const fileInput = document.getElementById('icon-file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', handleFileChange);
+  }
   
   // フォーム送信時の処理
   const form = document.querySelector('form');
@@ -151,18 +146,54 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// アイコン選択機能
+function selectIcon() {
+  document.getElementById('icon-file-input').click();
+}
+
+// ファイル入力の変更を監視してプレビューを更新
+function handleFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const iconPreview = document.getElementById('icon-preview');
+      if (iconPreview) {
+        iconPreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択されたアイコン" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        iconPreview.classList.remove('clickable-preview');
+        iconPreview.onclick = null;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 // アイコンリセット機能
 function resetIcon() {
   const iconPreview = document.getElementById('icon-preview');
-  const fileInput = document.querySelector('input[name="icon"]');
+  const fileInput = document.getElementById('icon-file-input');
   
   if (iconPreview) {
+    // プレビューを完全にクリア
     iconPreview.innerHTML = `
       <div class="no-image">
         <i class="material-icons">image</i>
         <span>画像が選択されていません</span>
       </div>
     `;
+    // クリック可能にする
+    iconPreview.classList.add('clickable-preview');
+    iconPreview.onclick = selectIcon;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = iconPreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
   }
   
   if (fileInput) {

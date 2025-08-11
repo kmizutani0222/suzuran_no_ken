@@ -44,31 +44,25 @@
                 </div>
               </div>
               <div class="col s6">
-                <div class="image-upload-section">
-                  <div class="image-preview-container">
-                    <div id="icon-preview" class="image-preview-large">
-                      <% if (skill.icon) { %>
-                        <img src="<%= skill.icon %>" alt="アイコン" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
-                      <% } else { %>
-                        <div class="no-image">
-                          <i class="material-icons">image</i>
-                          <span>画像が選択されていません</span>
-                        </div>
-                      <% } %>
-                    </div>
+                <h6 class="image-section-title">アイコン</h6>
+                <div class="image-preview-container">
+                  <div id="icon-preview" class="image-preview-large clickable-preview" onclick="selectIcon()">
+                    <% if (skill.icon) { %>
+                      <img src="<%= skill.icon %>" alt="アイコン" />
+                      <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+                        <i class="material-icons">close</i>
+                      </button>
+                    <% } else { %>
+                      <div class="no-image">
+                        <i class="material-icons">image</i>
+                        <span>画像が選択されていません</span>
+                      </div>
+                    <% } %>
                   </div>
-                  <div class="image-controls">
-                    <div class="file-input-wrapper">
-                      <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" />
-                      <label for="icon" class="file-input-label">
-                        <i class="material-icons">cloud_upload</i>
-                        <span>アイコンを選択</span>
-                      </label>
-                    </div>
-                    <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetIcon()">
-                      <i class="material-icons">refresh</i>
-                      リセット
-                    </button>
+                </div>
+                <div class="image-controls">
+                  <div class="file-input-wrapper">
+                    <input type="file" name="icon" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'icon')" id="icon-file-input" style="display: none;" />
                   </div>
                 </div>
               </div>
@@ -122,31 +116,25 @@
               <!-- 範囲画像と射程・範囲情報 -->
               <div class="row">
                                 <div class="col s6">
-                  <div class="image-upload-section">
-                    <div class="image-preview-container">
-                      <div id="rangeImage-preview" class="image-preview-large">
-                        <% if (skill.range && skill.range.image) { %>
-                          <img src="<%= skill.range.image %>" alt="範囲画像" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px;" />
-                        <% } else { %>
-                          <div class="no-image">
-                            <i class="material-icons">image</i>
-                            <span>画像が選択されていません</span>
-                          </div>
-                        <% } %>
-                      </div>
+                  <h6 class="image-section-title">範囲画像</h6>
+                  <div class="image-preview-container">
+                    <div id="rangeImage-preview" class="image-preview-large clickable-preview" onclick="selectRangeImage()">
+                      <% if (skill.range && skill.range.image) { %>
+                        <img src="<%= skill.range.image %>" alt="範囲画像" />
+                        <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetRangeImage()">
+                          <i class="material-icons">close</i>
+                        </button>
+                      <% } else { %>
+                        <div class="no-image">
+                          <i class="material-icons">image</i>
+                          <span>画像が選択されていません</span>
+                        </div>
+                      <% } %>
                     </div>
-                    <div class="image-controls">
-                      <div class="file-input-wrapper">
-                        <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" />
-                        <label for="rangeImage" class="file-input-label">
-                          <i class="material-icons">cloud_upload</i>
-                          <span>範囲画像を選択</span>
-                        </label>
-                      </div>
-                      <button type="button" class="btn-small waves-effect waves-light grey reset-btn" onclick="resetRangeImage()">
-                        <i class="material-icons">refresh</i>
-                        リセット
-                      </button>
+                  </div>
+                  <div class="image-controls">
+                    <div class="file-input-wrapper">
+                      <input type="file" name="rangeImage" accept="image/*" onchange="imageResizer.handleImageUpload(this, 'rangeImage')" id="rangeImage-file-input" style="display: none;" />
                     </div>
                   </div>
                 </div>
@@ -213,32 +201,140 @@
 </a>
 
 <script>
-// アイコンリセット
+document.addEventListener('DOMContentLoaded', function() {
+  // ファイル入力の変更を監視してプレビューを更新
+  const iconFileInput = document.getElementById('icon-file-input');
+  const rangeImageFileInput = document.getElementById('rangeImage-file-input');
+  
+  if (iconFileInput) {
+    iconFileInput.addEventListener('change', handleIconFileChange);
+  }
+  
+  if (rangeImageFileInput) {
+    rangeImageFileInput.addEventListener('change', handleRangeImageFileChange);
+  }
+});
+
+// アイコン選択機能
+function selectIcon() {
+  document.getElementById('icon-file-input').click();
+}
+
+// 範囲画像選択機能
+function selectRangeImage() {
+  document.getElementById('rangeImage-file-input').click();
+}
+
+// アイコンファイル入力の変更を監視してプレビューを更新し、iconClearフラグをリセット
+function handleIconFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const iconPreview = document.getElementById('icon-preview');
+      if (iconPreview) {
+        iconPreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択されたアイコン" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetIcon()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        iconPreview.classList.remove('clickable-preview');
+        iconPreview.onclick = null;
+      }
+      
+      // 新しい画像が選択されたら、iconClearフラグを削除
+      document.getElementById('iconClear').value = 'false';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// 範囲画像ファイル入力の変更を監視してプレビューを更新し、rangeImageClearフラグをリセット
+function handleRangeImageFileChange(e) {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const rangeImagePreview = document.getElementById('rangeImage-preview');
+      if (rangeImagePreview) {
+        rangeImagePreview.innerHTML = `
+          <img src="${e.target.result}" alt="選択された範囲画像" />
+          <button type="button" class="remove-icon-btn" onclick="event.stopPropagation(); resetRangeImage()">
+            <i class="material-icons">close</i>
+          </button>
+        `;
+        // 画像選択後はクリック不可にする
+        rangeImagePreview.classList.remove('clickable-preview');
+        rangeImagePreview.onclick = null;
+      }
+      
+      // 新しい画像が選択されたら、rangeImageClearフラグを削除
+      document.getElementById('rangeImageClear').value = 'false';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// アイコンリセット機能
 function resetIcon() {
-  document.getElementById('icon-preview').innerHTML = `
-    <div class="no-image">
-      <i class="material-icons">image</i>
-      <span>画像が選択されていません</span>
-    </div>
-  `;
+  const iconPreview = document.getElementById('icon-preview');
+  const fileInput = document.getElementById('icon-file-input');
+  
+  if (iconPreview) {
+    // プレビューを完全にクリア
+    iconPreview.innerHTML = `
+      <div class="no-image">
+        <i class="material-icons">image</i>
+        <span>画像が選択されていません</span>
+      </div>
+    `;
+    // クリック可能にする
+    iconPreview.classList.add('clickable-preview');
+    iconPreview.onclick = selectIcon;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = iconPreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
+  }
+  
+  if (fileInput) {
+    fileInput.value = '';
+  }
+  
+  // アイコンリセットフラグを設定
   document.getElementById('iconClear').value = 'true';
 }
 
-// レンジ画像リセット
+// 範囲画像リセット機能
 function resetRangeImage() {
-  document.getElementById('rangeImage-preview').innerHTML = `
-    <div class="no-image">
-      <i class="material-icons">image</i>
-      <span>画像が選択されていません</span>
-    </div>
-  `;
-  document.getElementById('rangeImageClear').value = 'true';
+  const rangeImagePreview = document.getElementById('rangeImage-preview');
+  const fileInput = document.getElementById('rangeImage-file-input');
   
-  // ファイル入力もクリア
-  const rangeImageInput = document.querySelector('input[name="rangeImage"]');
-  if (rangeImageInput) {
-    rangeImageInput.value = '';
+  if (rangeImagePreview) {
+    // プレビューを完全にクリア
+    rangeImagePreview.innerHTML = `
+      <div class="no-image">
+        <i class="material-icons">image</i>
+        <span>画像が選択されていません</span>
+      </div>
+    `;
+    // クリック可能にする
+    rangeImagePreview.classList.add('clickable-preview');
+    rangeImagePreview.onclick = selectRangeImage;
+    
+    // すべての×ボタンを確実に削除
+    const removeButtons = rangeImagePreview.querySelectorAll('.remove-icon-btn');
+    removeButtons.forEach(btn => btn.remove());
   }
+  
+  if (fileInput) {
+    fileInput.value = '';
+  }
+  
+  // 範囲画像リセットフラグを設定
+  document.getElementById('rangeImageClear').value = 'true';
 }
 
 // フォーム送信前の処理
